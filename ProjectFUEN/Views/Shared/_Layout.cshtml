@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@ViewData["Title"]</title>
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fa-solid fa-bars fs-5"></i></button>
+
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="@Url.Action("Index", "Home")">後台</a>
+
+    </nav>
+
+    <div id="layoutSidenav">
+        <!--side bar-->
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+
+                    <div class="nav">
+                        <!--會員管理-->
+                        <div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMembers" aria-expanded="false" aria-controls="collapseMembers">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                                會員
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseMembers" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+
+                                    <a href="@Url.Action("", "")" class="nav-link">會員管理</a>
+                                    <a href="@Url.Action("", "")" class="nav-link">黑名單</a>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <!--商城管理-->
+                        <div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseStores" aria-expanded="false" aria-controls="collapseStores">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-store"></i></div>
+                                商城
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseStores" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#productsCollapse" aria-expanded="false" aria-controls="productsCollapse">
+                                        商品
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="productsCollapse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a href="@Url.Action("", "")" class="nav-link">商品管理</a>
+                                            <a href="@Url.Action("", "")" class="nav-link">分類</a>
+                                            <a href="@Url.Action("", "")" class="nav-link">品牌</a>
+                                        </nav>
+                                    </div>
+
+                                    <a href="@Url.Action("", "")" class="nav-link">訂單管理</a>
+
+                                    <a href="@Url.Action("", "")" class="nav-link">行銷活動</a>
+
+                                    <a href="@Url.Action("", "")" class="nav-link">優惠券</a>
+
+                                </nav>
+                            </div>
+                        </div>
+
+                        <!--官方活動-->
+                        <div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseActivities" aria-expanded="false" aria-controls="collapseActivities">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-earth-asia"></i></div>
+                                官方活動
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseActivities" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a href="@Url.Action("", "")" class="nav-link">活動管理</a>
+                                    <a href="@Url.Action("", "")" class="nav-link">拍攝類型</a>
+                                    <a href="@Url.Action("", "")" class="nav-link">講師</a>
+                                    <a href="@Url.Action("", "")" class="nav-link">問與答</a>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <!--社群檢舉-->
+                        <div>
+                            <a class="nav-link" href="@Url.Action("", "")">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                社群檢舉
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div id="layoutSidenav_content">
+            @RenderBody()
+            <!--footer-->
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-center small">
+                        <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/scripts.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+

@@ -21,6 +21,7 @@ namespace ProjectFUEN.Controllers
         // GET: OrderItems
         public async Task<IActionResult> Index()
         {
+
             var projectFUENContext = _context.OrderItems.Include(o => o.Order).Include(o => o.Product);
             return View(await projectFUENContext.ToListAsync());
         }

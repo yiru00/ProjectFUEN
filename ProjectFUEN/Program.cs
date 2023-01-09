@@ -13,8 +13,8 @@ var ProjectFUENconnectionString = builder.Configuration.GetConnectionString("Pro
 builder.Services.AddDbContext<ProjectFUENContext>(options =>
 	options.UseSqlServer(ProjectFUENconnectionString));
 
-builder.Services.AddDbContext<ProjectFUENContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("ProjectFUEN") ?? throw new InvalidOperationException("Connection string 'ProjectFUEN' not found.")));
+//builder.Services.AddDbContext<ProjectFUENContext>(options =>
+//	options.UseSqlServer(builder.Configuration.GetConnectionString("ProjectFUEN") ?? throw new InvalidOperationException("Connection string 'ProjectFUEN' not found.")));
 
 var app = builder.Build();
 
@@ -39,7 +39,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=OrderItems}/{action=Index}/{id?}");
 
 
 app.Run();

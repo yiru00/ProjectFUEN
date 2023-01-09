@@ -1,0 +1,102 @@
+﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Coupon>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeastCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeastCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                    <button class="btn btn-info" id="@item.Code" data-bs-toggle="modal" data-bs-target="#exampleModal">發送</button>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">優惠券</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        優惠券發送成功
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+    
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(".btn").on("click", function () {
+            let couponCode = $(this).attr("id");
+
+            //alert(couponCode);
+
+            $.ajax({
+                type: "GET",
+                url: "https://localhost:7027/Coupons/MailToHtml?couponCode=" + couponCode
+            }).done(function (data) {
+                //alert(data);
+            }).fail(function (err) {
+                alert(err.statusText);
+            })
+        })
+
+
+    </script>
+}

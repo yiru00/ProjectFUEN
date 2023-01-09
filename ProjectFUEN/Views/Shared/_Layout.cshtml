@@ -71,7 +71,7 @@
 
                                     <a href="@Url.Action("", "")" class="nav-link">行銷活動</a>
 
-                                    <a href="@Url.Action("", "")" class="nav-link">優惠券</a>
+                                    <a href="@Url.Action("Index", "Coupons")" class="nav-link">優惠券</a>
 
                                 </nav>
                             </div>
@@ -120,6 +120,8 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="~/js/scripts.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

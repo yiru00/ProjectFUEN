@@ -18,148 +18,19 @@ namespace ProjectFUEN.Models.EFModels
         {
         }
 
-        public virtual DbSet<Activity> Activities { get; set; }
-        public virtual DbSet<ActivityCategory> ActivityCategories { get; set; }
-        public virtual DbSet<ActivityCollection> ActivityCollections { get; set; }
-        public virtual DbSet<ActivityMember> ActivityMembers { get; set; }
-        public virtual DbSet<Album> Albums { get; set; }
-        public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
         public virtual DbSet<Event> Events { get; set; }
-        public virtual DbSet<IndiscriminateReport> IndiscriminateReports { get; set; }
-        public virtual DbSet<Instructor> Instructors { get; set; }
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
-        public virtual DbSet<Photo> Photos { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductPhoto> ProductPhotos { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Activity>(entity =>
-            {
-                entity.Property(e => e.ActivityName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.CoverImage)
-                    .IsRequired()
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.DateOfCreated)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Deadline).HasColumnType("datetime");
-
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(300);
-
-                entity.Property(e => e.GatheringTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Recommendation)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Activities)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__Activitie__Categ__34C8D9D1");
-
-                entity.HasOne(d => d.Istructor)
-                    .WithMany(p => p.Activities)
-                    .HasForeignKey(d => d.IstructorId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK__Activitie__Istru__33D4B598");
-            });
-
-            modelBuilder.Entity<ActivityCategory>(entity =>
-            {
-                entity.HasIndex(e => e.DisplayOrder, "UQ__Activity__FB8517E6D7F2F089")
-                    .IsUnique();
-
-                entity.Property(e => e.CategoryName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ActivityCollection>(entity =>
-            {
-                entity.Property(e => e.DateCreated)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.Activity)
-                    .WithMany(p => p.ActivityCollections)
-                    .HasForeignKey(d => d.ActivityId)
-                    .HasConstraintName("FK__ActivityC__Activ__38996AB5");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.ActivityCollections)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__ActivityC__UserI__398D8EEE");
-            });
-
-            modelBuilder.Entity<ActivityMember>(entity =>
-            {
-                entity.Property(e => e.DateJoined)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.Activity)
-                    .WithMany(p => p.ActivityMembers)
-                    .HasForeignKey(d => d.ActivityId)
-                    .HasConstraintName("FK__ActivityM__Activ__3D5E1FD2");
-
-                entity.HasOne(d => d.Member)
-                    .WithMany(p => p.ActivityMembers)
-                    .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK__ActivityM__Membe__3E52440B");
-            });
-
-            modelBuilder.Entity<Album>(entity =>
-            {
-                entity.Property(e => e.CreatedTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.HasOne(d => d.Member)
-                    .WithMany(p => p.Albums)
-                    .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK__Albums__MemberId__03F0984C");
-            });
-
-            modelBuilder.Entity<Answer>(entity =>
-            {
-                entity.Property(e => e.Content)
-                    .IsRequired()
-                    .HasMaxLength(300);
-
-                entity.Property(e => e.DateCreated)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.Question)
-                    .WithMany(p => p.Answers)
-                    .HasForeignKey(d => d.QuestionId)
-                    .HasConstraintName("FK__Answers__Questio__46E78A0C");
-            });
-
             modelBuilder.Entity<Brand>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -209,44 +80,19 @@ namespace ProjectFUEN.Models.EFModels
                     .WithMany(p => p.Events)
                     .UsingEntity<Dictionary<string, object>>(
                         "EventItem",
-                        l => l.HasOne<Product>().WithMany().HasForeignKey("ProductId").HasConstraintName("FK__EventItem__Produ__6754599E"),
-                        r => r.HasOne<Event>().WithMany().HasForeignKey("EventId").HasConstraintName("FK__EventItem__Event__66603565"),
+                        l => l.HasOne<Product>().WithMany().HasForeignKey("ProductId").HasConstraintName("FK__EventItem__Produ__46E78A0C"),
+                        r => r.HasOne<Event>().WithMany().HasForeignKey("EventId").HasConstraintName("FK__EventItem__Event__45F365D3"),
                         j =>
                         {
-                            j.HasKey("EventId", "ProductId").HasName("PK__EventIte__B204047CCFA446DB");
+                            j.HasKey("EventId", "ProductId").HasName("PK__EventIte__B204047CA3A22E41");
 
                             j.ToTable("EventItems");
                         });
             });
 
-            modelBuilder.Entity<IndiscriminateReport>(entity =>
-            {
-                entity.HasKey(e => e.MemberId)
-                    .HasName("PK__Indiscri__0CF04B18F9117A1A");
-
-                entity.Property(e => e.MemberId).ValueGeneratedNever();
-            });
-
-            modelBuilder.Entity<Instructor>(entity =>
-            {
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(300);
-
-                entity.Property(e => e.InstructorName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.ResumePhoto)
-                    .IsRequired()
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-            });
-
             modelBuilder.Entity<Member>(entity =>
             {
-                entity.HasIndex(e => e.EmailAccount, "UQ__Members__005407CDD62C4870")
+                entity.HasIndex(e => e.EmailAccount, "UQ__Members__005407CD01E219D8")
                     .IsUnique();
 
                 entity.Property(e => e.About).HasMaxLength(500);
@@ -289,11 +135,11 @@ namespace ProjectFUEN.Models.EFModels
                     .WithMany(p => p.Members)
                     .UsingEntity<Dictionary<string, object>>(
                         "UsedCoupon",
-                        l => l.HasOne<Coupon>().WithMany().HasForeignKey("CouponId").HasConstraintName("FK__UsedCoupo__Coupo__6D0D32F4"),
-                        r => r.HasOne<Member>().WithMany().HasForeignKey("MemberId").HasConstraintName("FK__UsedCoupo__Membe__6C190EBB"),
+                        l => l.HasOne<Coupon>().WithMany().HasForeignKey("CouponId").HasConstraintName("FK__UsedCoupo__Coupo__4CA06362"),
+                        r => r.HasOne<Member>().WithMany().HasForeignKey("MemberId").HasConstraintName("FK__UsedCoupo__Membe__4BAC3F29"),
                         j =>
                         {
-                            j.HasKey("MemberId", "CouponId").HasName("PK__UsedCoup__BF74E403CCFD7B38");
+                            j.HasKey("MemberId", "CouponId").HasName("PK__UsedCoup__BF74E40319F00B13");
 
                             j.ToTable("UsedCoupons");
                         });
@@ -302,11 +148,11 @@ namespace ProjectFUEN.Models.EFModels
                     .WithMany(p => p.Members)
                     .UsingEntity<Dictionary<string, object>>(
                         "Favorite",
-                        l => l.HasOne<Product>().WithMany().HasForeignKey("ProductId").HasConstraintName("FK__Favorites__Produ__5629CD9C"),
-                        r => r.HasOne<Member>().WithMany().HasForeignKey("MemberId").HasConstraintName("FK__Favorites__Membe__5535A963"),
+                        l => l.HasOne<Product>().WithMany().HasForeignKey("ProductId").HasConstraintName("FK__Favorites__Produ__35BCFE0A"),
+                        r => r.HasOne<Member>().WithMany().HasForeignKey("MemberId").HasConstraintName("FK__Favorites__Membe__34C8D9D1"),
                         j =>
                         {
-                            j.HasKey("MemberId", "ProductId").HasName("PK__Favorite__C7B0877405BCD4DF");
+                            j.HasKey("MemberId", "ProductId").HasName("PK__Favorite__C7B08774A7A81927");
 
                             j.ToTable("Favorites");
                         });
@@ -325,13 +171,13 @@ namespace ProjectFUEN.Models.EFModels
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK__OrderDeta__Membe__5DCAEF64");
+                    .HasConstraintName("FK__OrderDeta__Membe__3D5E1FD2");
             });
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
                 entity.HasKey(e => new { e.OrderId, e.ProductId })
-                    .HasName("PK__OrderIte__08D097A313E65154");
+                    .HasName("PK__OrderIte__08D097A37EFF7133");
 
                 entity.Property(e => e.ProductName)
                     .IsRequired()
@@ -340,60 +186,12 @@ namespace ProjectFUEN.Models.EFModels
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderItems)
                     .HasForeignKey(d => d.OrderId)
-                    .HasConstraintName("FK__OrderItem__Order__60A75C0F");
+                    .HasConstraintName("FK__OrderItem__Order__403A8C7D");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderItems)
                     .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("FK__OrderItem__Produ__619B8048");
-            });
-
-            modelBuilder.Entity<Photo>(entity =>
-            {
-                entity.Property(e => e.Camera)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(300);
-
-                entity.Property(e => e.Location)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Negative)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Pixel)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ShootingTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Shutter)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Source)
-                    .IsRequired()
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.UploadTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.AuthorNavigation)
-                    .WithMany(p => p.Photos)
-                    .HasForeignKey(d => d.Author)
-                    .HasConstraintName("FK__Photos__Author__29221CFB");
+                    .HasConstraintName("FK__OrderItem__Produ__412EB0B6");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -412,13 +210,13 @@ namespace ProjectFUEN.Models.EFModels
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.BrandId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Products__BrandI__4F7CD00D");
+                    .HasConstraintName("FK__Products__BrandI__2F10007B");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Products__Catego__4E88ABD4");
+                    .HasConstraintName("FK__Products__Catego__2E1BDC42");
             });
 
             modelBuilder.Entity<ProductPhoto>(entity =>
@@ -430,44 +228,23 @@ namespace ProjectFUEN.Models.EFModels
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductPhotos)
                     .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("FK__ProductPh__Produ__52593CB8");
-            });
-
-            modelBuilder.Entity<Question>(entity =>
-            {
-                entity.Property(e => e.Content)
-                    .IsRequired()
-                    .HasMaxLength(300);
-
-                entity.Property(e => e.DateCreated)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.Activity)
-                    .WithMany(p => p.Questions)
-                    .HasForeignKey(d => d.ActivityId)
-                    .HasConstraintName("FK__Questions__Activ__4222D4EF");
-
-                entity.HasOne(d => d.Member)
-                    .WithMany(p => p.Questions)
-                    .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK__Questions__Membe__4316F928");
+                    .HasConstraintName("FK__ProductPh__Produ__31EC6D26");
             });
 
             modelBuilder.Entity<ShoppingCart>(entity =>
             {
                 entity.HasKey(e => new { e.MemberId, e.ProductId })
-                    .HasName("PK__Shopping__C7B0877422FFD759");
+                    .HasName("PK__Shopping__C7B08774CDA42069");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.ShoppingCarts)
                     .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK__ShoppingC__Membe__59063A47");
+                    .HasConstraintName("FK__ShoppingC__Membe__38996AB5");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ShoppingCarts)
                     .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("FK__ShoppingC__Produ__59FA5E80");
+                    .HasConstraintName("FK__ShoppingC__Produ__398D8EEE");
             });
 
             OnModelCreatingPartial(modelBuilder);

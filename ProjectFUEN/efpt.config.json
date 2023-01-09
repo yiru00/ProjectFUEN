@@ -15,30 +15,6 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[Activities]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ActivityCategories]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ActivityCollections]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[ActivityMembers]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Albums]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Answers]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Brands]",
          "ObjectType": 0
       },
@@ -63,14 +39,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[IndiscriminateReports]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Instructors]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Members]",
          "ObjectType": 0
       },
@@ -83,19 +51,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Photos]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[ProductPhotos]",
          "ObjectType": 0
       },
       {
          "Name": "[dbo].[Products]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Questions]",
          "ObjectType": 0
       },
       {

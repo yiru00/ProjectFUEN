@@ -9,12 +9,7 @@ namespace ProjectFUEN.Models.EFModels
     {
         public Member()
         {
-            ActivityCollections = new HashSet<ActivityCollection>();
-            ActivityMembers = new HashSet<ActivityMember>();
-            Albums = new HashSet<Album>();
             OrderDetails = new HashSet<OrderDetail>();
-            Photos = new HashSet<Photo>();
-            Questions = new HashSet<Question>();
             ShoppingCarts = new HashSet<ShoppingCart>();
             Coupons = new HashSet<Coupon>();
             Products = new HashSet<Product>();
@@ -34,12 +29,7 @@ namespace ProjectFUEN.Models.EFModels
         public bool IsConfirmed { get; set; }
         public bool IsInBlackList { get; set; }
 
-        public virtual ICollection<ActivityCollection> ActivityCollections { get; set; }
-        public virtual ICollection<ActivityMember> ActivityMembers { get; set; }
-        public virtual ICollection<Album> Albums { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public virtual ICollection<Photo> Photos { get; set; }
-        public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
 
         public virtual ICollection<Coupon> Coupons { get; set; }

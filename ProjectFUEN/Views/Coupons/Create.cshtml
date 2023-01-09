@@ -1,4 +1,4 @@
-﻿@model ProjectFUEN.Models.EFModels.Coupon
+﻿@model ProjectFUEN.Models.ViewModels.CouponVM
 
 @{
     ViewData["Title"] = "Create";
@@ -29,12 +29,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="LeastCost" class="control-label"></label>
-                <input asp-for="LeastCost" class="form-control" />
+                <input asp-for="LeastCost" class="form-control" min="0" />
                 <span asp-validation-for="LeastCost" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Count" class="control-label"></label>
-                <input asp-for="Count" class="form-control" />
+                <input asp-for="Count" class="form-control" min="0" max="500"/>
                 <span asp-validation-for="Count" class="text-danger"></span>
             </div>
             <div class="form-group">

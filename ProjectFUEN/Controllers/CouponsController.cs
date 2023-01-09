@@ -7,23 +7,34 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProjectFUEN.Models.DTOs;
 using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.Infrastructures.Repositories;
+using ProjectFUEN.Models.Services;
+using ProjectFUEN.Models.Services.Interfaces;
+using ProjectFUEN.Models.ViewModels;
 
 namespace ProjectFUEN.Controllers
 {
     public class CouponsController : Controller
     {
         private readonly ProjectFUENContext _context;
+        private CouponService couponService;
+        private ICouponRepository repo;
 
         public CouponsController(ProjectFUENContext context)
         {
             _context = context;
+            this.repo = new CouponRepository(context);
+            this.couponService = new CouponService(repo);
         }
 
         // GET: Coupons
         public  IActionResult Index()
         {
-              return View( _context.Coupons.ToList());
+            IEnumerable<CouponVM> allCoupons = repo.GetAll().Select(c => c.ToCouponVM());
+            return View(allCoupons);
+            
         }
         public string MailToHtml(string couponCode)
         {
@@ -32,6 +43,8 @@ namespace ProjectFUEN.Controllers
             mail.From = new MailAddress("projectfuen@gmail.com", "攝影交流平台");
 
             StringBuilder sb = new StringBuilder();
+
+            var emilAddresses = _context.Members.Select(m => m.EmailAccount).ToList();
 
             IEnumerable<string> emilAddress = new string[] { "jim2345678@gmail.com", "chenhuanhuan1127@gmail.com" };
 
@@ -99,6 +112,7 @@ namespace ProjectFUEN.Controllers
 
             var coupon = await _context.Coupons
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (coupon == null)
             {
                 return NotFound();
@@ -195,7 +209,7 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
 
-            return View(coupon);
+            return View(coupon.ToCouponDto().ToCouponVM());
         }
 
         // POST: Coupons/Delete/5

@@ -6,16 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ProjectFUEN-417c8fce-eded-4234-b925-97ebb68c98c2</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Models\Services\" />
-    <None Remove="Models\DTOs\" />
-    <None Remove="Models\ViewModels\" />
-    <None Remove="Models\Infrastructures\" />
-    <None Remove="Models\Infrastructures\ExtensionMethods\" />
-    <None Remove="Models\Infrastructures\Repositories\" />
-    <None Remove="Models\EFModels\" />
-  </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
@@ -27,15 +17,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.12" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Services\" />
-    <Folder Include="Models\DTOs\" />
-    <Folder Include="Models\ViewModels\" />
-    <Folder Include="Models\Infrastructures\" />
-    <Folder Include="Models\Infrastructures\ExtensionMethods\" />
-    <Folder Include="Models\Infrastructures\Repositories\" />
-    <Folder Include="Models\EFModels\" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
   </ItemGroup>
 </Project>

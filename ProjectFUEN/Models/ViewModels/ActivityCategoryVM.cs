@@ -9,7 +9,7 @@ namespace ProjectFUEN.Models.ViewModels
     {
         public int Id { get; set; }
 
-        [Display(Name = "顯示順序")]
+        [Display(Name = "編號順序")]
         public int DisplayOrder { get; set; }
 
         [Display(Name = "類型名稱")]
@@ -26,5 +26,7 @@ namespace ProjectFUEN.Models.ViewModels
                 CategoryName = source.CategoryName,
             };
         }
+
+        
     }
 }

@@ -16,7 +16,7 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         public int Id { get; set; }
-        [Display(Name ="顯示順序")]
+        [Display(Name ="順序編號")]
 		[Required]
 		public int DisplayOrder { get; set; }
 

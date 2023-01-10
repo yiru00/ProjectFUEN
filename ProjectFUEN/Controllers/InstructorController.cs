@@ -24,22 +24,7 @@ namespace ProjectFUEN.Controllers
 			IInstructorRepository repo = new InstructorRepository(_context);
 			this.instructorService = new InstructorService(repo);
 		}
-		public ActionResult UploadFile(IFormFile file)
-		{
-
-			(bool, string) uploadSuccess = fileManager.UploadFile(file);
-			if (!uploadSuccess.Item1) ModelState.AddModelError("ResumePhoto", uploadSuccess.Item2);
-			
-
-			if(ModelState.IsValid)
-			{
-				return View("Index");
-			}
-			else
-			{
-				return View("Create");
-			}
-		}
+		
 		// GET: Instructor
 		public async Task<IActionResult> Index()
 		{
@@ -75,14 +60,25 @@ namespace ProjectFUEN.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,InstructorName,ResumePhoto,Description")] Instructor instructor)
+		public async Task<IActionResult> Create(IFormFile file, [Bind("Id,InstructorName,Description")] InstructorVM instructor)
 		{
+			//上傳照片
+			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
+			if (!uploadSuccess.Item1)
+			{
+				ViewBag.photo = uploadSuccess.Item2;
+				return View(instructor);
+			};
+
+
 			if (ModelState.IsValid)
 			{
-				_context.Add(instructor);
+				_context.Add(instructor.ToEntity(uploadSuccess.Item3));
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
+
 			}
+
 			return View(instructor);
 		}
 

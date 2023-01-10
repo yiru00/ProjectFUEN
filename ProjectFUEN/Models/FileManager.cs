@@ -4,12 +4,17 @@ namespace fileUpload.Models
 {
 	public class FileManager
 	{
-
-		public (bool, string) UploadFile(IFormFile file)
+		/// <summary>
+		/// 上傳是否成功,erroMessage,fileName
+		/// </summary>
+		/// <param name="file"></param>
+		/// <returns></returns>
+		public (bool, string,string) UploadFile(IFormFile file)
 		{
 
 			bool isCopied = false;
 			string message = string.Empty;
+			string resumePhoto = string.Empty;
 			//1 check if the file length is greater than 0 bytes 
 			if (file!=null)
 			{
@@ -31,6 +36,7 @@ namespace fileUpload.Models
 						file.CopyTo(fileStream);
 						isCopied = true;
 					}
+					resumePhoto = newFileName;
 				}
 				else
 				{
@@ -43,7 +49,7 @@ namespace fileUpload.Models
 				message = "記得選取檔案";
 			}
 
-			return (isCopied, message);
+			return (isCopied, message,resumePhoto);
 
 		}
 

@@ -1,4 +1,5 @@
 ﻿using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.ViewModels;
 
 namespace ProjectFUEN.Models.DTOs
 {
@@ -24,6 +25,19 @@ namespace ProjectFUEN.Models.DTOs
                 Discount = source.Discount,
                 LeastCost= source.LeastCost,
                 Count= source.Count
+            };
+        }
+
+        public static CouponDto VMToCouponDto(this CouponVM source)
+        {
+            return new CouponDto
+            {
+                Id = source.Id,
+                Code = source.Code,
+                Name = source.Name,
+                Discount = source.Discount,
+                LeastCost = source.LeastCost,
+                Count = source.Count
             };
         }
     }

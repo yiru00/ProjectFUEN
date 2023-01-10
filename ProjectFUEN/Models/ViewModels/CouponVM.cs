@@ -17,13 +17,11 @@ namespace ProjectFUEN.Models.ViewModels
         public string Name { get; set; }
 
         [Display(Name = "Discount")] //不能是負的 小於10000
-        [Range(0, 10000,
+        [Range(0, 9999,
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         [Required(ErrorMessage = "{0}必填")]
         public decimal Discount { get; set; }
 
-        [Range(0, 100000,
-        ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         [Display(Name = "LeastCost")]
         [Required(ErrorMessage = "{0}必填")]
         public int LeastCost { get; set; }

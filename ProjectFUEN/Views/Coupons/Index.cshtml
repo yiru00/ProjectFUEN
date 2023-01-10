@@ -8,6 +8,7 @@
 
 <p>
     <a asp-action="Create">Create New</a>
+
 </p>
 <table class="table">
     <thead>
@@ -49,11 +50,11 @@
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
             <td>
-                    <button class="btn btn-info" id="@item.Code" data-bs-toggle="modal" data-bs-target="#exampleModal">發送</button>
+                <button class="btn btn-info sendCoupon" id="@item.Code" data-bs-toggle="modal" data-bs-target="#SendCouponModal">發送</button>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
@@ -62,7 +63,7 @@
 </table>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="SendCouponModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -80,9 +81,10 @@
   </div>
 </div>
 
+
 @section Scripts{
     <script>
-        $(".btn").on("click", function () {
+        $(".sendCoupon").on("click", function () {
             let couponCode = $(this).attr("id");
 
             //alert(couponCode);
@@ -96,6 +98,7 @@
                 alert(err.statusText);
             })
         })
+
 
 
     </script>

@@ -2,6 +2,8 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace ProjectFUEN.Models.EFModels
 {
@@ -13,11 +15,34 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         public int Id { get; set; }
-        public string EventName { get; set; }
-        public string Photo { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+
+		[Display(Name = "活動名稱")]
+		[Required(ErrorMessage = "{0} 必填")]
+		public string EventName { get; set; }
+
+
+
+		[Display(Name = "活動照片")]
+		[Required(ErrorMessage = "{0} 必選")]
+
+		public string Photo { get; set; }
+
+
+		[Display(Name = "開始日期")]
+		[DataType(DataType.DateTime, ErrorMessage = "格式有誤")]
+
+		public DateTime StartDate { get; set; }
+
+
+		[Display(Name = "結束日期")]
+		[DataType(DataType.DateTime, ErrorMessage = "格式有誤")]
+
+		public DateTime EndDate { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
-    }
+
+		//public IFormFile Image { get; set; }
+
+
+	}
 }

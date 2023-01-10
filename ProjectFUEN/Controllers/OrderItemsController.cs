@@ -21,7 +21,6 @@ namespace ProjectFUEN.Controllers
         // GET: OrderItems
         public async Task<IActionResult> Index()
         {
-
             var projectFUENContext = _context.OrderItems.Include(o => o.Order).Include(o => o.Product);
             return View(await projectFUENContext.ToListAsync());
         }
@@ -47,30 +46,30 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: OrderItems/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["OrderId"] = new SelectList(_context.OrderDetails, "Id", "Address");
-        //    ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductSpec");
-        //    return View();
-        //}
+        public IActionResult Create()
+        {
+            ViewData["OrderId"] = new SelectList(_context.OrderDetails, "Id", "Address");
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductSpec");
+            return View();
+        }
 
         // POST: OrderItems/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("OrderId,ProductId,ProductName,ProductPrice,ProductNumber")] OrderItem orderItem)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(orderItem);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["OrderId"] = new SelectList(_context.OrderDetails, "Id", "Address", orderItem.OrderId);
-        //    ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductSpec", orderItem.ProductId);
-        //    return View(orderItem);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("OrderId,ProductId,ProductName,ProductPrice,ProductNumber")] OrderItem orderItem)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(orderItem);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["OrderId"] = new SelectList(_context.OrderDetails, "Id", "Address", orderItem.OrderId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductSpec", orderItem.ProductId);
+            return View(orderItem);
+        }
 
         // GET: OrderItems/Edit/5
         public async Task<IActionResult> Edit(int? id)

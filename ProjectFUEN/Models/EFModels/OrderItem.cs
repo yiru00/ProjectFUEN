@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectFUEN.Models.EFModels
 {
@@ -12,8 +13,9 @@ namespace ProjectFUEN.Models.EFModels
         public string ProductName { get; set; }
         public int ProductPrice { get; set; }
         public int ProductNumber { get; set; }
-
+        [Display(Name = "訂單編號")]
         public virtual OrderDetail Order { get; set; }
+        [Display (Name ="產品")]
         public virtual Product Product { get; set; }
     }
 }

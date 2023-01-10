@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Instructor>
+
+@{
+    ViewData["Title"] = "講師列表";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">新增</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.InstructorName)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                 <a asp-action="Details" asp-route-id="@item.Id" class="d-flex w-100">@Html.DisplayFor(modelItem => item.InstructorName)</a>
+                
+            </td>
+            
+            <td>
+                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square"></i></a>
+                 <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

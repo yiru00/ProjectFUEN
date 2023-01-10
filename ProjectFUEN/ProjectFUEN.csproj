@@ -33,5 +33,6 @@
   <ItemGroup>
     <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="Models\EFModels\" />
+    <Folder Include="UploadedFiles\" />
   </ItemGroup>
 </Project>

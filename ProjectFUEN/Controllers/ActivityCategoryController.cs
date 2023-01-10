@@ -47,7 +47,7 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,DisplayOrder,CategoryName")] ActivityCategory activityCategory)
+        public IActionResult Create([Bind("Id,DisplayOrder,CategoryName")] ActivityCategoryVM activityCategory)
         {
 
             try
@@ -56,20 +56,20 @@ namespace ProjectFUEN.Controllers
             }
             catch (Exception ex)
             {
-                if (ex.Message == "類型已存在")
+                if (ex.Message == "編號已存在")
                 {
-                    ModelState.AddModelError("CategoryName", ex.Message);
+                    ModelState.AddModelError("DisplayOrder", ex.Message);
+                    
                 }
                 else
                 {
-                    ModelState.AddModelError("DisplayOrder", ex.Message);
+                    ModelState.AddModelError("CategoryName", ex.Message);
                 }
 
             }
             if (ModelState.IsValid)
             {
-                //_context.Add(activityCategory);
-                //await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
             return View(activityCategory);
@@ -92,7 +92,7 @@ namespace ProjectFUEN.Controllers
                 ViewBag.message = "找不到欲編輯的拍攝類別";
                 return View("../ErrorPage/page404");   
 			}
-            return View(data);
+            return View(data.ToVM());
         }
 
         // POST: ActivityCategory/Edit/5
@@ -100,7 +100,7 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  ActionResult Edit(int DisplayOrder, [Bind("Id,DisplayOrder,CategoryName")] ActivityCategory activityCategory)
+        public  ActionResult Edit(int DisplayOrder, [Bind("Id,DisplayOrder,CategoryName")] ActivityCategoryVM activityCategory)
         {
             if (DisplayOrder != activityCategory.DisplayOrder)
             {
@@ -113,15 +113,16 @@ namespace ProjectFUEN.Controllers
             }
             catch (Exception ex)
             {
-                if (ex.Message== "類型已存在")
+                if (ex.Message == "編號已存在")
                 {
-                    ModelState.AddModelError("CategoryName", ex.Message);
+                    ModelState.AddModelError("DisplayOrder", ex.Message);
+
                 }
                 else
                 {
-                    ModelState.AddModelError("DisplayOrder", ex.Message);
+                    ModelState.AddModelError("CategoryName", ex.Message);
                 }
-                
+
             }
 
             if (ModelState.IsValid)
@@ -154,25 +155,25 @@ namespace ProjectFUEN.Controllers
                 return View("../ErrorPage/page404");
             }
 
-            return View(activityCategory);
+            return View(activityCategory.ToDto().ToVM());
         }
 
         // POST: ActivityCategory/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int DisplayOrder)
+        public IActionResult DeleteConfirmed(int DisplayOrder)
         {
             if (_context.ActivityCategories == null)
             {
                 return Problem("Entity set 'ProjectFUENContext.ActivityCategories'  is null.");
             }
-            var activityCategory = await _context.ActivityCategories.FindAsync(DisplayOrder);
+            var activityCategory =  _context.ActivityCategories.FirstOrDefault(x => x.DisplayOrder == DisplayOrder);
             if (activityCategory != null)
             {
                 _context.ActivityCategories.Remove(activityCategory);
             }
             
-            await _context.SaveChangesAsync();
+             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

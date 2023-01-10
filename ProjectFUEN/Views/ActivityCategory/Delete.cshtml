@@ -1,4 +1,4 @@
-﻿@model ProjectFUEN.Models.EFModels.ActivityCategory
+﻿@model ProjectFUEN.Models.ViewModels.ActivityCategoryVM
 
 @{
     ViewData["Title"] = "確認刪除拍攝類型";
@@ -26,7 +26,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="DisplayOrder" />
         <input type="submit" value="刪除" class="btn btn-danger" /> |
         <a asp-action="Index">回到拍攝列表</a>
     </form>

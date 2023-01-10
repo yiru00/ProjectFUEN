@@ -20,6 +20,13 @@ namespace ProjectFUEN.Models.DTOs
                 DisplayOrder = source.DisplayOrder,
                 CategoryName = source.CategoryName,
             };
-        
+        public static ActivityCategoryDto ToDto(this ActivityCategoryVM source)
+            => new ActivityCategoryDto
+            {
+                Id = source.Id,
+                DisplayOrder = source.DisplayOrder,
+                CategoryName = source.CategoryName,
+            };
+
     }
 }

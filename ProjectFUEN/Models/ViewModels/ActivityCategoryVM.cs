@@ -26,7 +26,15 @@ namespace ProjectFUEN.Models.ViewModels
                 CategoryName = source.CategoryName,
             };
         }
+        public static ActivityCategoryVM ToVM(this ActivityCategory source)
+        {
+            return new ActivityCategoryVM
+            {
+                Id = source.Id,
+                DisplayOrder = source.DisplayOrder,
+                CategoryName = source.CategoryName,
+            };
+        }
 
-        
     }
 }

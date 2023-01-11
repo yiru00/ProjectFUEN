@@ -15,7 +15,7 @@ namespace ProjectFUEN.Models.ViewModels
         [Display(Name = "類型名稱")]
         public string CategoryName { get; set; }
     }
-    public static partial class ActivityCategoryDtoExts
+    public static partial class ActivityCategoryExts
     {
         public static ActivityCategoryVM ToVM(this ActivityCategoryDto source)
         {

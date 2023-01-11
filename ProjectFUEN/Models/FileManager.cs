@@ -22,7 +22,7 @@ namespace fileUpload.Models
 				//2 Get the extension of the file
 				string extension = Path.GetExtension(fileName);
 				//3 check the file extension as png
-				if (extension == ".png" || extension == ".jepg" || extension == ".jpg" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
+				if (extension == ".png" || extension == ".jepg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
 				{
 					string path = Directory.GetCurrentDirectory();
 					string newFileName = GetNewFileName(path, fileName);

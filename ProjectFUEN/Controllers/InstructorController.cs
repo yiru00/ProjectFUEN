@@ -8,6 +8,7 @@ using fileUpload.Models;
 using Microsoft.AspNetCore.Identity;
 using ProjectFUEN.Models;
 using ProjectFUEN.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ProjectFUEN.Controllers
 {
@@ -60,7 +61,7 @@ namespace ProjectFUEN.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(IFormFile file, [Bind("Id,InstructorName,Description")] InstructorVM instructor)
+		public async Task<IActionResult> Create(IFormFile file, [Bind("Id,InstructorName,Description")]InstructorVM instructor)
 		{
 			//上傳照片
 			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
@@ -68,12 +69,16 @@ namespace ProjectFUEN.Controllers
 			{
 				ViewBag.photo = uploadSuccess.Item2;
 				return View(instructor);
-			};
+			}
+			else
+			{
+				instructor.ResumePhoto = uploadSuccess.Item3;
 
+			}
 
 			if (ModelState.IsValid)
 			{
-				_context.Add(instructor.ToEntity(uploadSuccess.Item3));
+				_context.Add(instructor.ToEntity());
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));
 
@@ -95,7 +100,7 @@ namespace ProjectFUEN.Controllers
 			{
 				return NotFound();
 			}
-			return View(instructor);
+			return View(instructor.ToVM());
 		}
 
 		// POST: Instructor/Edit/5
@@ -103,39 +108,70 @@ namespace ProjectFUEN.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,InstructorName,ResumePhoto,Description")] Instructor instructor)
+		public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,InstructorName,ResumePhoto,Description")] InstructorVM instructor)
 		{
 			if (id != instructor.Id)
 			{
 				return NotFound();
 			}
+			//判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
 			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
-			if (!uploadSuccess.Item1)
+
+			//沒上傳檔案=>用原本資料庫的檔案，不要跳未上傳的錯誤訊息
+			//有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
+			
+
+			if (!uploadSuccess.Item1)//沒上傳
 			{
+				
+				if (ModelState.IsValid)
+				{
+					
+					_context.Update(instructor.ToEntity());
+					await _context.SaveChangesAsync();
+					return RedirectToAction(nameof(Index));
+
+				}
+				return View(instructor);
+			}
+			else //有上傳
+			{
+				if (uploadSuccess.Item2!= "檔案必須是圖片檔案") //沒跳檔案錯誤
+				{
+					instructor.ResumePhoto = uploadSuccess.Item3; //傳入新檔名
+					_context.Update(instructor.ToEntity());
+					await _context.SaveChangesAsync();
+					return RedirectToAction(nameof(Index));
+				}
 				ViewBag.photo = uploadSuccess.Item2;
 				return View(instructor);
-			};
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					_context.Update(instructor);
-					await _context.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!InstructorExists(instructor.Id))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
-				return RedirectToAction(nameof(Index));
+
 			}
-			return View(instructor);
+
+			
+
+			
+			//if (ModelState.IsValid)
+			//{
+			//	try
+			//	{
+			//		_context.Update(instructor);
+			//		await _context.SaveChangesAsync();
+			//	}
+			//	catch (DbUpdateConcurrencyException)
+			//	{
+			//		if (!InstructorExists(instructor.Id))
+			//		{
+			//			return NotFound();
+			//		}
+			//		else
+			//		{
+			//			throw;
+			//		}
+			//	}
+			//	return RedirectToAction(nameof(Index));
+			//}
+			//return View(instructor);
 		}
 
 		// GET: Instructor/Delete/5

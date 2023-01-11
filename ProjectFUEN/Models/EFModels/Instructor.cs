@@ -30,13 +30,13 @@ namespace ProjectFUEN.Models.EFModels
     }
     public static partial class InstructorExts
     {
-        public static Instructor ToEntity(this InstructorVM source,string resumePhoto)
+        public static Instructor ToEntity(this InstructorVM source)
         {
             return new Instructor
             {
                 Id = source.Id,
                 InstructorName=source.InstructorName,
-                ResumePhoto=resumePhoto,
+                ResumePhoto=source.ResumePhoto,
                 Description=source.Description,
                 
             };

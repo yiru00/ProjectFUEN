@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using ProjectFUEN.Models.DTOs;
 
 namespace ProjectFUEN.Models.EFModels
 {
@@ -251,5 +252,7 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<ProjectFUEN.Models.DTOs.OrderDetailsDTO> OrderDetailsDTO { get; set; }
     }
 }

@@ -63,7 +63,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $("#Type").hide();
-        $(".discountT").on("change","load",function(){
+        $(".discountT").on("change",function(){
             $("#Type").show();
             if ($(".discountT").val() === "1") $("#Type").text("折");
             else if($(".discountT").val() === "2") $("#Type").text("元");

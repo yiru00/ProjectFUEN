@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Index";
     //var orderstate = viewbag.state as IEnumerable<SelectListItem>;
-
 }
 
 <h1>訂單管理</h1>
@@ -14,10 +13,10 @@
                 <div class="row list-group-horizontal " >
            
 
-                    <div class="col-md-4 list-group-horizontal">
-                        商品名稱:
-                        <input type="text" name="MemberName" class="" value="" id="Searchtext">           
-                        <input type="submit" class="btn btn-dark " value="Search" id="SearchClick" />
+                    <div class="col-md-4 list-group-horizontal">                      
+                        <input type="text" name="MemberName" class="" value="" id="Searchtext" placeholder="請輸入.."/>           
+                        @*<input type="submit" class="btn btn-dark " value="Search" id="SearchClick" />*@
+                <button class="btn btn-dark" id="SearchClick">Search</button>
                       </div>
                 </div>
 
@@ -43,7 +42,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderDate)
@@ -59,7 +59,7 @@
             </td>
             <td>
                 <a  asp-action="Edit" asp-route-id="@item.Id">編輯</a> |
-                    <a asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id">詳細資訊</a> |
+                 <a asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id">詳細資訊</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">刪除</a>
             </td>
         </tr>
@@ -70,25 +70,20 @@
 
 @section Scripts
     {
-    <script>     
-           
-        $("#SearchClick").on("click",function(){
+    <script>
+
+        $("#SearchClick").on("click", function () {
            
             $.ajax({
                 type:"GET",
-                url:"https:localhost:7027/OrderDetails/Search/?account=" + $("#Searchtext").val()
+                url: "https://localhost:7027/OrderDetails/Search/?account=" + $("#Searchtext").val()
 
-            }).done(function(data){console.log(data)
+            }).done(function(data){
+                showtable(data)
             })
             .fail(function(err){err.statuxtext});
             
         } )
-
-
-
-
-
-
 
     </script>
 }

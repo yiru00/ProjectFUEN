@@ -13,12 +13,11 @@ namespace ProjectFUEN.Models.ViewModels
         [Display(Name = "姓名")]
         [Required]
         [StringLength(50)]
-        public string InstructorName { get; set; }
-		[BindNever]
+        public string ?InstructorName { get; set; }
 		public string ?ResumePhoto { get; set; }
         [Required]
         [StringLength(300)]
-        public string Description { get; set; }
+        public string ?Description { get; set; }
 
     }
 	public static partial class InstructorExts

@@ -117,35 +117,46 @@ namespace ProjectFUEN.Controllers
 			//判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
 			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
-			//沒上傳檔案=>用原本資料庫的檔案，不要跳未上傳的錯誤訊息
+			//上傳檔案失敗(沒上傳東西/上傳圖檔以外的)=>
 			//有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
 			
 
-			if (!uploadSuccess.Item1)//沒上傳
+			if (!uploadSuccess.Item1)//上傳失敗 item1=false
 			{
 				
-				if (ModelState.IsValid)
+				if (uploadSuccess.Item2== "記得選取檔案") //未上傳任何檔案，用原有的
 				{
-					
-					_context.Update(instructor.ToEntity());
-					await _context.SaveChangesAsync();
-					return RedirectToAction(nameof(Index));
+					ModelState.Remove("file");
+					if (ModelState.IsValid)
+					{
+						_context.Update(instructor.ToEntity());
+						await _context.SaveChangesAsync();
+						return RedirectToAction(nameof(Index));
 
+					}
+				}
+				else if (uploadSuccess.Item2== "檔案必須是圖片檔案")//上傳成圖檔以外的
+				{
+					ViewBag.photoError = uploadSuccess.Item2; //錯誤訊息
+					return View(instructor);
 				}
 				return View(instructor);
 			}
-			else //有上傳
+			else //有上傳檔案
 			{
-				if (uploadSuccess.Item2!= "檔案必須是圖片檔案") //沒跳檔案錯誤
+				if (uploadSuccess.Item2== "") //上傳圖檔，錯誤訊息=""
 				{
 					instructor.ResumePhoto = uploadSuccess.Item3; //傳入新檔名
 					_context.Update(instructor.ToEntity());
 					await _context.SaveChangesAsync();
 					return RedirectToAction(nameof(Index));
 				}
-				ViewBag.photo = uploadSuccess.Item2;
-				return View(instructor);
-
+				else //上傳圖檔以外的(ppt.pdf...)
+				{
+					ViewBag.photoError = uploadSuccess.Item2;
+					return View(instructor);
+				}
+				
 			}
 
 			

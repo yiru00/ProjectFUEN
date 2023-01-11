@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using ProjectFUEN.Models.VM;
 
 namespace ProjectFUEN.Models.EFModels
 {
@@ -673,5 +674,9 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<ProjectFUEN.Models.VM.CategoryIndexVM> CategoryIndexVM { get; set; }
+
+        public DbSet<ProjectFUEN.Models.VM.ProductIndexVm> ProductIndexVm { get; set; }
     }
 }

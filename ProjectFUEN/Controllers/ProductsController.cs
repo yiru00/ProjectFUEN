@@ -2,27 +2,66 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using fileUpload.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.Infrastructures.Repositories;
+using ProjectFUEN.Models.Services;
+using ProjectFUEN.Models.Services.interfaces;
+using ProjectFUEN.Models.VM;
 
 namespace ProjectFUEN.Controllers
 {
     public class ProductsController : Controller
     {
+        FileManager fileManager;
         private readonly ProjectFUENContext _context;
+        private IProductPhotoService productPhotoService;
 
         public ProductsController(ProjectFUENContext context)
         {
+            fileManager = new FileManager();
             _context = context;
+            IProductPhotoRepository repo = new ProductPhotoRepository(_context);
+            this.productPhotoService = new IProductPhotoService(repo);
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            var projectFUENContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
-            return View(await projectFUENContext.ToListAsync());
+
+            //var projectFUENContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
+            //return View(await projectFUENContext.ToListAsync());
+
+            var data = _context.Products
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Price,
+                    p.ReleaseDate,
+                    p.ManufactorDate,
+                    p.ProductSpec,
+
+                    CategoryName = p.Category.Name,
+                    BrandName = p.Brand.Name
+
+                }).ToList()
+                .Select(p => new ProductIndexVm
+                {
+                    Id = p.Id,
+                    CategoryName = p.CategoryName,
+                    BrandName = p.BrandName,
+                    Price = p.Price,
+                    ReleaseDate = p.ReleaseDate,
+                    ManufactorDate = p.ManufactorDate,
+                    ProductSpec = p.ProductSpec,
+                });
+            return View(data);
+
         }
 
         // GET: Products/Details/5
@@ -71,7 +110,7 @@ namespace ProjectFUEN.Controllers
             return View(product);
         }
 
-        // GET: Products/Edit/5
+        //GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Products == null)
@@ -89,9 +128,9 @@ namespace ProjectFUEN.Controllers
             return View(product);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //POST: Products/Edit/5
+         //To protect from overposting attacks, enable the specific properties you want to bind to.
+         //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,BrandId,Name,Price,ManufactorDate,ReleaseDate,Inventory,ProductSpec")] Product product)
@@ -160,14 +199,14 @@ namespace ProjectFUEN.Controllers
             {
                 _context.Products.Remove(product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-          return _context.Products.Any(e => e.Id == id);
+            return _context.Products.Any(e => e.Id == id);
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.VM;
 
 namespace ProjectFUEN.Controllers
 {
@@ -19,9 +20,22 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        public  ActionResult Index()
         {
-              return View(await _context.Categories.ToListAsync());
+
+            var data = _context.Categories
+            .Select(c => new
+            {
+                Id = c.Id,
+                Name = c.Name,
+            })
+            .Select(x => new CategoryIndexVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+            });
+
+            return View(data);
         }
 
         // GET: Categories/Details/5

@@ -9,27 +9,28 @@ namespace fileUpload.Models
 		/// </summary>
 		/// <param name="file"></param>
 		/// <returns></returns>
-		public (bool, string,string) UploadFile(IFormFile file)
+		public (bool, string, string) UploadFile(IFormFile file)
 		{
 
 			bool isCopied = false;
 			string message = string.Empty;
 			string resumePhoto = string.Empty;
 			//1 check if the file length is greater than 0 bytes 
-			if (file!=null)
+			if (file != null)
 			{
 				string fileName = file.FileName;
 				//2 Get the extension of the file
 				string extension = Path.GetExtension(fileName);
 				//3 check the file extension as png
-				if (extension == ".png" || extension == ".jepg" || extension ==".jpg"|| extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon"  )
+				if (extension == ".png" || extension == ".jepg" || extension == ".jpg" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
 				{
 					string path = Directory.GetCurrentDirectory();
 					string newFileName = GetNewFileName(path, fileName);
 					//4 set the path where file will be copied
 					string filePath = Path.GetFullPath(
 							Path.Combine(Directory.GetCurrentDirectory(),
-														"UploadedFiles"));
+														"wwwroot/UploadedFiles"));
+
 					//5 copy the file to the path
 					using (var fileStream = new FileStream(Path.Combine(filePath, newFileName), FileMode.Create))
 					{
@@ -37,19 +38,19 @@ namespace fileUpload.Models
 						isCopied = true;
 					}
 					resumePhoto = newFileName;
-			}
-			else
-			{
-				message = "檔案必須是圖片檔案";
-			}
+				}
+				else
+				{
+					message = "檔案必須是圖片檔案";
+				}
 
-		}
+			}
 			else
 			{
 				message = "記得選取檔案";
 			}
 
-			return (isCopied, message,resumePhoto);
+			return (isCopied, message, resumePhoto);
 
 		}
 
@@ -61,7 +62,7 @@ namespace fileUpload.Models
 
 			do
 			{
-				newFileName = Guid.NewGuid().ToString("N").Substring(0,28) + ext;  //guid會有dash-，ToString("N")去掉dash
+				newFileName = Guid.NewGuid().ToString("N").Substring(0, 28) + ext;  //guid會有dash-，ToString("N")去掉dash
 				fullPath = System.IO.Path.Combine(path, newFileName);
 			} while (System.IO.File.Exists(fullPath));
 			return newFileName;

@@ -103,13 +103,18 @@ namespace ProjectFUEN.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,InstructorName,ResumePhoto,Description")] Instructor instructor)
+		public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,InstructorName,ResumePhoto,Description")] Instructor instructor)
 		{
 			if (id != instructor.Id)
 			{
 				return NotFound();
 			}
-
+			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
+			if (!uploadSuccess.Item1)
+			{
+				ViewBag.photo = uploadSuccess.Item2;
+				return View(instructor);
+			};
 			if (ModelState.IsValid)
 			{
 				try

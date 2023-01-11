@@ -8,5 +8,13 @@ namespace ProjectFUEN.Models.Services.Interfaces
         IEnumerable<CouponDto> GetAll(); 
 
         void Create(CouponDto dto);
+
+        (bool isExist, CouponDto dto) CouponIsExist(int? id);
+
+        void Edit(CouponDto dto);
+
+        void Delete(int id);
+
+        IEnumerable<string> GetAllEmails();
     }
 }

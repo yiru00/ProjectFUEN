@@ -1,7 +1,9 @@
-﻿@model ProjectFUEN.Models.ViewModels.CouponVM
+﻿@model ProjectFUEN.Models.ViewModels.DeleteCouponVM
 
 @{
     ViewData["Title"] = "Delete";
+    int m = Model.discountType;
+    string discountText = (m == 1) ? "折扣" : "折價";
 }
 
 <h1>Delete</h1>
@@ -30,11 +32,18 @@
             @Html.DisplayFor(model => model.Discount)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.discountType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => discountText)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.LeastCost)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.LeastCost)
         </dd>
+        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Count)
         </dt>

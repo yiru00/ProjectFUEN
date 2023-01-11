@@ -11,6 +11,8 @@ namespace ProjectFUEN.Models.DTOs
         public decimal Discount { get; set; }
         public int LeastCost { get; set; }
         public int Count { get; set; }
+
+        public int discountType { get; set; }
     }
 
     public static class CouponExts
@@ -28,7 +30,7 @@ namespace ProjectFUEN.Models.DTOs
             };
         }
 
-        public static CouponDto VMToCouponDto(this CouponVM source)
+        public static CouponDto CreateVMToDto(this CreateCouponVM source)
         {
             return new CouponDto
             {
@@ -37,7 +39,36 @@ namespace ProjectFUEN.Models.DTOs
                 Name = source.Name,
                 Discount = source.Discount,
                 LeastCost = source.LeastCost,
-                Count = source.Count
+                Count = source.Count,
+                discountType= source.discountType,
+            };
+        }
+
+        public static CouponDto EditVMToDto(this EditCouponVM source)
+        {
+            return new CouponDto
+            {
+                Id = source.Id,
+                Code = source.Code,
+                Name = source.Name,
+                Discount = source.Discount,
+                LeastCost = source.LeastCost,
+                Count = source.Count,
+                discountType = source.discountType,
+            };
+        }
+
+        public static CouponDto DeleteVMToDto(this DeleteCouponVM source)
+        {
+            return new CouponDto
+            {
+                Id = source.Id,
+                Code = source.Code,
+                Name = source.Name,
+                Discount = source.Discount,
+                LeastCost = source.LeastCost,
+                Count = source.Count,
+                discountType = source.discountType,
             };
         }
     }

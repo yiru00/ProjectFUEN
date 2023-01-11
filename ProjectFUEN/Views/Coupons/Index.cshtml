@@ -1,18 +1,21 @@
-﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.CouponVM>
+﻿@using ProjectFUEN.Models.ViewModels;
+@model IEnumerable<ProjectFUEN.Models.ViewModels.CouponVM>
 
 @{
     ViewData["Title"] = "Index";
+    CouponVM[] b = Model.ToArray();
 }
 
-<h1>Index總覽</h1>
+<h1>Coupons</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
-
+    <a asp-action="Create"><i class="fa-regular fa-square-plus"></i>Create</a>
 </p>
-<table class="table">
+<h2>@b[0].Name</h2>
+
+<table class="table table-hover">
     <thead>
-        <tr>
+        <tr class="table-primary text-center">
             <th>
                 @Html.DisplayNameFor(model => model.Code)
             </th>
@@ -28,12 +31,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.Count)
             </th>
-            <th></th>
+            <th>
+                Send
+            </th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            <tr class="text-center" style="vertical-align: middle">
             <td>
                 @Html.DisplayFor(modelItem => item.Code)
             </td>
@@ -50,12 +57,12 @@
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
             <td>
-                <button class="btn btn-info sendCoupon" id="@item.Code" data-bs-toggle="modal" data-bs-target="#SendCouponModal">發送</button>
+                <button class="btn btn-primary sendCoupon" id="@item.Code" data-bs-toggle="modal" data-bs-target="#SendCouponModal"><i class="fa-regular fa-envelope sendIcon"></i></button>
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square fs-5"></i></a> |
+                    @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
+                    <button class="btn btn-primary deleteCoupon" id="@item.Id" data-bs-toggle="modal" data-bs-target="#DeleteCouponModal">D</button>
             </td>
         </tr>
 }
@@ -71,6 +78,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
+          @b[0].Name
         優惠券發送成功
       </div>
       <div class="modal-footer border-top-0">
@@ -81,25 +89,45 @@
   </div>
 </div>
 
+<div class="modal fade" id="DeleteCouponModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">確認刪除</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                優惠券刪除
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 @section Scripts{
     <script>
         $(".sendCoupon").on("click", function () {
             let couponCode = $(this).attr("id");
-
+            $(this).attr('disabled', true)
+            .css({"background-color":"gray","border-color":"gray"});
             //alert(couponCode);
 
-            $.ajax({
-                type: "GET",
-                url: "https://localhost:7027/Coupons/MailToHtml?couponCode=" + couponCode
-            }).done(function (data) {
-                //alert(data);
-            }).fail(function (err) {
-                alert(err.statusText);
-            })
+            //$.ajax({
+            //    type: "GET",
+            //    url: "https://localhost:7027/Coupons/MailToHtml?couponCode=" + couponCode
+            //}).done(function (data) {
+            //    //alert(data);
+            //}).fail(function (err) {
+            //    alert(err.statusText);
+            //})
+            
         })
-
-
 
     </script>
 }

@@ -12,10 +12,16 @@ namespace ProjectFUEN.Models.EFModels
             ActivityCollections = new HashSet<ActivityCollection>();
             ActivityMembers = new HashSet<ActivityMember>();
             Albums = new HashSet<Album>();
+            CommentReports = new HashSet<CommentReport>();
+            Comments = new HashSet<Comment>();
             OrderDetails = new HashSet<OrderDetail>();
+            OthersCollections = new HashSet<OthersCollection>();
+            OwnCollections = new HashSet<OwnCollection>();
+            PhotoReports = new HashSet<PhotoReport>();
             Photos = new HashSet<Photo>();
             Questions = new HashSet<Question>();
             ShoppingCarts = new HashSet<ShoppingCart>();
+            Views = new HashSet<View>();
             Coupons = new HashSet<Coupon>();
             Products = new HashSet<Product>();
         }
@@ -37,10 +43,16 @@ namespace ProjectFUEN.Models.EFModels
         public virtual ICollection<ActivityCollection> ActivityCollections { get; set; }
         public virtual ICollection<ActivityMember> ActivityMembers { get; set; }
         public virtual ICollection<Album> Albums { get; set; }
+        public virtual ICollection<CommentReport> CommentReports { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<OthersCollection> OthersCollections { get; set; }
+        public virtual ICollection<OwnCollection> OwnCollections { get; set; }
+        public virtual ICollection<PhotoReport> PhotoReports { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
+        public virtual ICollection<View> Views { get; set; }
 
         public virtual ICollection<Coupon> Coupons { get; set; }
         public virtual ICollection<Product> Products { get; set; }

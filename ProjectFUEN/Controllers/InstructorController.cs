@@ -67,7 +67,7 @@ namespace ProjectFUEN.Controllers
 			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 			if (!uploadSuccess.Item1)
 			{
-				ViewBag.photo = uploadSuccess.Item2;
+				ViewBag.photoError = uploadSuccess.Item2;
 				return View(instructor);
 			}
 			else
@@ -117,10 +117,10 @@ namespace ProjectFUEN.Controllers
 			//判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
 			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
-			//上傳檔案失敗(沒上傳東西/上傳圖檔以外的)=>
-			//有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
+
 			
 
+			//上傳檔案失敗(沒上傳東西/上傳圖檔以外的)
 			if (!uploadSuccess.Item1)//上傳失敗 item1=false
 			{
 				
@@ -142,7 +142,7 @@ namespace ProjectFUEN.Controllers
 				}
 				return View(instructor);
 			}
-			else //有上傳檔案
+			else //有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
 			{
 				if (uploadSuccess.Item2== "") //上傳圖檔，錯誤訊息=""
 				{
@@ -160,29 +160,6 @@ namespace ProjectFUEN.Controllers
 			}
 
 			
-
-			
-			//if (ModelState.IsValid)
-			//{
-			//	try
-			//	{
-			//		_context.Update(instructor);
-			//		await _context.SaveChangesAsync();
-			//	}
-			//	catch (DbUpdateConcurrencyException)
-			//	{
-			//		if (!InstructorExists(instructor.Id))
-			//		{
-			//			return NotFound();
-			//		}
-			//		else
-			//		{
-			//			throw;
-			//		}
-			//	}
-			//	return RedirectToAction(nameof(Index));
-			//}
-			//return View(instructor);
 		}
 
 		// GET: Instructor/Delete/5

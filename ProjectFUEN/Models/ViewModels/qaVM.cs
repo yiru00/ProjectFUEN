@@ -21,4 +21,5 @@ namespace ProjectFUEN.Models.ViewModels
         public virtual Member Member { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
     }
+	
 }

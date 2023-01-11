@@ -1,115 +1,130 @@
 ﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.qaVM>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Activity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QuestionContent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QuestionDateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Activity.ActivityName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member.EmailAccount)
-            </td>
-            <td>
-                   @Html.DisplayFor(modelItem => item.QuestionContent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuestionDateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            
-            <td>
-                    <a asp-action="Create" asp-controller="Answer" asp-route-id="@item.QuestionId" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="getbootstrap">回答</a> |
-                    <a asp-action="Details" asp-route-id="@item.QuestionId">Details</a> |
-                
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Activity)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Member)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.QuestionContent)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.QuestionDateCreated)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.State)
+			</th>
+
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Activity.ActivityName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Member.EmailAccount)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.QuestionContent)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.QuestionDateCreated)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.State)
+				</td>
+
+				<td>
+					<a asp-action="Create" asp-route-id="@item.QuestionId" id="@item.QuestionId" class="btn btn-primary sendAnswer" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="getbootstrap">回答</a> |
+					<a asp-action="Details" asp-route-id="@item.QuestionId">Details</a> |
+
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
 
 @*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="getbootstrap">Open modal for getbootstrap</button>*@
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form asp-controller="Question" asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send message</button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">New message</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form asp-controller="Question" asp-action="Create" method="post">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="mb-3">
+						<label for="recipient-name" class="col-form-label">回覆給:</label>
+						<input type="text" class="form-control" id="recipient-name" readonly>
+					</div>
+					<div class="mb-3">
+						<label for="message-text" class="col-form-label">Message:</label>
+						<textarea class="form-control" id="message-text"></textarea>
+					</div>
+					<div class="form-group">
+						<input type="submit" value="send message" class="btn btn-primary" />
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+
+			</div>
+		</div>
+	</div>
 </div>
 @section Scripts{
-    <script>
-        var exampleModal = document.getElementById('exampleModal')
-exampleModal.addEventListener('show.bs.modal', function (event) {
-  // Button that triggered the modal
-  var button = event.relatedTarget
-  // Extract info from data-bs-* attributes
-  var recipient = button.getAttribute('data-bs-whatever')
-  // If necessary, you could initiate an AJAX request here
-  // and then do the updating in a callback.
-  //
-  // Update the modal's content.
-  var modalTitle = exampleModal.querySelector('.modal-title')
-  var modalBodyInput = exampleModal.querySelector('.modal-body input')
+	<script>
+		var exampleModal = document.getElementById('exampleModal')
+		exampleModal.addEventListener('show.bs.modal', function (event) {
+			// Button that triggered the modal
+			var button = event.relatedTarget
+			// Extract info from data-bs-* attributes
+			var recipient = button.getAttribute('data-bs-whatever')
+			// If necessary, you could initiate an AJAX request here
+			// and then do the updating in a callback.
+			//
+			var id = $(".sendAnswer").attr("id")
+			$.ajax({
+				type: "GET",
+				url: "https://localhost:7027/Question/Create?id=" + id,
+				
+			})
+				.done(function (data) {
+					alert(data);
+				})
+				.fail(function (err) {
+					alert("失敗");
+				})
 
-  modalTitle.textContent = 'New message to ' + recipient
-  modalBodyInput.value = recipient
-})
-    </script>
+			// Update the modal's content.
+			var modalTitle = exampleModal.querySelector('.modal-title')
+			var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+			modalTitle.textContent = 'New message to ' + recipient
+			modalBodyInput.value = recipient
+		})
+
+
+
+	</script>
 
 }

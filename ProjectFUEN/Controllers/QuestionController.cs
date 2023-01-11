@@ -49,17 +49,20 @@ namespace ProjectFUEN.Controllers
         //    return View(answer);
         //}
 
-        // GET: Answer/Create
-        public IActionResult Create()
+        // GET: Question/Create
+        [HttpGet]
+		public ActionResult<qaVM> Create(int id)
         {
-            ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Content");
-            return View();
+            
+			var question = _context.Questions.Include(q => q.Activity).Include(q => q.Member).FirstOrDefault(x=>x.Id==id).ToqaVM();
+            
+			return question;
         }
 
-        // POST: Answer/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		// POST: Question/Create
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Content,DateCreated,QuestionId")] qaVM answer)
         {

@@ -31,10 +31,15 @@ namespace ProjectFUEN.Controllers
 
         
         [HttpGet]
-        public  IEnumerable<OrderDetail> Search(string account)
+        public  IEnumerable<Object> Search(string account)
         {
-            var emaccount = _context.OrderDetails.Include(o=>o.Member).Where(x=> x.Member.EmailAccount.Contains(account));
-
+            var emaccount = _context.OrderDetails.Include(o => o.Member).Where(x => x.Member.EmailAccount.Contains(account)).Select(x => new
+            {
+                MemberId = x.Member.Id,
+                state = x.State,
+                Id = x.Id,
+                address = x.Address,
+            });
 
             return  emaccount;
         }

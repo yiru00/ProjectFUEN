@@ -1,4 +1,4 @@
-﻿@model ProjectFUEN.Models.EFModels.Event
+﻿@model ProjectFUEN.Models.ViewModels.EventVM
 
 @{
     ViewData["Title"] = "Create";
@@ -10,23 +10,39 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form method="post" enctype="multipart/form-data"
+			  asp-controller="Event" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="EventName" class="control-label"></label>
                 <input asp-for="EventName" class="form-control" />
+                <br />
+                <br />
                 <span asp-validation-for="EventName" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
+				<div class="col-md-10">
+                    <label asp-for="Photo" class="control-label"></label>
+					<input type="file" name="file" id="myimg" accept="image/*" />
+				</div>
+				<p class="text-danger">@ViewBag.photo</p>
+				<img id="preview" style="max-height:200px;" />
+				<span asp-validation-for="Photo" class="text-danger"></span>
+			</div>
+            
+            
+            @*<div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
                 <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
                 <input asp-for="EndDate" class="form-control" />
@@ -45,4 +61,14 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        $('#myimg').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#preview').attr('src', objectURL);
+        });
+
+    </script>
 }
+

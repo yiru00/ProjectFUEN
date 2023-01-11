@@ -12,8 +12,6 @@
     <None Remove="Models\DTOs\" />
     <None Remove="Models\ViewModels\" />
     <None Remove="Models\Infrastructures\" />
-    <None Remove="Models\Infrastructures\ExtensionMethods\" />
-    <None Remove="Models\Infrastructures\Repositories\" />
     <None Remove="Models\EFModels\" />
   </ItemGroup>
   <ItemGroup>
@@ -31,12 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\DTOs\" />
+    <Folder Include="Models\Infrastructures\Repositories\" />
+    <Folder Include="Models\Services\" />
+    <Folder Include="wwwroot\UploadedFiles\" />
     <Folder Include="Models\Services\" />
     <Folder Include="Models\DTOs\" />
-    <Folder Include="Models\ViewModels\" />
-    <Folder Include="Models\Infrastructures\" />
     <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="Models\Infrastructures\Repositories\" />
-    <Folder Include="Models\EFModels\" />
   </ItemGroup>
 </Project>

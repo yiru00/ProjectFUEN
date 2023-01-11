@@ -29,11 +29,36 @@ namespace ProjectFUEN.Controllers
             return View(await projectFUENContext.ToListAsync());
         }
 
-        public  ActionResult Search()
+        
+        [HttpGet]
+        public  IEnumerable<OrderDetail> Search(string account)
         {
-            var projectFUENContext = _context.OrderDetails.Include(o => o.Member);
-            return View();
+            var emaccount = _context.OrderDetails.Include(o=>o.Member).Where(x=> x.Member.EmailAccount.Contains(account));
+
+
+            return  emaccount;
         }
+        //怪怪的
+        //public ActionResult SelectState(int? stateNum)
+        //{
+        //    ViewBag.state = GetOrderState(stateNum);
+        //    var data = _context.OrderDetails.Include(x => x.State);
+
+        //    if (stateNum.HasValue) data = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<OrderDetail, int>)data.Where(p => p.State == stateNum.Value);
+
+            
+        //    return View(data);
+        //}
+
+
+        //private IEnumerable<SelectListItem>
+        //    GetOrderState(int? stateNum)
+        //{
+        //    var state = _context.OrderDetails.Select(c => new SelectListItem { Value = c.State.ToString(), Selected = (stateNum.HasValue && c.State == stateNum.Value) }).ToList().Prepend(new SelectListItem { Value = string.Empty, Text = "  " });
+
+        //    return state;
+        //}
+
 
         // GET: OrderDetails/Details/5
         public async Task<IActionResult> Details(int? id)

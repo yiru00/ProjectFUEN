@@ -16,6 +16,12 @@
     <None Remove="Models\Infrastructures\Repositories\" />
     <None Remove="Models\EFModels\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="UploadedFiles\033b0ac2d003477bae0776cb2465156f" />
+    <Content Include="UploadedFiles\15a687d9731e4a419e90811f57c6.png" />
+    <Content Include="UploadedFiles\4a1de6f1cb5e4cf9b685b10869cbbd20.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>

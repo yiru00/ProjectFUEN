@@ -3,15 +3,13 @@
 
 @{
     ViewData["Title"] = "Index";
-    CouponVM[] b = Model.ToArray();
 }
 
 <h1>Coupons</h1>
 
 <p>
-    <a asp-action="Create"><i class="fa-regular fa-square-plus"></i>Create</a>
+    <a asp-action="Create" class="fs-4"><i class="fa-regular fa-square-plus fs-4"></i>Create</a>
 </p>
-<h2>@b[0].Name</h2>
 
 <table class="table table-hover">
     <thead>
@@ -57,75 +55,93 @@
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
             <td>
-                <button class="btn btn-primary sendCoupon" id="@item.Code" data-bs-toggle="modal" data-bs-target="#SendCouponModal"><i class="fa-regular fa-envelope sendIcon"></i></button>
+                    <button class="btn btn-primary sendCoupon" id="@item.Code" couponName="@item.Name"><i class="fa-regular fa-envelope sendIcon"></i></button>
             </td>
             <td>
                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square fs-5"></i></a> |
                     @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
-                    <button class="btn btn-primary deleteCoupon" id="@item.Id" data-bs-toggle="modal" data-bs-target="#DeleteCouponModal">D</button>
+                    <a class="deleteCoupon" id="@item.Id" couponName="@item.Name" style="cursor:pointer"><i class="fa-regular fa-trash-can fs-5"></i></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
 
-<!-- Modal -->
-<div class="modal fade" id="SendCouponModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">優惠券</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-          @b[0].Name
-        優惠券發送成功
-      </div>
-      <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-    
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="DeleteCouponModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-bottom-0">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">確認刪除</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                優惠券刪除
-            </div>
-            <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 
 @section Scripts{
     <script>
+
         $(".sendCoupon").on("click", function () {
             let couponCode = $(this).attr("id");
-            $(this).attr('disabled', true)
-            .css({"background-color":"gray","border-color":"gray"});
+            let couponName = $(this).attr("couponName");
+            Swal.fire({
+                title: 'Send ' + couponName,
+                text: "Code: "+couponCode,
+                icon: 'question',
+                iconHtml: '<i class="fa-solid fa-envelope-open-text" style="font-size:50px"></i>',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, send it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Send!',
+                        'Coupon has been sent',
+                        'success'
+                    )
+                        $.ajax({
+                        type: "POST",
+                        url: "https://localhost:7027/Coupons/MailToHtml",
+                        data: { couponCode: couponCode }
+                    }).done(function (data) {
+                        //alert(data);
+                    }).fail(function (err) {
+                        alert(err.statusText);
+                    })
 
-            //$.ajax({
-            //    type: "GET",
-            //    url: "https://localhost:7027/Coupons/MailToHtml?couponCode=" + couponCode
-            //}).done(function (data) {
-            //    //alert(data);
-            //}).fail(function (err) {
-            //    alert(err.statusText);
-            //})
-            
+                    $(this).attr('disabled', true).css({"background-color":"gray","border-color":"gray"});
+                }
+                    
+            })
+        })
+
+        $(".deleteCoupon").on("click", function () {
+            let couponId = $(this).attr("id");
+            let couponName = $(this).attr("couponName");
+            Swal.fire({
+                title: 'Delete ' + couponName,
+                text: 'Click "Yes"',
+                icon: 'error',
+                iconHtml: '<i class="fa-regular fa-trash-can" style="font-size:50px"></i>',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Coupon has been deleted',
+                        'success'
+                    ).then((result) =>{
+                        history.go(0);
+                    })
+
+                    $.ajax({
+                        type: "Delete",
+                        url: "https://localhost:7027/Coupons/DeleteCoupon",
+                        data: { id: couponId },
+                        async: false
+                    }).done(function (data) {
+
+                    }).fail(function (err) {
+                        alert(err.statusText);
+                    })
+                                        
+                }
+
+            })
         })
 
     </script>

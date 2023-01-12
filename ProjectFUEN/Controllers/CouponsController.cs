@@ -38,16 +38,14 @@ namespace ProjectFUEN.Controllers
             IEnumerable<CouponVM> allCoupons = repo.GetAll().Select(c => c.ToCouponVM());
             return View(allCoupons);
         }
-        public string MailToHtml(string couponCode)
+        public void MailToHtml(string couponCode)
         {
-            //service做發信
-            //I/Repository GetAllEmail 找全部會員的EmailAccount 直接用IEnumerable傳
-            //細節-> 改html模板、Index Modal
-            //GET 改 POST
+            //[V]service做發信
+            //[V]I/Repository GetAllEmail 找全部會員的EmailAccount 直接用IEnumerable傳
+            //[ ]細節-> 改html模板
+            //[V]GET 改 POST
 
             couponService.SendCoupon(couponCode);
-
-            return "優惠碼已發送成功";
         }
 
         // GET: Coupons/Create
@@ -149,6 +147,16 @@ namespace ProjectFUEN.Controllers
             repo.Delete(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpDelete, ActionName("DeleteCoupon")]
+        public void DeleteCoupon(int id)
+        {
+            // db會是null??
+            // 判斷id是否存在 不存在根本就不會點到?!
+            // I/Repository Delete(id) db.FindAsync(id) 資料庫remove(id的那筆資料) save
+
+            repo.Delete(id);
         }
     }
 }

@@ -27,18 +27,39 @@ namespace ProjectFUEN.Models.EFModels
     }
     public static partial class QuestionExts
     {
-        public static qaVM ToqaVM(this Question source)
+        public static QaVM QToqaVM(this Question source)
         {
-            return new qaVM
+            if (source.Answers.Count==0) 
             {
-                QuestionId = source.Id,
-                QuestionContent = source.Content,
-                QuestionDateCreated = source.DateCreated,
-                Activity = source.Activity,
-                Member = source.Member,
-                State = source.State,
+                return new QaVM
+                {
+                    QuestionId = source.Id,
+                    QuestionContent = source.Content,
+                    QuestionDateCreated = source.DateCreated,
+                    ActivityName = source.Activity.ActivityName,
+                    ActivityId = source.ActivityId,
+                    EmailAccount = source.Member.EmailAccount,
+                    MemberId = source.Member.Id,
+                    State = source.State
+                };
+            }
+            else {
+				return new QaVM
+				{
+					QuestionId = source.Id,
+					QuestionContent = source.Content,
+					QuestionDateCreated = source.DateCreated,
+					ActivityName = source.Activity.ActivityName,
+					ActivityId = source.ActivityId,
+					EmailAccount = source.Member.EmailAccount,
+					MemberId = source.Member.Id,
+					State = source.State,
+					AnswerContent = source.Answers.ToArray()[0].Content,
+					AnswerDateCreated = source.Answers.ToArray()[0].DateCreated
 
-            };
+				};
+			}
+            
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.qaVM>
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.QaVM>
 
 @{
 	ViewData["Title"] = "Index";
@@ -11,10 +11,10 @@
 	<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.Activity)
+				@Html.DisplayNameFor(model => model.ActivityName)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Member)
+				@Html.DisplayNameFor(model => model.EmailAccount)
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.QuestionContent)
@@ -26,7 +26,7 @@
 				@Html.DisplayNameFor(model => model.State)
 			</th>
 
-			<th></th>
+			<th>答覆</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -34,10 +34,10 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.Activity.ActivityName)
+					@Html.DisplayFor(modelItem => item.ActivityName)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Member.EmailAccount)
+					@Html.DisplayFor(modelItem => item.EmailAccount)
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.QuestionContent)
@@ -50,8 +50,9 @@
 				</td>
 
 				<td>
-					<a asp-action="Create" asp-route-id="@item.QuestionId" id="@item.QuestionId" class="btn btn-primary sendAnswer" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="getbootstrap">回答</a> |
-					<a asp-action="Details" asp-route-id="@item.QuestionId">Details</a> |
+					@item.State
+					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-none create" data-bs-toggle="modal" data-bs-target="#QuestionModal">新增</a>
+					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-none edit" data-bs-toggle="modal" data-bs-target="#AnswerModal">修改</a>
 
 				</td>
 			</tr>
@@ -61,68 +62,162 @@
 
 @*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="getbootstrap">Open modal for getbootstrap</button>*@
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+@*新增答案*@
+<div class="modal fade" id="QuestionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">New message</h5>
+				<h5 class="modal-title" id="exampleModalLabel">回覆問題</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form asp-controller="Question" asp-action="Create" method="post">
+				<form method="post">
 					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 					<div class="mb-3">
-						<label for="recipient-name" class="col-form-label">回覆給:</label>
-						<input type="text" class="form-control" id="recipient-name" readonly>
+						<p>回覆給：<span class="emailAccount"></span></p>
+						<p class="questionContent"></p>
 					</div>
 					<div class="mb-3">
-						<label for="message-text" class="col-form-label">Message:</label>
-						<textarea class="form-control" id="message-text"></textarea>
+						<label for="message-text" class="col-form-label">回答:</label>
+						<textarea class="form-control answerContent" id="message-text"></textarea>
+						<p class="msgErr text-danger"></p>
 					</div>
 					<div class="form-group">
-						<input type="submit" value="send message" class="btn btn-primary" />
+						<button type="button" class="btn btn-primary postAnswer">送出</button>
 					</div>
 				</form>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
 
-			</div>
 		</div>
 	</div>
 </div>
+
+
+@*編輯答案*@
+
+<div class="modal fade" id="AnswerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">回覆問題</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="mb-3">
+						<p>回覆給：<span class="emailAccount"></span></p>
+						<p class="questionContent"></p>
+					</div>
+					<div class="mb-3">
+						<label for="message-text" class="col-form-label">回答:</label>
+						<textarea class="form-control answerContent" id="message-text"></textarea>
+						<p class="msgErr text-danger"></p>
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-primary putAnswer">送出</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
 @section Scripts{
 	<script>
-		var exampleModal = document.getElementById('exampleModal')
-		exampleModal.addEventListener('show.bs.modal', function (event) {
-			// Button that triggered the modal
-			var button = event.relatedTarget
-			// Extract info from data-bs-* attributes
-			var recipient = button.getAttribute('data-bs-whatever')
-			// If necessary, you could initiate an AJAX request here
-			// and then do the updating in a callback.
-			//
-			var id = $(".sendAnswer").attr("id")
+		let id;
+		console.log(document.querySelectorAll(".getQuestion"))
+		//state=true show create // state=false show edit
+		let allBtn=document.querySelectorAll(".getQuestion")
+		for (let i = 0; i < allBtn.length; i++)
+            {
+				if(allBtn[i].getAttribute("state")==true){console.log(allBtn[i])}
+            }
+		
+		$(".getQuestion").on("click", function () {
+
+			id = $(this).attr("question"); //取得點到問題id
+			//alert(id)
+			$(".msgErr").text(null)
+			$(".answerContent").val(null)
+
 			$.ajax({
 				type: "GET",
-				url: "https://localhost:7027/Question/Create?id=" + id,
+				url: "https://localhost:7027/Question/GetQ?id=" + id,
+				data: "json"
+			})
+				.done(function (data) {
+					alert(data["answerContent"])
+					$(".emailAccount").text(data["emailAccount"])
+					$(".questionContent").text("Ｑ：" + data["questionContent"])
+					$(".answerContent").val(data["answerContent"])
+				})
+				.fail(function (err) {
+					history.go(0);
+				})
+		})
+
+		//新增
+		$(".postAnswer").on("click", function () {
+			let answerContent = $(".answerContent").val()
+			console.log(answerContent)
+
+			$(".msgErr").text(null)
+			if(answerContent.trim()==""||answerContent==""){
+				$(".msgErr").text("記得輸入內容")
+			}
+			else{
+			$.ajax({
+				type: "POST",
+				data: {
+					QuestionId: id,
+					AnswerContent: answerContent
+				},
+
+				url: "https://localhost:7027/Question/Create",
 				
 			})
 				.done(function (data) {
-					alert(data);
+					history.go(0);
 				})
 				.fail(function (err) {
 					alert("失敗");
 				})
+			}
 
-			// Update the modal's content.
-			var modalTitle = exampleModal.querySelector('.modal-title')
-			var modalBodyInput = exampleModal.querySelector('.modal-body input')
-
-			modalTitle.textContent = 'New message to ' + recipient
-			modalBodyInput.value = recipient
 		})
 
+		//編輯
+		$(".putAnswer").on("click", function () {
+			let answerContent = $(".answerContent").val()
+			console.log(answerContent)
+
+			$(".msgErr").text(null)
+			if(answerContent.trim()==""||answerContent==""){
+				$(".msgErr").text("記得輸入內容")
+			}
+			else{
+			$.ajax({
+				type: "put",
+				data: {
+					QuestionId: id,
+					AnswerContent: answerContent
+				},
+
+				url: "https://localhost:7027/Question/Edit",
+				
+			})
+				.done(function (data) {
+					history.go(0);
+				})
+				.fail(function (err) {
+					alert("失敗");
+				})
+			}
+
+		})
 
 
 	</script>

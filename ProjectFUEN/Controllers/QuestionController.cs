@@ -22,39 +22,17 @@ namespace ProjectFUEN.Controllers
         // GET: Question
         public async Task<IActionResult> Index()
         {
-            var projectFUENContext = _context.Questions.Include(q => q.Activity).Include(q => q.Member).Select(x=>x.ToqaVM()).ToListAsync();
-            return View(await projectFUENContext);
+            var data = _context.Questions.Include(q => q.Activity).Include(q => q.Member).Include(q=>q.Answers).OrderBy(q=>q.State).Select(x=>x.QToqaVM()).ToListAsync();
+            return View(await data);
         }
-        // GET: Answer/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Content");
-        //    return View();
-        //}
+       
 
-        // POST: Answer/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Content,DateCreated,QuestionId")] Answer answer)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(answer);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Content", answer.QuestionId);
-        //    return View(answer);
-        //}
-
-        // GET: Question/Create
+        // GET: Question/GetQ
         [HttpGet]
-		public ActionResult<qaVM> Create(int id)
+		public QaVM GetQ(int id)
         {
-            
-			var question = _context.Questions.Include(q => q.Activity).Include(q => q.Member).FirstOrDefault(x=>x.Id==id).ToqaVM();
+            //不用include answer 會沒東西
+			var question = _context.Questions.Include(q => q.Activity).Include(q => q.Member).Include(q => q.Answers).FirstOrDefault(x=>x.Id==id).QToqaVM();
             
 			return question;
         }
@@ -63,18 +41,19 @@ namespace ProjectFUEN.Controllers
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,DateCreated,QuestionId")] qaVM answer)
+        public bool Create(int QuestionId,string AnswerContent)
         {
-            if (ModelState.IsValid)
+            var answer = new Answer()
             {
-                _context.Add(answer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["QuestionId"] = new SelectList(_context.Questions, "Id", "Content", answer.QuestionId);
-            return View(answer);
-        }
+                QuestionId = QuestionId,
+                Content = AnswerContent
+            };
+			_context.Add(answer);
+			_context.SaveChanges();
+
+			return true;
+            
+		}
         // GET: Question/Details/5
         public async Task<IActionResult> Details(int? id)
         {

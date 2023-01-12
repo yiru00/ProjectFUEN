@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace fileUpload.Models
+namespace ProjectFUEN.Models
 {
 	public class FileManager
 	{
@@ -63,8 +63,8 @@ namespace fileUpload.Models
 			do
 			{
 				newFileName = Guid.NewGuid().ToString("N").Substring(0, 28) + ext;  //guid會有dash-，ToString("N")去掉dash
-				fullPath = System.IO.Path.Combine(path, newFileName);
-			} while (System.IO.File.Exists(fullPath));
+				fullPath = Path.Combine(path, newFileName);
+			} while (File.Exists(fullPath));
 			return newFileName;
 		}
 	}

@@ -4,7 +4,6 @@ using ProjectFUEN.Models.EFModels;
 using ProjectFUEN.Models.Infrastructures.Repositories;
 using ProjectFUEN.Models.Services.Interfaces;
 using ProjectFUEN.Models.Services;
-using fileUpload.Models;
 using Microsoft.AspNetCore.Identity;
 using ProjectFUEN.Models;
 using ProjectFUEN.Models.ViewModels;

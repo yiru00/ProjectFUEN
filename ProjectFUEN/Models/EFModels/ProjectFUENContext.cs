@@ -253,6 +253,6 @@ namespace ProjectFUEN.Models.EFModels
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-        public DbSet<ProjectFUEN.Models.DTOs.OrderDetailsDTO> OrderDetailsDTO { get; set; }
+        //public DbSet<ProjectFUEN.Models.DTOs.OrderDetailsDTO> OrderDetailsDTO { get; set; }
     }
 }

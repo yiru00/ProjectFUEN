@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectFUEN.Models.EFModels
 {
@@ -16,8 +17,10 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         public int Id { get; set; }
+        [Display(Name = ("帳戶"))]
         public string EmailAccount { get; set; }
         public string EncryptedPassword { get; set; }
+        [Display(Name =("姓名"))]
         public string RealName { get; set; }
         public string NickName { get; set; }
         public DateTime? BirthOfDate { get; set; }

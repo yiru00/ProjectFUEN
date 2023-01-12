@@ -8,8 +8,8 @@ using System.Collections.Generic;
 namespace ProjectFUEN.Models.DTOs
 {
     public class OrderDetailsDTO
-    {     
-
+    {
+      
         public int Id { get; set; }
         public int MemberId { get; set; }
        
@@ -18,10 +18,12 @@ namespace ProjectFUEN.Models.DTOs
         public string Address { get; set; }
         
         public int State { get; set; }
-       
+
+        //public string EmailAccount { get; set; }
+
         public virtual Member Member { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
 
-        public string EmailAccount { get; set; }
+        
     }
 }

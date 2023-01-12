@@ -3,8 +3,9 @@ using ProjectFUEN.Models.EFModels;
 
 namespace ProjectFUEN.Models.DTOs
 {
-    public class MembersDTO : Controller
+    public class MembersDTO 
     {
+
         public int Id { get; set; }
         public string EmailAccount { get; set; }
         public string EncryptedPassword { get; set; }

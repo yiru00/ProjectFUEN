@@ -28,8 +28,16 @@ namespace ProjectFUEN.Controllers
         public async Task<IActionResult> Index()
         {
             var projectFUENContext = _context.OrderDetails.Include(o => o.Member);
+            //state int to string
+            //var state = _context.OrderDetails.Select(x => stateToString(x.State));
+            //if ( ) { };
             return View(await projectFUENContext.ToListAsync());
         }
+
+        //private string stateToString(int state)
+        //{
+            
+        //}
 
         //無限回傳 要new新物件 err500 非同步不會做跳500
         //[HttpGet]
@@ -57,26 +65,37 @@ namespace ProjectFUEN.Controllers
         //{
         //    var emaccount = _context.OrderDetails.Include(o => o.Member).Select(x => new OrderDetailsDTO
         //    {
-
         //        Member = x.Member,
         //        State = x.State,
         //        Address = x.Address,
         //        OrderDate = x.OrderDate,
+        //        EmailAccount = x.Member.EmailAccount,           
         //    });
+
+        //    if (!string.IsNullOrEmpty(account))
+        //    {
+        //        emaccount = emaccount.Where(s => s.EmailAccount.Contains(account));
+        //    }
 
         //    return View(await emaccount.ToListAsync());
         //}
 
-        [HttpGet]
-        public async Task<IActionResult> Search(string account)
-        {
-            var member = _context.OrderDetails.Include(x => x.Member).Select(x=>x.Member.EmailAccount);
-           
+        //[HttpGet]
+        //public async Task<IActionResult> Search(string account)
+        //{
+        //    var member = from m in _context.Members select m;
+        //    if (account == null || _context.Members == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if (!String.IsNullOrEmpty(account))
+        //    {
+        //        member = member.Where(s => s.EmailAccount!.Contains(account));
+        //    }
+        //    return View(await member.ToListAsync());
+        //}
 
-            return View(await member.ToListAsync());
-        }
-
-        //阿郭search
+        ////阿郭search
         //public ActionResult search(string accountname)
         //{
 
@@ -84,10 +103,11 @@ namespace ProjectFUEN.Controllers
         //    var data = _context.OrderDetails.Include(x => x.Member);
 
 
-        //    if (string.IsNullOrEmpty(accountname) == false) data = data.Where(p => p.Member.EmailAccount.Contains(accountname));
+        //    if (string.IsNullOrEmpty(accountname) == false) data = data.Where(p =>p.Member ));
 
         //    return View(data);
         //}
+
 
 
         //怪怪的
@@ -112,7 +132,7 @@ namespace ProjectFUEN.Controllers
         //}
 
 
-        // GET: OrderDetails/Details/5
+        //GET: OrderDetails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.OrderItems == null)
@@ -149,6 +169,8 @@ namespace ProjectFUEN.Controllers
 
         //    return View(orderDetail);
         //}
+
+
         // GET: OrderDetails/Create
         public IActionResult Create()
         {

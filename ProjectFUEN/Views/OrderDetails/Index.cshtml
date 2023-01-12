@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     var accountname = ViewBag.accountname as string;
+    
 }
 
 <h1>訂單管理</h1>
@@ -12,12 +13,14 @@
                 <h3></h3>
                 <div class="row list-group-horizontal " >
            
-
-                    <div class="col-md-4 list-group-horizontal">                      
+                    <form method="get">
+                       <div class="col-md-4 list-group-horizontal">                      
                         <input type="text" name="MemberName" class="" value="" id="Searchtext" placeholder="請輸入.."/>           
-                        @*<input type="submit" class="btn btn-dark " value="Search" id="SearchClick" />*@
-                <button class="btn btn-dark" id="SearchClick">Search</button>
+                        <input type="submit" class="btn btn-dark " value="Search" id="SearchClick" />
+                @*<button class="btn btn-dark" id="SearchClick">Search</button>*@
                       </div>
+                    </form>
+
                 </div>
 
             </div>
@@ -27,6 +30,12 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Member.RealName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.EmailAccount)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OrderDate)
             </th>
             <th>
@@ -35,9 +44,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.State)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member)
-            </th>
+           
             <th></th>
         </tr>
     </thead>
@@ -45,6 +52,14 @@
         @foreach (var item in Model)
         {
         <tr>
+             
+
+            <td>
+               @Html.DisplayFor(modelItem => item.Member.RealName)
+            </td>
+             <td>
+               @Html.DisplayFor(modelItem => item.Member.EmailAccount)
+             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderDate)
             </td>
@@ -54,9 +69,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.State)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member.RealName)
-            </td>
+            
             <td>
                 <a  asp-action="Edit" asp-route-id="@item.Id">編輯</a> |
                  <a asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id">詳細資訊</a> |

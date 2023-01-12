@@ -21,5 +21,7 @@ namespace ProjectFUEN.Models.DTOs
        
         public virtual Member Member { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+
+        public string EmailAccount { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
-    //var orderstate = viewbag.state as IEnumerable<SelectListItem>;
+    var accountname = ViewBag.accountname as string;
 }
 
 <h1>訂單管理</h1>
@@ -79,7 +79,7 @@
                 url: "https://localhost:7027/OrderDetails/Search/?account=" + $("#Searchtext").val()
 
             }).done(function(data){
-                showtable(data)
+
             })
             .fail(function(err){err.statuxtext});
             

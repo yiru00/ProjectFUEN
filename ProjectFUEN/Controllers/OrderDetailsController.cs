@@ -31,38 +31,64 @@ namespace ProjectFUEN.Controllers
             return View(await projectFUENContext.ToListAsync());
         }
 
-        //無限回傳 要new新物件 err500
+        //無限回傳 要new新物件 err500 非同步不會做跳500
+        //[HttpGet]
+        //public async Task<IEnumerable<object>> Searcht(string account)
+        //{
+        //    //var emaccount = _context.OrderDetails.Include(o => o.Member).Where(x => x.Member.EmailAccount.Contains(account));
+
+        //    var emaccount = await _context.OrderDetails.Include(o => o.Member).Select(x => new
+        //    {
+        //        id = x.Id,
+        //        adress = x.Address,
+        //        state = x.State,
+        //        Member = x.Member,
+        //    }).ToListAsync();//.Where(x => x.Member.EmailAccount.Contains(account));
+
+
+        //    return emaccount;
+        //}
+
+
+
+
+        //[HttpGet]
+        //public async Task<ActionResult<OrderDetailsDTO>> Search(string account)
+        //{
+        //    var emaccount = _context.OrderDetails.Include(o => o.Member).Select(x => new OrderDetailsDTO
+        //    {
+
+        //        Member = x.Member,
+        //        State = x.State,
+        //        Address = x.Address,
+        //        OrderDate = x.OrderDate,
+        //    });
+
+        //    return View(await emaccount.ToListAsync());
+        //}
+
         [HttpGet]
-        public async Task<IEnumerable <object>> Searcht(string account)
+        public async Task<IActionResult> Search(string account)
         {
-            //var emaccount = _context.OrderDetails.Include(o => o.Member).Where(x => x.Member.EmailAccount.Contains(account));
+            var member = _context.OrderDetails.Include(x => x.Member).Select(x=>x.Member.EmailAccount);
+           
 
-            var emaccount = await _context.OrderDetails.Include(o => o.Member).Select(x => new
-            {
-                id = x.Id,
-                adress = x.Address,
-                state = x.State,
-                Member = x.Member,
-            }).ToListAsync();//.Where(x => x.Member.EmailAccount.Contains(account));
-             
-
-            return emaccount ;
+            return View(await member.ToListAsync());
         }
 
+        //阿郭search
+        //public ActionResult search(string accountname)
+        //{
 
-        [HttpGet]
-        public async Task<ActionResult<OrderDetailsDTO>> Search(string account)
-        {
-            var emaccount = _context.OrderDetails.Include(o => o.Member).Select(x => new OrderDetailsDTO
-            {
-                Member = x.Member,
-                State = x.State,
-                Address = x.Address,
-                OrderDate = x.OrderDate,
-            });
+        //    ViewBag.AccountName = accountname;
+        //    var data = _context.OrderDetails.Include(x => x.Member);
 
-            return View(await emaccount.ToListAsync()) ;
-        }
+
+        //    if (string.IsNullOrEmpty(accountname) == false) data = data.Where(p => p.Member.EmailAccount.Contains(accountname));
+
+        //    return View(data);
+        //}
+
 
         //怪怪的
         //public ActionResult SelectState(int? stateNum)

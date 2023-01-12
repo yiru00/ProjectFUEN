@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using fileUpload.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using ProjectFUEN.Models.DTOs;
 using ProjectFUEN.Models.EFModels;
 using ProjectFUEN.Models.ViewModels;
 
@@ -36,7 +38,7 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events
+            var @event = await _context.Events.Include(x => x.Products)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
@@ -49,7 +51,10 @@ namespace ProjectFUEN.Controllers
         // GET: Event/Create
         public IActionResult Create()
         {
-            return View();
+            EventVM vm = new EventVM();
+            vm.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
+
+            return View(vm);
         }
 
         // POST: Event/Create
@@ -57,12 +62,13 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile file, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM @event)
+        public async Task<IActionResult> Create(IFormFile file, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM @event, ICollection<int> checkboxes)
         {
-            //var dataInDb = await _context.Events.FirstOrDefaultAsync(e => e.EventName == @event.EventName); if (dataInDb != null)
-            //{
-            //    ModelState.AddModelError("EventName", "這個 活動名稱 已經報名過了!");
-            //}
+            var dataInDb = await _context.Events.FirstOrDefaultAsync(e => e.EventName == @event.EventName);
+            if (dataInDb != null)
+            {
+                ModelState.AddModelError("EventName", "這個 活動名稱 已經取過了!");
+            }
 
             (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
             if (!uploadSuccess.Item1)
@@ -78,6 +84,9 @@ namespace ProjectFUEN.Controllers
 
             if (ModelState.IsValid)
             {
+                var events = _context.Events.ToList();
+                events.Products
+
                 _context.Add(@event.ToEntity());
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -101,6 +110,11 @@ namespace ProjectFUEN.Controllers
             return View(@event.ToVM());
         }
 
+        public bool FindCategoryNameWithoutSelf(EventDto eventDto)
+        {
+            return _context.Events.Where(x => x.EventName != eventDto.EventName).Any(e => e.EventName == eventDto.EventName);
+        }
+
         // POST: Event/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -108,9 +122,11 @@ namespace ProjectFUEN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM @event)
         {
-            if (id != @event.Id)
+            var dataInDb =await _context.Events.Where(x => x.Id != @event.Id).FirstOrDefaultAsync(e => e .EventName == @event.EventName);
+            if (dataInDb != null)
             {
-                return NotFound();
+                ModelState.AddModelError("EventName", "這個 活動名稱 已經取過了!");
+                return View(@event);
             }
 
 
@@ -202,8 +218,7 @@ namespace ProjectFUEN.Controllers
         }
 
         // POST: Event/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpDelete, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Events == null)

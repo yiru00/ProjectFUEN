@@ -1,7 +1,10 @@
-﻿@model ProjectFUEN.Models.EFModels.Event
+﻿@using ProjectFUEN.Models.EFModels;
+@model ProjectFUEN.Models.EFModels.Event
 
 @{
     ViewData["Title"] = "Details";
+    //Event e = Model;
+    //List<Product> products = Model.Products.ToList();
 }
 
 <h1>Details</h1>
@@ -34,9 +37,47 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
         </dd>
+
+
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Products.ToArray()[0])*@
+            @*@products[0].ProductSpec*@
+        </dt>
+        <dd class="col-sm-10">
+            @*@products[0].Price*@
+            @* @Html.DisplayFor(model => model.Products.ToArray()[0])*@
+        </dd>
+        }
+
     </dl>
+
 </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>產品名稱</td>
+            <td>產品規格</td>
+            <td>價格</td>
+        </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var item in Model.Products)
+    {
+        <tr>
+            <td>小魚</td>
+            <td>@item.ProductSpec</td>
+            <td>@item.Price</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <input type="submit" value="Edit" class="btn btn-primary" />
+</div>
+<br />
+<div>
+    <a asp-action="Index">返回活動總覽</a>
 </div>

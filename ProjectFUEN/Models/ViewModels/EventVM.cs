@@ -25,6 +25,8 @@ namespace ProjectFUEN.Models.ViewModels
         [DataType(DataType.DateTime, ErrorMessage = "格式有誤")]
         public DateTime EndDate { get; set; }
 
+        public ICollection<Product> Products { get; set; }
+
     }
 
     public static partial class EventExts
@@ -37,7 +39,8 @@ namespace ProjectFUEN.Models.ViewModels
                 EventName = source.EventName,
                 Photo = source.Photo,
                 StartDate = source.StartDate,
-                EndDate = source.EndDate
+                EndDate = source.EndDate,
+                Products = source.Products
             };
         }
     }

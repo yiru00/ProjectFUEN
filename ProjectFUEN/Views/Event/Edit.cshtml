@@ -1,4 +1,4 @@
-﻿@model ProjectFUEN.Models.EFModels.Event
+﻿@model ProjectFUEN.Models.ViewModels.EventVM
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,7 +10,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form method="post" enctype="multipart/form-data"
+              asp-controller="Event" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -18,32 +19,64 @@
                 <input asp-for="EventName" class="form-control" />
                 <span asp-validation-for="EventName" class="text-danger"></span>
             </div>
+            <br />
+            
             <div class="form-group">
+                <div class="col-md-10">
+
+                    <input type="file" name="file" id="myimg" accept="image/*" />
+                </div>
+                <p class="text-danger">@ViewBag.photoError</p>
+                <img id="preview" style="max-height:200px;" src="/UploadedFiles/@Model.Photo" />
+
+            </div>
+
+            @*隱藏Photo欄位(還是要拿來繫結)*@
+            <div class="form-group visually-hidden">
                 <label asp-for="Photo" class="control-label"></label>
                 <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
+            <br />
+            @*<div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+                <input asp-for="Photo" class="form-control" />
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>*@
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">返回活動總覽</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+        <script>
+
+            $('#myimg').on('change', function (e) {
+                const file = this.files[0];
+                const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+                $('#preview').attr('src', objectURL);
+            });
+
+        </script>
 }

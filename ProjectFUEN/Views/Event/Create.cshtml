@@ -1,62 +1,87 @@
-﻿@model ProjectFUEN.Models.ViewModels.EventVM
+﻿@using ProjectFUEN.Models.EFModels
+@using ProjectFUEN.Models.ViewModels;
+@model ProjectFUEN.Models.ViewModels.EventVM
+
 
 @{
     ViewData["Title"] = "Create";
+    int length = Model.Products.ToArray().Length;
 }
 
 <h1>Create</h1>
 
 <h4>Event</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+
+
         <form method="post" enctype="multipart/form-data"
-			  asp-controller="Event" asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EventName" class="control-label"></label>
-                <input asp-for="EventName" class="form-control" />
-                <br />
-                <br />
-                <span asp-validation-for="EventName" class="text-danger"></span>
-            </div>
+      asp-controller="Event" asp-action="Create">
+             <div class="row">
+                <div class="col-md-4" style="margin-right:200px">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="EventName" class="control-label"></label>
+                        <input asp-for="EventName" class="form-control" />
+                        <span asp-validation-for="EventName" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+				        <div class="col-md-10">
+                            <label asp-for="Photo" class="control-label"></label>
+					        <input type="file" name="file" id="myimg" accept="image/*" />
+				        </div>
+				        <p class="text-danger">@ViewBag.photo</p>
+				        <img id="preview" style="max-height:200px;" />
+				        <span asp-validation-for="Photo" class="text-danger"></span>
+			        </div>
             
-            <div class="form-group">
-				<div class="col-md-10">
-                    <label asp-for="Photo" class="control-label"></label>
-					<input type="file" name="file" id="myimg" accept="image/*" />
-				</div>
-				<p class="text-danger">@ViewBag.photo</p>
-				<img id="preview" style="max-height:200px;" />
-				<span asp-validation-for="Photo" class="text-danger"></span>
-			</div>
-            
-            
-            @*<div class="form-group">
-                <label asp-for="Photo" class="control-label"></label>
-                <input asp-for="Photo" class="form-control" />
-                <span asp-validation-for="Photo" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input asp-for="StartDate" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input asp-for="EndDate" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <h2>商品</h2>
+                    <table class="table">
+                        <thead id="thead">
+                            <tr class="row-cols-3">
+                                <td class="col-1"><input type="checkbox"></td>
+                                @*<td>商品名稱</td>*@
+                                <td>品牌</td>
+                                <td>類別</td>
+                                <td>價格</td>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @foreach (var item in Model.Products)
+                            {
+                                <tr class="row-cols-3">
+                                    <td class="col-1"><input type="checkbox" name="checkboxes" value="@item.Id"></td>
+                                    @*<td>@item.Name</td>*@
+                                    <td>@item.Brand.Name</td>
+                                    <td>@item.Category.Name</td>
+                                    <td>@item.Price</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <br />
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
-    </div>
-</div>
-
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">返回活動總覽</a>
 </div>
 
 @section Scripts {
@@ -67,6 +92,40 @@
             const file = this.files[0];
             const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
             $('#preview').attr('src', objectURL);
+        });
+
+        // 全部勾選checkbox, global的checkbox也會勾選
+        // 點擊Global的checkbox, local全部都勾選
+        $("#thead").on("click", $("input[type='checkbox']"), function () {
+            let localLength = $("#tbody input[type='checkbox']").length;
+
+            if ($("#thead input[type='checkbox']").prop("checked")) {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                    item.prop("checked", true);
+                }
+            } else {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                    item.prop("checked", false);
+                }
+            }
+        });
+        // 當local的checkbox全部被勾選, global的checkbox被勾選
+        // 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
+        $("#tbody").on("click", $("input[type='checkbox']"), function () {
+            let localLength = $("#tbody input[type='checkbox']").length;
+            let count = 0;
+            for (let i = 0; i < localLength; i++) {
+                let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                if (item.prop("checked")) count++;
+            }
+
+            if (count === localLength) $("#thead input[type='checkbox']").prop("checked", true);
+            else $("#thead input[type='checkbox']").prop("checked", false);
         });
 
     </script>

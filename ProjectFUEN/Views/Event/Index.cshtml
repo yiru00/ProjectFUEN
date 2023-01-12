@@ -45,9 +45,52 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                <a class="Delete" id=@item.Id eventName=@item.EventName style="cursor:pointer">刪除</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(".Delete").on("click",function(){
+            let eventName = $(this).attr("eventName");
+            let eventId = $(this).attr("id");
+
+                Swal.fire({
+                title: '確定要刪除嗎?',
+                text: "活動名稱 : "+eventName,
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '是的',
+                cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                    Swal.fire(
+                        '已刪除',
+                        '已刪除活動名稱',
+                        'success'
+                    ).then((result) => {
+                            history.go(0);
+                    })
+                                $.ajax({
+                            type: "Delete",
+                            url: "https://localhost:7027/Event/Delete",
+                            data: { id: eventId }
+                        }).done(function (data) {
+
+                        }).fail(function (err) {
+                            alert(err.statusText)
+                        })
+
+                    }
+                })
+
+                    
+        })
+    </script>
+}

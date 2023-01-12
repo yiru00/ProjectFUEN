@@ -51,8 +51,8 @@
 
 				<td>
 					@item.State
-					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-none create" data-bs-toggle="modal" data-bs-target="#QuestionModal">新增</a>
-					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-none edit" data-bs-toggle="modal" data-bs-target="#AnswerModal">修改</a>
+					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-hidden " data-bs-toggle="modal" data-bs-target="#QuestionModal">新增</a>
+					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-hidden " data-bs-toggle="modal" data-bs-target="#AnswerModal">修改</a>
 
 				</td>
 			</tr>
@@ -128,12 +128,13 @@
 @section Scripts{
 	<script>
 		let id;
-		console.log(document.querySelectorAll(".getQuestion"))
+		//console.log(document.querySelectorAll(".getQuestion"))
 		//state=true show create // state=false show edit
 		let allBtn=document.querySelectorAll(".getQuestion")
 		for (let i = 0; i < allBtn.length; i++)
             {
-				if(allBtn[i].getAttribute("state")==true){console.log(allBtn[i])}
+				console.log(allBtn[i])
+			//if (allBtn[i].getAttribute("state") == "True") { console.log(allBtn[i]) }
             }
 		
 		$(".getQuestion").on("click", function () {

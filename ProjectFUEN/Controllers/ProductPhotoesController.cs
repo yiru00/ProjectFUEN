@@ -30,29 +30,12 @@ namespace ProjectFUEN.Controllers
 
 
         // GET: ProductPhotoes1
-        //public async Task<IActionResult> Index()
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
+        //public ActionResult Index()
         {
-            //var projectFUENContext = _context.ProductPhotos.Include(p => p.Product);
-            //return View(await projectFUENContext.ToListAsync());
-
-            var data = _context.ProductPhotos
-               .Select(p => new
-               {
-                   p.Id,
-                   p.ProductId,
-                   p.Source,
-
-
-               }).ToList()
-               .Select(p => new ProductPhotoVM
-               {
-                   Id= p.Id,
-                   ProductId= p.ProductId,
-                   Source= p.Source,
-                
-               });
-            return View(data);
+            var projectFUENContext = _context.ProductPhotos.Include(p => p.Product);
+            return View(await _context.ProductPhotos.ToListAsync());
+        
         }
 
         // GET: ProductPhotoes1/Details/5
@@ -87,6 +70,7 @@ namespace ProjectFUEN.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile file, [Bind("Id,ProductId,Source")] ProductPhotoVM productPhoto)
+
         {
             //上傳照片
             (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
@@ -94,10 +78,16 @@ namespace ProjectFUEN.Controllers
             {
                 ViewBag.photo = uploadSuccess.Item2;
                 return View(productPhoto);
-            };
+            }
+            else
+            {
+                productPhoto.Source = uploadSuccess.Item3;
+
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(productPhoto);
+                _context.Add(productPhoto.ToEntity());
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -127,35 +117,81 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,Source")] ProductPhotoVM productPhoto)
+        public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,ProductId,Source")] ProductPhotoVM productPhoto)
         {
             if (id != productPhoto.Id)
             {
                 return NotFound();
             }
+            //判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
+            (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
-            if (ModelState.IsValid)
+            //上傳檔案失敗(沒上傳東西/上傳圖檔以外的)=>
+            //有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
+
+
+            if (!uploadSuccess.Item1)//上傳失敗 item1=false
             {
-                try
+
+                if (uploadSuccess.Item2 == "記得選取檔案") //未上傳任何檔案，用原有的
                 {
-                    _context.Update(productPhoto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductPhotoExists(productPhoto.Id))
+                    ModelState.Remove("file");
+                    if (ModelState.IsValid)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        _context.Update(productPhoto.ToEntity());
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                else if (uploadSuccess.Item2 == "檔案必須是圖片檔案")//上傳成圖檔以外的
+                {
+                    ViewBag.photoError = uploadSuccess.Item2; //錯誤訊息
+                    return View(productPhoto);
+                }
+                return View(productPhoto);
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
-            return View(productPhoto);
+            else //有上傳檔案
+            {
+                if (uploadSuccess.Item2 == "") //上傳圖檔，錯誤訊息=""
+                {
+                    productPhoto.Source = uploadSuccess.Item3; //傳入新檔名
+                    _context.Update(productPhoto.ToEntity());
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else //上傳圖檔以外的(ppt.pdf...)
+                {
+                    ViewBag.photoError = uploadSuccess.Item2;
+                    return View(productPhoto);
+                }
+                //ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
+                //return View(productPhoto);
+
+            }
+
+
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+            //        _context.Update(productPhoto);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!ProductPhotoExists(productPhoto.Id))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+           
         }
 
         // GET: ProductPhotoes1/Delete/5

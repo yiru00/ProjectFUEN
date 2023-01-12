@@ -1,5 +1,5 @@
-﻿@model IEnumerable<ProjectFUEN.Models.VM.ProductPhotoVM>
-
+﻿@*@model IEnumerable<ProjectFUEN.Models.VM.ProductPhotoVM>*@
+@model IEnumerable<ProjectFUEN.Models.EFModels.ProductPhoto>
 @{
     ViewData["Title"] = "產品圖";
 }
@@ -30,10 +30,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Source)
             </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="d-flex w-100">@Html.DisplayFor(modelItem => item.Product.Name)</a>
+
+                </td>
          
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+          @*      <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

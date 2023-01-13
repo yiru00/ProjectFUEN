@@ -40,7 +40,7 @@ namespace ProjectFUEN.Models.ViewModels
                 Photo = source.Photo,
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
-                Products = source.Products
+                //Products = source.Products
             };
         }
     }

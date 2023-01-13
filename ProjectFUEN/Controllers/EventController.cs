@@ -84,8 +84,8 @@ namespace ProjectFUEN.Controllers
 
             if (ModelState.IsValid)
             {
-                var events = _context.Events.ToList();
-                events.Products
+                //var events = _context.Events.ToList();
+                //events.Products
 
                 _context.Add(@event.ToEntity());
                 await _context.SaveChangesAsync();
@@ -102,17 +102,16 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
 
+            //EventVM vm = new EventVM();
+            //vm.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
+            //return View(vm);
+
             var @event = await _context.Events.FindAsync(id);
             if (@event == null)
             {
                 return NotFound();
             }
             return View(@event.ToVM());
-        }
-
-        public bool FindCategoryNameWithoutSelf(EventDto eventDto)
-        {
-            return _context.Events.Where(x => x.EventName != eventDto.EventName).Any(e => e.EventName == eventDto.EventName);
         }
 
         // POST: Event/Edit/5

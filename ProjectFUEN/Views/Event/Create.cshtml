@@ -8,9 +8,8 @@
     int length = Model.Products.ToArray().Length;
 }
 
-<h1>Create</h1>
-
-<h4>Event</h4>
+<br>
+<h1> 商城活動新增</h1>
 <hr />
 
 
@@ -31,7 +30,7 @@
 					        <input type="file" name="file" id="myimg" accept="image/*" />
 				        </div>
 				        <p class="text-danger">@ViewBag.photo</p>
-				        <img id="preview" style="max-height:200px;" />
+				        <img id="preview" style="max-height:160px;" />
 				        <span asp-validation-for="Photo" class="text-danger"></span>
 			        </div>
             
@@ -96,7 +95,7 @@
 
         // 全部勾選checkbox, global的checkbox也會勾選
         // 點擊Global的checkbox, local全部都勾選
-        $("#thead").on("click", $("input[type='checkbox']"), function () {
+        $("#thead").on("click", "input[type='checkbox']", function () {
             let localLength = $("#tbody input[type='checkbox']").length;
 
             if ($("#thead input[type='checkbox']").prop("checked")) {
@@ -115,7 +114,7 @@
         });
         // 當local的checkbox全部被勾選, global的checkbox被勾選
         // 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
-        $("#tbody").on("click", $("input[type='checkbox']"), function () {
+        $("#tbody").on("click", "input[type='checkbox']", function () {
             let localLength = $("#tbody input[type='checkbox']").length;
             let count = 0;
             for (let i = 0; i < localLength; i++) {

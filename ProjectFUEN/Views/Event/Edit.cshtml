@@ -78,5 +78,38 @@
                 $('#preview').attr('src', objectURL);
             });
 
+        //// 全部勾選checkbox, global的checkbox也會勾選
+        //// 點擊Global的checkbox, local全部都勾選
+        //$("#thead").on("click", "input[type='checkbox']", function () {
+        //    let localLength = $("#tbody input[type='checkbox']").length;
+
+        //    if ($("#thead input[type='checkbox']").prop("checked")) {
+        //        for (let i = 0; i < localLength; i++) {
+        //            let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+        //            item.prop("checked", true);
+        //        }
+        //    } else {
+        //        for (let i = 0; i < localLength; i++) {
+        //            let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+        //            item.prop("checked", false);
+        //        }
+        //    }
+        //});
+        //// 當local的checkbox全部被勾選, global的checkbox被勾選
+        //// 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
+        //$("#tbody").on("click", "input[type='checkbox']", function () {
+        //    let localLength = $("#tbody input[type='checkbox']").length;
+        //    let count = 0;
+        //    for (let i = 0; i < localLength; i++) {
+        //        let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+        //        if (item.prop("checked")) count++;
+        //    }
+
+        //    if (count === localLength) $("#thead input[type='checkbox']").prop("checked", true);
+        //    else $("#thead input[type='checkbox']").prop("checked", false);
+        //});
         </script>
 }

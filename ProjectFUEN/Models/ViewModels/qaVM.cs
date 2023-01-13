@@ -13,7 +13,7 @@ namespace ProjectFUEN.Models.ViewModels
         public string EmailAccount { get; set; }
 		public int MemberId { get; set; }
 		public bool? State { get; set; }
-
+		public int AnswerId { get; set; }
 		public string AnswerContent { get; set; }
 		public DateTime AnswerDateCreated { get; set; }
 	}

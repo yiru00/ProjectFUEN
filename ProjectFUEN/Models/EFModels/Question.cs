@@ -54,6 +54,7 @@ namespace ProjectFUEN.Models.EFModels
 					EmailAccount = source.Member.EmailAccount,
 					MemberId = source.Member.Id,
 					State = source.State,
+					AnswerId = source.Answers.ToArray()[0].Id,
 					AnswerContent = source.Answers.ToArray()[0].Content,
 					AnswerDateCreated = source.Answers.ToArray()[0].DateCreated
 

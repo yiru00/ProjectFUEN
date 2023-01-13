@@ -50,21 +50,20 @@
 				</td>
 
 				<td>
-					@item.State
-					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-hidden " data-bs-toggle="modal" data-bs-target="#QuestionModal">新增</a>
-					<a state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion d-hidden " data-bs-toggle="modal" data-bs-target="#AnswerModal">修改</a>
-
+					
+					<a data-state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion " data-bs-toggle="modal" @*data-bs-target="#CreateModal"*@>123</a>
+@*					<a data-state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion " data-bs-toggle="modal" data-bs-target="#EditModal">修改</a>
+*@
 				</td>
 			</tr>
 		}
 	</tbody>
 </table>
 
-@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="getbootstrap">Open modal for getbootstrap</button>*@
 
 
 @*新增答案*@
-<div class="modal fade" id="QuestionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -96,7 +95,7 @@
 
 @*編輯答案*@
 
-<div class="modal fade" id="AnswerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -112,7 +111,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="message-text" class="col-form-label">回答:</label>
-						<textarea class="form-control answerContent" id="message-text"></textarea>
+						<textarea class="form-control editContent" id="message-text"></textarea>
 						<p class="msgErr text-danger"></p>
 					</div>
 					<div class="form-group">
@@ -127,33 +126,44 @@
 
 @section Scripts{
 	<script>
-		let id;
-		//console.log(document.querySelectorAll(".getQuestion"))
-		//state=true show create // state=false show edit
-		let allBtn=document.querySelectorAll(".getQuestion")
+		let qid;
+		let aid;
+		
+		let allBtn = $(".getQuestion")
+		
 		for (let i = 0; i < allBtn.length; i++)
-            {
-				console.log(allBtn[i])
-			//if (allBtn[i].getAttribute("state") == "True") { console.log(allBtn[i]) }
-            }
+        {
+			if (allBtn[i].getAttribute("data-state") == "False") {
+
+				allBtn[i].setAttribute("data-bs-target", "#CreateModal");
+				allBtn[i].innerText="新增"
+			}
+			else{
+				allBtn[i].setAttribute("data-bs-target", "#EditModal");
+				allBtn[i].innerText = "修改"
+			}
+        }
 		
 		$(".getQuestion").on("click", function () {
 
-			id = $(this).attr("question"); //取得點到問題id
-			//alert(id)
+			qid = $(this).attr("question"); //取得點到問題id
+			alert(qid)
 			$(".msgErr").text(null)
-			$(".answerContent").val(null)
+			//$(".answerContent").val(null)
 
 			$.ajax({
 				type: "GET",
-				url: "https://localhost:7027/Question/GetQ?id=" + id,
+				url: "https://localhost:7027/Question/GetQ?qid=" + qid,
 				data: "json"
 			})
 				.done(function (data) {
-					alert(data["answerContent"])
+					alert(JSON.stringify(data))
+					aid=data["answerId"]
 					$(".emailAccount").text(data["emailAccount"])
 					$(".questionContent").text("Ｑ：" + data["questionContent"])
-					$(".answerContent").val(data["answerContent"])
+					if (data["state"] == false) { $(".answerContent").val(data["answerContent"]) }
+					else if (data["state"] == true) { $(".editContent").val(data["answerContent"]) }
+
 				})
 				.fail(function (err) {
 					history.go(0);
@@ -173,7 +183,7 @@
 			$.ajax({
 				type: "POST",
 				data: {
-					QuestionId: id,
+					QuestionId:qid,
 					AnswerContent: answerContent
 				},
 
@@ -192,34 +202,33 @@
 
 		//編輯
 		$(".putAnswer").on("click", function () {
-			let answerContent = $(".answerContent").val()
-			console.log(answerContent)
+			let editContent = $(".editContent").val()
+			console.log(editContent)
 
 			$(".msgErr").text(null)
-			if(answerContent.trim()==""||answerContent==""){
+			if (editContent.trim() == "" || editContent == "") {
 				$(".msgErr").text("記得輸入內容")
 			}
 			else{
+				
 			$.ajax({
-				type: "put",
+				url: "https://localhost:7027/Question/Edit",
+				type: "PUT",
 				data: {
-					QuestionId: id,
-					AnswerContent: answerContent
+					AnswerId: aid,
+					AnswerContent: editContent
 				},
 
-				url: "https://localhost:7027/Question/Edit",
-				
 			})
 				.done(function (data) {
 					history.go(0);
 				})
 				.fail(function (err) {
-					alert("失敗");
+					alert("請在試一次");
+					history.go(0);
 				})
 			}
-
 		})
-
 
 	</script>
 

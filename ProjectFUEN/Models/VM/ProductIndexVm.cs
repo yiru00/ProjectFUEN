@@ -20,7 +20,7 @@ namespace ProjectFUEN.Models.VM
         public virtual Brand Brand { get; set; }
         public string Source { get; set; }
 
-        //public HttpPostedFileBase File { get; set; }
+ 
         public virtual Category Category { get; set; }
         public virtual ProductPhoto ProductPhoto { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
@@ -30,7 +30,7 @@ namespace ProjectFUEN.Models.VM
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Member> Members { get; set; }
 
-        public List <ProductPhoto> photo_list { get; set; }
 
+       
     }
 }

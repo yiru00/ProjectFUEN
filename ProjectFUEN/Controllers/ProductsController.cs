@@ -6,7 +6,9 @@ using fileUpload.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using ProjectFUEN.Models.EFModels;
 using ProjectFUEN.Models.Infrastructures.Repositories;
 using ProjectFUEN.Models.Services;
@@ -97,43 +99,47 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public string Create(ICollection<IFormFile> files, [Bind("Id,CategoryId,BrandId,Name,Price,ManufactorDate,ReleaseDate,Inventory,ProductSpec")] Product product)
+        public IActionResult Create(ProductVm vm)
         {
-            if (ModelState.IsValid)
+            // View驗證不成功
+            if (!ModelState.IsValid) return View(vm);
+
+
+            // 圖片Copy to project的資料夾
+            foreach (var file in vm.Sources)
             {
+                //上傳照片
+                (bool isCopied, string message, string Source) uploadSuccess = fileManager.UploadFile(file);
 
-
-                _context.Products.Add(product);
-                _context.SaveChanges();
-
-
-                // 抓下一筆的ProductId
-                int id = _context.Products.OrderBy(x => x.Id).Last().Id;
-
-                // 儲存產品圖片
-                List<ProductPhoto> photos = new List<ProductPhoto>();
-                foreach (var item in files)
+                // 失敗呈現在View上面
+                if (!uploadSuccess.isCopied)
                 {
-                    photos.Add(new ProductPhoto()
-                    {
-                        ProductId = id,
-                        Source = item.FileName,
-                    });
+                    ViewBag.photo = uploadSuccess.message;
+                    return View(vm);
                 }
-                _context.ProductPhotos.AddRange(photos);
-
-                _context.SaveChanges();
-
-
-                return "成功";
-                //return RedirectToAction(nameof(Index));
             }
 
-            return "失敗";
+            //存取資料庫
+            Product product = new Product()
+            {
+                Id = vm.Id,
+                Name= vm.Name,
+                Price= vm.Price,
+                ManufactorDate= vm.ManufactorDate,
+                Inventory= vm.Inventory,
+                ProductSpec= vm.ProductSpec,
+                BrandId = vm.BrandId,
+                CategoryId = vm.CategoryId
+            };
+            product.ProductPhotos.AddRange(vm.Sources.Select(x => new ProductPhoto()
+            {
+                Source = x.FileName
+            }));
+            _context.Products.Add(product);
+            _context.SaveChanges();
 
-            //ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
-            //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            //return View(product);
+            return RedirectToAction(nameof(Index));
+            
         }
 
         //GET: Products/Edit/5
@@ -144,14 +150,35 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+
+            var product = await _context.Products.Include(x => x.ProductPhotos).FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
             {
                 return NotFound();
             }
+
+            ProductVm vm = new ProductVm()
+            {
+                Id= product.Id,
+                BrandId = product.BrandId,
+                CategoryId= product.CategoryId,
+                Inventory= product.Inventory,
+                Price= product.Price,
+                ProductSpec= product.ProductSpec,
+                Name= product.Name,
+                ManufactorDate= product.ManufactorDate,
+            };
+
+            List<string> photoNames = new List<string>();
+            foreach (var fileName in product.ProductPhotos)
+            {
+                photoNames.Add(fileName.Source);
+            }
+            vm.FileNames = photoNames;
+
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
+            return View(vm);
         }
 
         //POST: Products/Edit/5
@@ -159,23 +186,35 @@ namespace ProjectFUEN.Controllers
          //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,BrandId,Name,Price,ManufactorDate,ReleaseDate,Inventory,ProductSpec")] Product product)
+        public async Task<IActionResult> Edit(int id, ProductVm vm)
         {
-            if (id != product.Id)
+
+            if (id != vm.Id)
             {
                 return NotFound();
             }
+            foreach (var file in vm.Sources)
+            {
+                //上傳照片
+                (bool isCopied, string message, string Source) uploadSuccess = fileManager.UploadFile(file);
 
+                // 失敗呈現在View上面
+                if (!uploadSuccess.isCopied)
+                {
+                    ViewBag.photo = uploadSuccess.message;
+                    return View(vm);
+                }
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(vm);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!ProductExists(vm.Id))
                     {
                         return NotFound();
                     }
@@ -186,9 +225,7 @@ namespace ProjectFUEN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
+            return View(vm);
         }
 
         // GET: Products/Delete/5

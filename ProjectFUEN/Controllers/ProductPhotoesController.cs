@@ -69,25 +69,39 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ICollection<IFormFile> files, [Bind("Id,ProductId,Source")] ProductPhotoVM productPhoto)
+        public IActionResult Create(ProductPhotoVM vm)
 
         {
-            IFormFile file = files.ToArray()[0];
 
-            //上傳照片
-            (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
+            if (!ModelState.IsValid) return View(vm);
 
-            if (uploadSuccess.Item1) productPhoto.Source = uploadSuccess.Item3;
-            else
+
+            // 圖片Copy to project的資料夾
+            foreach (var file in vm.Sources)
             {
-                ViewBag.photo = uploadSuccess.Item2;
-                return View(productPhoto);
+                //上傳照片
+                (bool isCopied, string message, string Source) uploadSuccess = fileManager.UploadFile(file);
+
+                // 失敗呈現在View上面
+                if (!uploadSuccess.isCopied)
+                {
+                    ViewBag.photo = uploadSuccess.message;
+                    return View(vm);
+                }
             }
+            //存取資料庫
+            ProductPhoto productPhoto = new ProductPhoto()
+            {
+                Id = vm.Id,
+                ProductId = vm.ProductId,
+                Source = vm.Source
+            };
+
 
             if (ModelState.IsValid)
             {
-                _context.Add(productPhoto.ToEntity());
-                await _context.SaveChangesAsync();
+                _context.Add(vm.ToEntity());
+                _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);

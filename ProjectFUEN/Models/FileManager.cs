@@ -9,7 +9,7 @@ namespace fileUpload.Models
 		/// </summary>
 		/// <param name="file"></param>
 		/// <returns></returns>
-		public (bool, string,string) UploadFile(IFormFile file)
+		public (bool isCopied, string message, string Source) UploadFile(IFormFile file)
 		{
 
 			bool isCopied = false;

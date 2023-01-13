@@ -19,16 +19,16 @@ namespace ProjectFUEN.Models.EFModels
 
         public virtual ICollection<Activity> Activities { get; set; }
     }
-	public static partial class ActivityCategoryExts
-	{
-		public static ActivityCategory ToEntity(this ActivityCategoryDto source)
-		{
-			return new ActivityCategory
-			{
-				Id = source.Id,
-				DisplayOrder = source.DisplayOrder,
-				CategoryName = source.CategoryName,
-			};
-		}
-	}
+    public static partial class ActivityCategoryExts
+    {
+        public static ActivityCategory ToEntity(this ActivityCategoryDto source)
+        {
+            return new ActivityCategory
+            {
+                Id = source.Id,
+                DisplayOrder = source.DisplayOrder,
+                CategoryName = source.CategoryName,
+            };
+        }
+    }
 }

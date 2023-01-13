@@ -144,7 +144,7 @@
 		$(".getQuestion").on("click", function () {
 
 			qid = $(this).attr("question"); //取得點到問題id
-			alert(qid)
+			//alert(qid)
 			$(".msgErr").text(null)
 			//$(".answerContent").val(null)
 
@@ -154,7 +154,7 @@
 				data: "json"
 			})
 				.done(function (data) {
-					alert(JSON.stringify(data))
+					//alert(JSON.stringify(data))
 					aid=data["answerId"]
 					$(".emailAccount").text(data["emailAccount"])
 					$(".questionContent").text("Ｑ：" + data["questionContent"])
@@ -170,7 +170,7 @@
 		//新增
 		$(".postAnswer").on("click", function () {
 			let answerContent = $(".answerContent").val()
-			console.log(answerContent)
+			//console.log(answerContent)
 
 			$(".msgErr").text(null)
 			if(answerContent.trim()==""||answerContent==""){

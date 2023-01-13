@@ -20,18 +20,18 @@ namespace ProjectFUEN.Models.EFModels
 
         public virtual ICollection<Activity> Activities { get; set; }
     }
-	public static partial class InstructorExts
-	{
-		public static Instructor ToEntity(this InstructorVM source)
-		{
-			return new Instructor
-			{
-				Id = source.Id,
-				InstructorName = source.InstructorName,
-				ResumePhoto = source.ResumePhoto,
-				Description = source.Description,
+    public static partial class InstructorExts
+    {
+        public static Instructor ToEntity(this InstructorVM source)
+        {
+            return new Instructor
+            {
+                Id = source.Id,
+                InstructorName = source.InstructorName,
+                ResumePhoto = source.ResumePhoto,
+                Description = source.Description,
 
-			};
-		}
-	}
+            };
+        }
+    }
 }

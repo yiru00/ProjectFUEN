@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Instructor>
 
 @{
-    ViewData["Title"] = "講師列表";
+    ViewData["Title"] = "講師總覽";
 }
 
 <h1>Index</h1>
@@ -15,7 +15,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.InstructorName)
             </th>
-            
+            <th>講師照片</th>
             <th></th>
         </tr>
     </thead>
@@ -26,6 +26,7 @@
                  <a asp-action="Details" asp-route-id="@item.Id" class="d-flex w-100">@Html.DisplayFor(modelItem => item.InstructorName)</a>
                 
             </td>
+                <td><img id="preview" style="max-height:80px;max-width:fit-content" src="/UploadedFiles/@item.ResumePhoto" /></td>
             
             <td>
                  <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square"></i></a>

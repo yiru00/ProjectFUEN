@@ -1,7 +1,7 @@
-﻿@model ProjectFUEN.Models.EFModels.Activity
+﻿@model ProjectFUEN.Models.ViewModels.ActivityVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "編輯活動";
 }
 
 <h1>Edit</h1>
@@ -10,19 +10,33 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form method="post" enctype="multipart/form-data" asp-controller="Activity" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
+            @*隱藏CoverImage欄位(還是要拿來繫結)*@
+            <div class="form-group visually-hidden">
                 <label asp-for="CoverImage" class="control-label"></label>
                 <input asp-for="CoverImage" class="form-control" />
                 <span asp-validation-for="CoverImage" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="ActivityName" class="control-label"></label>
                 <input asp-for="ActivityName" class="form-control" />
                 <span asp-validation-for="ActivityName" class="text-danger"></span>
             </div>
+            
+           @* 圖片上傳*@
+            <div class="form-group">
+                <div class="col-md-10">
+
+                    <input type="file" name="file" id="myimg" accept="image/*" />
+                </div>
+                <p class="text-danger">@ViewBag.photoError</p>
+                <img id="preview" style="max-height:200px;" src="/UploadedFiles/@Model.CoverImage" />
+
+            </div>
+
             <div class="form-group">
                 <label asp-for="Recommendation" class="control-label"></label>
                 <input asp-for="Recommendation" class="form-control" />
@@ -38,14 +52,10 @@
                 <input asp-for="MemberLimit" class="form-control" />
                 <span asp-validation-for="MemberLimit" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="NumOfMember" class="control-label"></label>
-                <input asp-for="NumOfMember" class="form-control" />
-                <span asp-validation-for="NumOfMember" class="text-danger"></span>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -86,4 +96,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('#myimg').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#preview').attr('src', objectURL);
+        });
+
+    </script>
 }

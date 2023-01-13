@@ -37,8 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="Models\EFModels\" />
+    <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="wwwroot\UploadedFiles\" />
   </ItemGroup>
 

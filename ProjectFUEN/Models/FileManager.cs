@@ -21,6 +21,7 @@ namespace ProjectFUEN.Models
 				string fileName = file.FileName;
 				//2 Get the extension of the file
 				string extension = Path.GetExtension(fileName);
+				extension= extension.ToLower();
 				//3 check the file extension as png
 				if (extension == ".png" || extension == ".jepg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
 				{
@@ -56,7 +57,8 @@ namespace ProjectFUEN.Models
 
 		private string GetNewFileName(string path, string fileName)
 		{
-			string ext = Path.GetExtension(fileName);  //得到副檔名(包含.)
+			string ext = Path.GetExtension(fileName); //得到副檔名(包含.)
+			ext= ext.ToLower();
 			string newFileName = string.Empty;
 			string fullPath = string.Empty;
 

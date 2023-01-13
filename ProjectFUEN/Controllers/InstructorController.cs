@@ -117,8 +117,6 @@ namespace ProjectFUEN.Controllers
 			(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
 
-			
-
 			//上傳檔案失敗(沒上傳東西/上傳圖檔以外的)
 			if (!uploadSuccess.Item1)//上傳失敗 item1=false
 			{

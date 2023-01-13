@@ -5,16 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProjectFUEN.Models;
 using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.ViewModels;
 
 namespace ProjectFUEN.Controllers
 {
     public class ActivityController : Controller
     {
+        FileManager fileManager;
         private readonly ProjectFUENContext _context;
 
         public ActivityController(ProjectFUENContext context)
         {
+            fileManager = new FileManager();
             _context = context;
         }
 
@@ -49,7 +53,7 @@ namespace ProjectFUEN.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName");
-            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "Description");
+            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName");
             return View();
         }
 
@@ -58,16 +62,28 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CoverImage,ActivityName,Recommendation,Address,MemberLimit,NumOfMember,Description,GatheringTime,Deadline,DateOfCreated,InstructorId,CategoryId")] Activity activity)
+        public async Task<IActionResult> Create(IFormFile file, [Bind("Id,ActivityName,Recommendation,Address,MemberLimit,NumOfMember,Description,GatheringTime,Deadline,DateOfCreated,InstructorId,CategoryId")] ActivityVM activity)
         {
+            //上傳照片
+            (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
+            if (!uploadSuccess.Item1)
+            {
+                ViewBag.photoError = uploadSuccess.Item2;
+                return View(activity);
+            }
+            else
+            {
+                activity.CoverImage = uploadSuccess.Item3;
+
+            }
             if (ModelState.IsValid)
             {
-                _context.Add(activity);
+                _context.Add(activity.ToEntity());
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
-            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "Description", activity.InstructorId);
+            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
             return View(activity);
         }
 
@@ -85,8 +101,8 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
-            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "Description", activity.InstructorId);
-            return View(activity);
+            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
+            return View(activity.ToVM());
         }
 
         // POST: Activity/Edit/5
@@ -94,36 +110,63 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CoverImage,ActivityName,Recommendation,Address,MemberLimit,NumOfMember,Description,GatheringTime,Deadline,DateOfCreated,InstructorId,CategoryId")] Activity activity)
+        public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,CoverImage,ActivityName,Recommendation,Address,MemberLimit,NumOfMember,Description,GatheringTime,Deadline,DateOfCreated,InstructorId,CategoryId")] ActivityVM activity)
         {
             if (id != activity.Id)
             {
                 return NotFound();
             }
+            //判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
+            (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
-            if (ModelState.IsValid)
+
+            //上傳檔案失敗(沒上傳東西/上傳圖檔以外的)
+            if (!uploadSuccess.Item1)//上傳失敗 item1=false
             {
-                try
+
+                if (uploadSuccess.Item2 == "記得選取檔案") //未上傳任何檔案，用原有的
                 {
-                    _context.Update(activity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ActivityExists(activity.Id))
+                    ModelState.Remove("file");
+                    if (ModelState.IsValid)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        _context.Update(activity.ToEntity());
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                else if (uploadSuccess.Item2 == "檔案必須是圖片檔案")//上傳成圖檔以外的
+                {
+                    ViewBag.photoError = uploadSuccess.Item2; //錯誤訊息
+                    ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
+                    ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
+                    return View(activity);
+                }
+                ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
+                ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
+                return View(activity);
             }
-            ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
-            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "Description", activity.InstructorId);
-            return View(activity);
+            else //有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
+            {
+                if (uploadSuccess.Item2 == "") //上傳圖檔，錯誤訊息=""
+                {
+                    activity.CoverImage = uploadSuccess.Item3; //傳入新檔名
+                    _context.Update(activity.ToEntity());
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else //上傳圖檔以外的(ppt.pdf...)
+                {
+                    ViewBag.photoError = uploadSuccess.Item2;
+                    ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
+                    ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
+                    return View(activity);
+                }
+
+            }
+            //ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
+            //ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
+            //return View(activity);
         }
 
         // GET: Activity/Delete/5

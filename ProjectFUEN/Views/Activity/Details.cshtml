@@ -1,7 +1,7 @@
 ﻿@model ProjectFUEN.Models.EFModels.Activity
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "活動詳情";
 }
 
 <h1>Details</h1>
@@ -16,6 +16,14 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CoverImage)
         </dd>
+        <dt class = "col-sm-2">
+           活動圖片
+        </dt>
+        <dd class = "col-sm-10">
+            <img id="preview" style="max-height:200px;max-width:fit-content" src="/UploadedFiles/@Model.CoverImage" />
+        </dd>
+        
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ActivityName)
         </dt>
@@ -40,12 +48,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MemberLimit)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumOfMember)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumOfMember)
-        </dd>
+       
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -81,10 +84,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Instructor.Description)
+            <img id="preview" style="max-height:200px;" src="/UploadedFiles/@Model.Instructor.ResumePhoto" />
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
     <a asp-action="Index">Back to List</a>
 </div>

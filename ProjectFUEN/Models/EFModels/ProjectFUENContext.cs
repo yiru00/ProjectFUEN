@@ -214,13 +214,11 @@ namespace ProjectFUEN.Models.EFModels
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Comments__Member__6442E2C9");
 
                 entity.HasOne(d => d.Photo)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.PhotoId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Comments__PhotoI__65370702");
             });
 

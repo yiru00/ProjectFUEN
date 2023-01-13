@@ -1,4 +1,4 @@
-﻿@model ProjectFUEN.Models.VM.ProductIndexVm
+﻿@model ProjectFUEN.Models.EFModels.Product
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form method="post" enctype="multipart/form-data" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
@@ -46,6 +46,14 @@
                 <span asp-validation-for="ProductSpec" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <div class="col-md-10">
+                    <input type="file" multiple="multiple" name="files" id="myimg" accept="image/*" />
+                </div>
+                <p class="text-danger">@ViewBag.photo</p>
+                <img id="preview" style="max-height:200px;" />
+                @*<span asp-validation-for="Source" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -58,4 +66,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('#myimg').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#preview').attr('src', objectURL);
+        });
+
+    </script>
 }

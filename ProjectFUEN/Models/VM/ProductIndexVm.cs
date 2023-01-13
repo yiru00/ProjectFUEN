@@ -33,13 +33,4 @@ namespace ProjectFUEN.Models.VM
         public List <ProductPhoto> photo_list { get; set; }
 
     }
-
-    public  class ProductPhoto
-    {
-        public int Id { get; set; }
-        public int ProductId { get; set; }
-        public string Source { get; set; }
-
-        public virtual Product Product { get; set; }
-    }
 }

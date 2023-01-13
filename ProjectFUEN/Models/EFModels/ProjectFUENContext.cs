@@ -675,8 +675,8 @@ namespace ProjectFUEN.Models.EFModels
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-        public DbSet<ProjectFUEN.Models.VM.CategoryIndexVM> CategoryIndexVM { get; set; }
+        //public DbSet<ProjectFUEN.Models.VM.CategoryIndexVM> CategoryIndexVM { get; set; }
 
-        public DbSet<ProjectFUEN.Models.VM.ProductIndexVm> ProductIndexVm { get; set; }
+        //public DbSet<ProjectFUEN.Models.VM.ProductIndexVm> ProductIndexVm { get; set; }
     }
 }

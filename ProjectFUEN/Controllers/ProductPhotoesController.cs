@@ -69,20 +69,19 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile file, [Bind("Id,ProductId,Source")] ProductPhotoVM productPhoto)
+        public async Task<IActionResult> Create(ICollection<IFormFile> files, [Bind("Id,ProductId,Source")] ProductPhotoVM productPhoto)
 
         {
+            IFormFile file = files.ToArray()[0];
+
             //上傳照片
             (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
-            if (!uploadSuccess.Item1)
+
+            if (uploadSuccess.Item1) productPhoto.Source = uploadSuccess.Item3;
+            else
             {
                 ViewBag.photo = uploadSuccess.Item2;
                 return View(productPhoto);
-            }
-            else
-            {
-                productPhoto.Source = uploadSuccess.Item3;
-
             }
 
             if (ModelState.IsValid)

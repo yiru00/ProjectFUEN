@@ -97,17 +97,43 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CategoryId,BrandId,Name,Price,ManufactorDate,ReleaseDate,Inventory,ProductSpec")] Product product)
+        public string Create(ICollection<IFormFile> files, [Bind("Id,CategoryId,BrandId,Name,Price,ManufactorDate,ReleaseDate,Inventory,ProductSpec")] Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+
+                _context.Products.Add(product);
+                _context.SaveChanges();
+
+
+                // 抓下一筆的ProductId
+                int id = _context.Products.OrderBy(x => x.Id).Last().Id;
+
+                // 儲存產品圖片
+                List<ProductPhoto> photos = new List<ProductPhoto>();
+                foreach (var item in files)
+                {
+                    photos.Add(new ProductPhoto()
+                    {
+                        ProductId = id,
+                        Source = item.FileName,
+                    });
+                }
+                _context.ProductPhotos.AddRange(photos);
+
+                _context.SaveChanges();
+
+
+                return "成功";
+                //return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
+
+            return "失敗";
+
+            //ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
+            //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
+            //return View(product);
         }
 
         //GET: Products/Edit/5

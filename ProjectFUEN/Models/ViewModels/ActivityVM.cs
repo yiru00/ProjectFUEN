@@ -1,35 +1,44 @@
 ﻿using ProjectFUEN.Models.EFModels;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 namespace ProjectFUEN.Models.ViewModels
 {
 	public class ActivityVM
 	{
-
-		
-
 		public int Id { get; set; }
 		
 		public string ?CoverImage { get; set; }
+
 		[Display(Name = "活動名稱")]
 		public string ActivityName { get; set; }
+        
         [Display(Name = "推薦器材")]
         public string Recommendation { get; set; }
+        
         [Display(Name = "地址")]
         public string Address { get; set; }
-        [Display(Name = "參加名額")]
+        
+        [Display(Name = "活動名額")]
         public int MemberLimit { get; set; }
-
-		public int NumOfMember { get; set; }
+        
+        [Display(Name = "參加人數")]
+        public int NumOfMember { get; set; }
+        
         [Display(Name = "活動說明")]
         public string Description { get; set; }
-        [Display(Name = "集合時間")]
+        
+        [Display(Name = "活動集合時間")]
         public DateTime GatheringTime { get; set; }
-        [Display(Name = "截止日")]
+
+        [Display(Name = "報名截止時間")]
         public DateTime Deadline { get; set; }
-		public DateTime DateOfCreated { get; set; }
-		[Display(Name = "講師")]
+        
+        [Display(Name = "活動刊登時間")]
+        public DateTime DateOfCreated { get; set; }
+		
+        [Display(Name = "講師")]
 		public int? InstructorId { get; set; }
 
         [Display(Name = "分類")]
@@ -49,7 +58,7 @@ namespace ProjectFUEN.Models.ViewModels
                 Recommendation= source.Recommendation,
                 Address= source.Address,
                 MemberLimit= source.MemberLimit,
-                NumOfMember=0,
+                NumOfMember=source.ActivityMembers.Count,
                 Description=source.Description,
                 GatheringTime= source.GatheringTime,
                 Deadline= source.Deadline,

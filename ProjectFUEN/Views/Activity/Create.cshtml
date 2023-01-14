@@ -13,9 +13,9 @@
         <form method="post" enctype="multipart/form-data" asp-controller="Activity" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*<div class="form-group">
-                <label asp-for="CoverImage" class="control-label"></label>
-                <input asp-for="CoverImage" class="form-control" />
-                <span asp-validation-for="CoverImage" class="text-danger"></span>
+            <label asp-for="CoverImage" class="control-label"></label>
+            <input asp-for="CoverImage" class="form-control" />
+            <span asp-validation-for="CoverImage" class="text-danger"></span>
             </div>*@
             <div class="form-group">
                 <div class="col-md-10">
@@ -46,29 +46,35 @@
                 <input asp-for="MemberLimit" class="form-control" />
                 <span asp-validation-for="MemberLimit" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" ></textarea>
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
+            @*集合時間*@
             <div class="form-group">
                 <label asp-for="GatheringTime" class="control-label"></label>
-                <input asp-for="GatheringTime" class="form-control" />
+                <input id="gatheringTime" type="datetime-local" asp-for="GatheringTime" class="form-control" />
                 <span asp-validation-for="GatheringTime" class="text-danger"></span>
+                
             </div>
+
+            @*活動報名截止日*@
             <div class="form-group">
                 <label asp-for="Deadline" class="control-label"></label>
-                <input asp-for="Deadline" class="form-control" />
+                <input id="deadLine" type="datetime-local" asp-for="Deadline" class="form-control" />
                 <span asp-validation-for="Deadline" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="InstructorId" class="control-label"></label>
-                <select asp-for="InstructorId" class ="form-control" asp-items="ViewBag.InstructorId"></select>
+                <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.InstructorId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -82,13 +88,58 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
+        //圖片預覽用
         $('#myimg').on('change', function (e) {
             const file = this.files[0];
             const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
             $('#preview').attr('src', objectURL);
         });
 
+        function convertToISO(timebit) {
+            // remove GMT offset
+            timebit.setHours(0, -timebit.getTimezoneOffset(), 0, 0);
+            
+            var isodate = timebit.toISOString().slice(0,16); //回傳格式:2020-07-01T00:00
+            return isodate;
+        }
+
+        //活動日
+        let gatheringDate = $('#gatheringTime');
+        //設定最小日期(新增日往後7天)
+        let currentForGatheringMin = new Date(); //取得目前時間
+        let sevenDaysTS = currentForGatheringMin.setDate(currentForGatheringMin.getDate() + 7); //回傳七天後的時間戳記
+        let minGatheringDate = new Date(sevenDaysTS); //時間戳記轉成日期型別
+        let minGatheringStr = convertToISO(minGatheringDate); //回傳字串 設定input屬性用
+        gatheringDate.attr('min', minGatheringStr) //設定可以選的最小日期
+        gatheringDate.attr('value', minGatheringStr) //預設是最小日期
+        
+        //設定最大日期(新增日往後兩個月)
+        let currentForGatheringMax = new Date();
+        let maxGatheringDateStr = convertToISO(new Date(currentForGatheringMax.setMonth(currentForGatheringMax.getMonth() + 2)));
+        gatheringDate.attr('max',maxGatheringDateStr)
+
+
+        //截止日
+        let deadLine=$('#deadLine');
+        //設定最小日期(新增日往後3天)
+        let currentForDeadLineMin=new Date();
+        let minDeadLineStr = convertToISO(new Date(currentForDeadLineMin.setDate(currentForDeadLineMin.getDate() + 3)));
+        deadLine.attr('min',minDeadLineStr)
+        deadLine.attr('value',minDeadLineStr)
+
+        //設定最大日期(活動日往前3天)
+        $('#gatheringTime').on("change",function(){
+            let gatheringInput = new Date($("#gatheringTime").val());
+            let maxDeadLineStr = convertToISO(new Date(gatheringInput.setDate(gatheringInput.getDate() - 3)));
+            console.log(maxDeadLineStr)
+            deadLine.attr('max', maxDeadLineStr)
+        })
+
+       
+        
     </script>
 }

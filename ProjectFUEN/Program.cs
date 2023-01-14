@@ -37,7 +37,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Activity}/{action=Index}/{id?}");
+    pattern: "{controller=Activity}/{action=Create}/{id?}");
 
 
 app.Run();

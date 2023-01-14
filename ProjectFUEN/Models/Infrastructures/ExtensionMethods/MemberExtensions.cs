@@ -17,5 +17,15 @@ namespace ProjectFUEN.Models.Infrastructures.ExtensionMethods
 				BirthOfDate = (source.BirthOfDate.HasValue) ? source.BirthOfDate.Value.ToString("yyyy-MM-dd") : string.Empty,
 			};
 		}
+
+		public static BlackListVM EntityToBlackVM(this Member source)
+		{
+			return new BlackListVM()
+			{
+				Id = source.Id,
+				EmailAccount = source.EmailAccount,
+				RealName = source.RealName
+			};
+		}
 	}
 }

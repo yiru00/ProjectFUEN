@@ -91,7 +91,6 @@
                 type: "GET",
                 url: `https://localhost:7027/Members/GetMembers?account=${searchText}&selectCity=${selectValue}`
             }).done(function (data) {
-                console.log(data)
                 showTable(data);
             }).fail(function (err) {
                 console.log(err.statusText)
@@ -104,24 +103,24 @@
 
             for (let item of data) {
                 let tbody = $(`<tr id="${item.id}">
-                                        <td>
-                                            ${item.emailAccount}
-                                        </td>
-                                        <td>
-                                            ${item.realName}
-                                        </td>
-                                        <td>
-                                            ${item.mobile}
-                                        </td>
-                                        <td>
-                                            ${item.birthOfDate}
-                                        </td>
-                                        <td>
-                                            ${item.city}
-                                        </td>
-                                        <td>
-                                        </td>
-                                    </tr>`)
+                                <td>
+                                    ${item.emailAccount}
+                                </td>
+                                <td>
+                                    ${item.realName}
+                                </td>
+                                <td>
+                                    ${item.mobile}
+                                </td>
+                                <td>
+                                    ${item.birthOfDate}
+                                </td>
+                                <td>
+                                    ${item.city}
+                                </td>
+                                <td>
+                                </td>
+                            </tr>`)
 
                 $("#tbody").append(tbody);
             }

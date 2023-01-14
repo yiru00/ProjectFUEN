@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.Infrastructures.ExtensionMethods;
+using ProjectFUEN.Models.ViewModels;
 
 namespace ProjectFUEN.Controllers
 {
@@ -21,7 +23,15 @@ namespace ProjectFUEN.Controllers
         // GET: BlackLists
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Members.ToListAsync());
-        }
-    }
+			return View(await _context.Members.Where(x => x.IsInBlackList).Select(x => x.EntityToBlackVM()).ToListAsync());
+		}
+
+		public IEnumerable<BlackListVM> GetBackListMembers(string account)
+		{
+			var members = _context.Members
+				.Where(x => x.EmailAccount != null && x.IsInBlackList && x.EmailAccount.Contains(account));
+
+			return members.Select(x => x.EntityToBlackVM());
+		}
+	}
 }

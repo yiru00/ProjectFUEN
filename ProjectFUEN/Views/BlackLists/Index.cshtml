@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Member>
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.BlackListVM>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +6,12 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div>
+    <span>EmailAccount:</span>
+    <input type="text" id="searchText">
+    <button id="search">Search</button>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -37,3 +40,42 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // Search button
+        $("#search").on("click", function () {
+            let searchText = $("#searchText").val();
+
+            $.ajax({
+                type: "GET",
+                url: `https://localhost:7027/BlackLists/GetBackListMembers?account=${searchText}`
+            }).done(function (data) {
+                showTable(data);
+            }).fail(function (err) {
+                console.log(err.statusText)
+            })
+        })
+
+        // Show
+        function showTable(data) {
+            $("#tbody").empty();
+
+            for (let item of data) {
+                let tbody = $(`<tr id="${item.id}">
+                                <td>
+                                    ${item.emailAccount}
+                                </td>
+                                <td>
+                                    ${item.realName}
+                                </td>
+                                <td>
+                                    <button id="${item.id}" class="btn-primary delete">Delete</button>
+                                </td>
+                            </tr>`)
+
+                $("#tbody").append(tbody);
+            }
+        }
+    </script>
+}

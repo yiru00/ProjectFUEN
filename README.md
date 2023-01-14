@@ -10,5 +10,13 @@
 
 3.  [V]建立 BlackListsController
 
+4.  [V]建立 BlackListIndexVM
+    [V] Search JS Code
+    [V]Action index
+    [V]Entity -> indexVM
+
+[X]Action GetMembers
+[X]BlackList delete
+
 [X]MemberRepository
 [!]City 的判斷方法

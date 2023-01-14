@@ -1,10 +1,41 @@
-﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Member>
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.MemberIndexVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Members";
 }
 
-<h1>Index</h1>
+<h1>Members</h1>
+
+<div>
+    <select id="selectCity">
+        <option>請選擇縣市...</option>
+        <option>台北市</option>
+        <option>新北市</option>
+        <option>桃園市</option>
+        <option>台中市</option>
+        <option>台南市</option>
+        <option>高雄市</option>
+        <option>新竹縣</option>
+        <option>苗栗縣</option>
+        <option>彰化市</option>
+        <option>南投縣</option>
+        <option>雲林縣</option>
+        <option>嘉義縣</option>
+        <option>屏東縣</option>
+        <option>宜蘭縣</option>
+        <option>花蓮縣</option>
+        <option>台東縣</option>
+        <option>澎湖縣</option>
+        <option>金門縣</option>
+        <option>連江縣</option>
+        <option>基隆市</option>
+        <option>新竹市</option>
+        <option>嘉義市</option>
+    </select>
+    <span>EmailAccount</span>
+    <input type="text" id="searchText">
+    <button id="search">Search</button>
+</div>
 
 <table class="table">
     <thead>
@@ -22,11 +53,11 @@
                 @Html.DisplayNameFor(model => model.Mobile)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => model.City)
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tbody">
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -42,9 +73,58 @@
                 @Html.DisplayFor(modelItem => item.Mobile)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address)
+                @Html.DisplayFor(modelItem => item.City)
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // Search button
+        $("#search").on("click", function () {
+            let searchText = $("#searchText").val();
+            let selectValue = $("#selectCity").val();
+
+            $.ajax({
+                type: "GET",
+                url: `https://localhost:7027/Members/GetMembers?account=${searchText}&selectCity=${selectValue}`
+            }).done(function (data) {
+                console.log(data)
+                showTable(data);
+            }).fail(function (err) {
+                console.log(err.statusText)
+            })
+        })
+
+        // Show
+        function showTable(data) {
+            $("#tbody").empty();
+
+            for (let item of data) {
+                let tbody = $(`<tr id="${item.id}">
+                                        <td>
+                                            ${item.emailAccount}
+                                        </td>
+                                        <td>
+                                            ${item.realName}
+                                        </td>
+                                        <td>
+                                            ${item.mobile}
+                                        </td>
+                                        <td>
+                                            ${item.birthOfDate}
+                                        </td>
+                                        <td>
+                                            ${item.city}
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>`)
+
+                $("#tbody").append(tbody);
+            }
+        }
+    </script>
+}

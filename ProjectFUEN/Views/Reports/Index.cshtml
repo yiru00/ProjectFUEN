@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectFUEN.Models.EFModels.PhotoReport>
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.PhotoReportIndexVM>
 
 @{
     ViewData["Title"] = "Reports";
@@ -10,13 +10,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ReportTime)
+                @Html.DisplayNameFor(model => model.Reporter)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Photo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReporterNavigation)
+                @Html.DisplayNameFor(model => model.ReportTime)
             </th>
             <th></th>
         </tr>
@@ -25,18 +25,17 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Reporter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Photo)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.ReportTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Photo.Description)
+                <button class="btn btn-primary">Delete</button>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReporterNavigation.EmailAccount)
-            </td>
-            <td>
-                <button>Delete</button>
-            </td>
-            
         </tr>
 }
     </tbody>

@@ -36,9 +36,6 @@
   <ItemGroup>
     <Folder Include="Models\Services\" />
     <Folder Include="Models\DTOs\" />
-    <Folder Include="Models\ViewModels\" />
-    <Folder Include="Models\Infrastructures\" />
-    <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="Models\Infrastructures\Repositories\" />
     <Folder Include="Models\EFModels\" />
   </ItemGroup>

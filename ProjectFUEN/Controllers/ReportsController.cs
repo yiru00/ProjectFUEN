@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.Infrastructures.ExtensionMethods;
 
 namespace ProjectFUEN.Controllers
 {
@@ -21,8 +22,12 @@ namespace ProjectFUEN.Controllers
         // GET: Reports
         public async Task<IActionResult> Index()
         {
-            var projectFUENContext = _context.PhotoReports.Include(p => p.Photo).Include(p => p.ReporterNavigation);
-            return View(await projectFUENContext.ToListAsync());
+            var photoReport = _context.PhotoReports
+                .Include(p => p.Photo)
+                .Include(p => p.ReporterNavigation)
+                .Select(x => x.PhotoEntityToIndexVM());
+
+            return View(await photoReport.ToListAsync());
         }
     }
 }

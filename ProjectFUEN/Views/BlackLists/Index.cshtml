@@ -57,6 +57,45 @@
             })
         })
 
+        // Delete Black List Member
+        $("#tbody").on("click", ".delete", function () {
+            const tr = $(this).parent().parent()
+            let id = $(this).prop("id");
+            const tds = $(this).parent().parent().find("td");
+            const text = `${tds.eq(0).text().trim()}`
+
+            Swal.fire({
+                title: "Are you sure?",
+                html: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Removed!',
+                        `${tds.eq(0).text().trim()} has removed`,
+                        'success'
+                    ).then((result) => {
+                        // Delete DB 黑名單
+                        $.ajax({
+                            type: "PUT",
+                            url: `http://localhost:5154/BlackLists/Delete?id=${id}`
+                        }).done(function (data) {
+
+                        }).fail(function (err) {
+                            console.log(err.statusText)
+                        })
+
+                        // Delte 此筆資料
+                        tr.remove();
+                    })
+                }
+            })
+        })
+
         // Show
         function showTable(data) {
             $("#tbody").empty();

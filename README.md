@@ -16,7 +16,11 @@
     [V]Entity -> indexVM
     [V]Action GetBlackListMembers
 
-[X]BlackList delete
+5.  [V]delete JS code
+    [V]Action delete
+    [V]BlackList delete
 
+[X]Search text 清空
+[X]BlackRepository
 [X]MemberRepository
 [!]City 的判斷方法

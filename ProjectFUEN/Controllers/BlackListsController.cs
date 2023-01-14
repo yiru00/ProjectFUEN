@@ -33,5 +33,15 @@ namespace ProjectFUEN.Controllers
 
 			return members.Select(x => x.EntityToBlackVM());
 		}
+
+		[HttpPut]
+		public void Delete(int id)
+		{
+			var member = _context.Members.FirstOrDefault(x => x.Id == id);
+
+			member.IsInBlackList = false;
+
+			_context.SaveChangesAsync();
+		}
 	}
 }

@@ -5,21 +5,21 @@ using System.Collections.Generic;
 
 namespace ProjectFUEN.Models.EFModels
 {
-    public partial class Question
+    public partial class Comment
     {
-        public Question()
+        public Comment()
         {
-            Answers = new HashSet<Answer>();
+            CommentReports = new HashSet<CommentReport>();
         }
 
         public int Id { get; set; }
         public string Content { get; set; }
-        public DateTime DateCreated { get; set; }
-        public int ActivityId { get; set; }
+        public DateTime CommentTime { get; set; }
+        public int PhotoId { get; set; }
         public int MemberId { get; set; }
 
-        public virtual Activity Activity { get; set; }
         public virtual Member Member { get; set; }
-        public virtual ICollection<Answer> Answers { get; set; }
+        public virtual Photo Photo { get; set; }
+        public virtual ICollection<CommentReport> CommentReports { get; set; }
     }
 }

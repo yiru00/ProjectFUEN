@@ -8,6 +8,6 @@ namespace ProjectFUEN.Models.EFModels
     public partial class IndiscriminateReport
     {
         public int MemberId { get; set; }
-        public int? NumOfTimes { get; set; }
+        public int NumOfTimes { get; set; }
     }
 }

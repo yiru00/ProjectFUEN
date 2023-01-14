@@ -7,6 +7,12 @@ namespace ProjectFUEN.Models.EFModels
 {
     public partial class Photo
     {
+        public Photo()
+        {
+            Comments = new HashSet<Comment>();
+            PhotoReports = new HashSet<PhotoReport>();
+        }
+
         public int Id { get; set; }
         public string Source { get; set; }
         public string Title { get; set; }
@@ -14,14 +20,16 @@ namespace ProjectFUEN.Models.EFModels
         public int Author { get; set; }
         public int? ISO { get; set; }
         public string Pixel { get; set; }
+        public string Aperture { get; set; }
+        public string Shutter { get; set; }
         public string Camera { get; set; }
         public string Negative { get; set; }
-        public int? FocalLength { get; set; }
-        public string Shutter { get; set; }
         public string Location { get; set; }
         public DateTime ShootingTime { get; set; }
         public DateTime UploadTime { get; set; }
 
         public virtual Member AuthorNavigation { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<PhotoReport> PhotoReports { get; set; }
     }
 }

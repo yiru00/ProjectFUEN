@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ProjectFUEN.Models.EFModels.PhotoReport>
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<h1>Reports</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Photo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReporterNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Photo.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReporterNavigation.EmailAccount)
+            </td>
+            <td>
+                <button>Delete</button>
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>

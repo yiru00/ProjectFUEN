@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Member>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAccount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAccount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealName)
+            </td>
+            <td>
+               <button id="@item.Id" class="btn-primary delete">Delete</button>
+            </td> 
+        </tr>
+}
+    </tbody>
+</table>

@@ -8,6 +8,7 @@
     [V]Search Add JS Cod
     [V]GetMembers Action
 
+3.  [V]建立 BlackListsController
+
 [X]MemberRepository
 [!]City 的判斷方法
-[X]Black List

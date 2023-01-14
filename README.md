@@ -14,8 +14,8 @@
     [V] Search JS Code
     [V]Action index
     [V]Entity -> indexVM
+    [V]Action GetBlackListMembers
 
-[X]Action GetMembers
 [X]BlackList delete
 
 [X]MemberRepository

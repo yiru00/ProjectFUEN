@@ -1,4 +1,4 @@
-﻿@model ProjectFUEN.Models.EFModels.Activity
+﻿@model ProjectFUEN.Models.ViewModels.ActivityVM
 
 @{
     ViewData["Title"] = "活動詳情";
@@ -22,8 +22,6 @@
         <dd class = "col-sm-10">
             <img id="preview" style="max-height:200px;max-width:fit-content" src="/UploadedFiles/@Model.CoverImage" />
         </dd>
-        
-
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ActivityName)
         </dt>
@@ -74,17 +72,16 @@
             @Html.DisplayFor(model => model.DateOfCreated)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.CategoryName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryName)
+            @Html.DisplayFor(model => model.CategoryName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Instructor)
+            @Html.DisplayNameFor(model => model.InstructorName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Instructor.Description)
-            <img id="preview" style="max-height:200px;" src="/UploadedFiles/@Model.Instructor.ResumePhoto" />
+            @Html.DisplayFor(model => model.InstructorName)
         </dd>
     </dl>
 </div>

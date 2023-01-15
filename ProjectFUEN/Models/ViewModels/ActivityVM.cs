@@ -17,14 +17,14 @@ namespace ProjectFUEN.Models.ViewModels
         [Display(Name = "推薦器材")]
         public string Recommendation { get; set; }
         
-        [Display(Name = "地址")]
+        [Display(Name = "地點")]
         public string Address { get; set; }
         
         [Display(Name = "活動名額")]
         public int MemberLimit { get; set; }
         
         [Display(Name = "參加人數")]
-        public int NumOfMember { get; set; }
+        public int ?NumOfMember { get; set; }
         
         [Display(Name = "活動說明")]
         public string Description { get; set; }
@@ -43,9 +43,12 @@ namespace ProjectFUEN.Models.ViewModels
 
         [Display(Name = "分類")]
         public int? CategoryId { get; set; }
+        [Display(Name = "分類")]
+        public string ?CategoryName { get; set; }
+        [Display(Name = "講師")]
 
-		
-	}
+        public string ?InstructorName { get; set; }
+    }
     public static partial class ActivityExts
     {
         public static ActivityVM ToVM(this Activity source)
@@ -65,6 +68,8 @@ namespace ProjectFUEN.Models.ViewModels
                 DateOfCreated= source.DateOfCreated,
                 InstructorId= source.InstructorId,
                 CategoryId = source.CategoryId,
+                CategoryName=source.Category.CategoryName,
+                InstructorName=source.Instructor.InstructorName
 
             };
         }

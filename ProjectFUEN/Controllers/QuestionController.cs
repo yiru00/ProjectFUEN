@@ -31,7 +31,7 @@ namespace ProjectFUEN.Controllers
 		[HttpGet]
 		public QaVM GetQ(int qid)
 		{
-			//不用include answer 會沒東西
+			
 			var question = _context.Questions.Include(q => q.Activity).Include(q => q.Member).Include(q => q.Answers).FirstOrDefault(x => x.Id == qid).QToqaVM();
 
 			return question;

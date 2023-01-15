@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Activity>
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.ActivityVM>
 
 @{
     ViewData["Title"] = "活動總覽";
@@ -18,11 +18,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.Address)
             </th>
-            
+
             <th>
-               報名人數
+                報名人數
             </th>
-            
+
             <th>
                 @Html.DisplayNameFor(model => model.GatheringTime)
             </th>
@@ -33,50 +33,133 @@
                 @Html.DisplayNameFor(model => model.DateOfCreated)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category.CategoryName)
+                @Html.DisplayNameFor(model => model.CategoryName)
             </th>
-            
+
             <th>
-                @Html.DisplayNameFor(model => model.Instructor.InstructorName)
+                @Html.DisplayNameFor(model => model.InstructorName)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.ActivityName)
-            </td>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            
-                <td>報名人數 @Html.DisplayFor(modelItem => item.ActivityMembers.Count)</td>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.GatheringTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deadline)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Instructor.InstructorName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivityName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+
+                <td>@Html.DisplayFor(modelItem => item.NumOfMember)</td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.GatheringTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Deadline)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InstructorName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @*<a asp-action="MemberDetails" asp-route-id="@item.Id" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">參加會員</a>*@
+                    <a id="@item.Id" class="btn btn-primary getMembers" data-bs-toggle="modal" data-bs-target="#staticBackdrop">參與會員</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+
+<div class="modal " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>帳號</th>
+                            <th>姓名</th>
+                            <th>電話</th>
+                            <th>加入時間</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="member">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="border p-1 mb-1 no-print" onclick="window.print()">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let getMembers = $(".getMembers")
+        let id;
+
+        $(".getMembers").on('click', function () {
+            id = $(this).attr("id")
+            $(".member").html("");
+            $.ajax({
+                type: "GET",
+                url: "https://localhost:7027/Activity/MemberDetails?id=" + id,
+                data: "json"
+            })
+                .done(function (data) {
+                    //alert(JSON.stringify(data))
+                    $(".modal-title").text(data[0]["ActivityName"])
+                    for (let i = 0; i < data.length; i++) {
+                        //console.log(data[i]["emailAccount"])
+                        let emailAccount = data[i]["emailAccount"]
+                        let realName = data[i]["realName"]
+                        let mobile = data[i]["mobile"]
+                        let dateJoined = data[i]["dateJoined"]
+
+                        $(".member").append(`<tr>
+                                                 <th>${emailAccount}</th>
+                                                 <th>${realName}</th>
+                                                 <th>${mobile}</th>
+                                                 <th>${dateJoined}</th>
+                                             </tr>`)
+                    }
+                })
+                .fail(function (err) {
+                    history.go(0);
+                })
+
+
+
+        })
+
+    </script>
+}

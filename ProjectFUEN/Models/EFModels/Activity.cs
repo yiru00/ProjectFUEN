@@ -54,7 +54,6 @@ namespace ProjectFUEN.Models.EFModels
                 InstructorId= source.InstructorId,
                 CategoryId= source.CategoryId,
 
-
             };
         }
     }

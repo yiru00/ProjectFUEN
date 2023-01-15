@@ -4,88 +4,94 @@
     ViewData["Title"] = "新增活動";
 }
 
-<h1>Create</h1>
+<div class="d-flex justify-content-between align-items-center p-2"><h1>新增活動</h1><a asp-action="Index">回到活動總覽</a></div>
 
-<h4>Activity</h4>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row p-2">
+    <div class="col">
         <form method="post" enctype="multipart/form-data" asp-controller="Activity" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
-            <label asp-for="CoverImage" class="control-label"></label>
-            <input asp-for="CoverImage" class="form-control" />
-            <span asp-validation-for="CoverImage" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <div class="col-md-10">
-                    <label>活動圖</label>
-                    <input type="file" name="file" id="myimg" accept="image/*" />
+            @*隱藏欄位(還是要拿來繫結)*@
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="NumOfMember"/>
+            <input type="hidden" asp-for="InstructorName" />
+            <input type="hidden" asp-for="CategoryName" />
+            <div class="d-flex row gx-4">
+                <div class="col-4">
+                    <div class="form-group my-2">
+                        <label asp-for="ActivityName" class="control-label"></label>
+                        <input asp-for="ActivityName" class="form-control" />
+                        <span asp-validation-for="ActivityName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group my-2">
+                        <label asp-for="InstructorId" class="control-label"></label>
+                        <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.InstructorId"></select>
+                    </div>
+                    <div class="form-group my-2">
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    </div>
+                    <div class="form-group my-2">
+                        <label asp-for="Recommendation" class="control-label"></label>
+                        <input asp-for="Recommendation" class="form-control" />
+                        <span asp-validation-for="Recommendation" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group my-2">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    
                 </div>
-                <p class="text-danger">@ViewBag.photoError</p>
-                <img id="preview" style="max-height:200px;" />
-                <span asp-validation-for="CoverImage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ActivityName" class="control-label"></label>
-                <input asp-for="ActivityName" class="form-control" />
-                <span asp-validation-for="ActivityName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Recommendation" class="control-label"></label>
-                <input asp-for="Recommendation" class="form-control" />
-                <span asp-validation-for="Recommendation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MemberLimit" class="control-label"></label>
-                <input asp-for="MemberLimit" class="form-control" />
-                <span asp-validation-for="MemberLimit" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+                <div class="col-4">
+                    @*集合時間*@
+                    <div class="form-group my-2">
+                        <label asp-for="GatheringTime" class="control-label"></label>
+                        <input id="gatheringTime" type="datetime-local" asp-for="GatheringTime" class="form-control" />
+                        <span asp-validation-for="GatheringTime" class="text-danger"></span>
 
-            @*集合時間*@
-            <div class="form-group">
-                <label asp-for="GatheringTime" class="control-label"></label>
-                <input id="gatheringTime" type="datetime-local" asp-for="GatheringTime" class="form-control" />
-                <span asp-validation-for="GatheringTime" class="text-danger"></span>
-                
-            </div>
+                    </div>
 
-            @*活動報名截止日*@
-            <div class="form-group">
-                <label asp-for="Deadline" class="control-label"></label>
-                <input id="deadLine" type="datetime-local" asp-for="Deadline" class="form-control" />
-                <span asp-validation-for="Deadline" class="text-danger"></span>
-            </div>
+                    @*活動報名截止日*@
+                    <div class="form-group my-2">
+                        <label asp-for="Deadline" class="control-label"></label>
+                        <input id="deadLine" type="datetime-local" asp-for="Deadline" class="form-control" />
+                        <span asp-validation-for="Deadline" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="InstructorId" class="control-label"></label>
-                <select asp-for="InstructorId" class="form-control" asp-items="ViewBag.InstructorId"></select>
+                    <div class="form-group my-2">
+                        <label asp-for="MemberLimit" class="control-label"></label>
+                        <input asp-for="MemberLimit" class="form-control" />
+                        <span asp-validation-for="MemberLimit" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group my-2">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control" maxlength="300" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group my-2">
+                        <label class="control-label" for="myimg">活動圖片</label>
+                        <div class="input-group">
+                            <input type="file" name="file" id="myimg" accept="image/*" class="form-control" />
+                        </div>
+                        <p class="text-danger">@ViewBag.photoError</p>
+                        <img id="preview" style="max-height:200px;" />
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+            
+            <input type="submit" value="儲存" class="btn btn-primary" />
+            
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{

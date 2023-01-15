@@ -25,9 +25,19 @@ namespace ProjectFUEN.Controllers
         // GET: Activity
         public async Task<IActionResult> Index()
         {
-            var projectFUENContext = _context.Activities.Include(a => a.Category).Include(a => a.Instructor);
+            var projectFUENContext = _context.Activities.Include(a => a.Category).Include(a => a.Instructor).Include(a=>a.ActivityMembers).Select(a=>a.ToVM());
             return View(await projectFUENContext.ToListAsync());
         }
+
+        //get Activity/MemberDetails/5
+        [HttpGet]
+        public List<ActivityMemberVM> MemberDetails(int id) 
+        {
+            var activity = _context.ActivityMembers.Include(a => a.Activity).Include(a => a.Member).Where(m => m.ActivityId == id).Select(m => m.ToActivityMemberVM()).ToList();
+            return activity;
+            
+        }
+
 
         // GET: Activity/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -40,13 +50,14 @@ namespace ProjectFUEN.Controllers
             var activity = await _context.Activities
                 .Include(a => a.Category)
                 .Include(a => a.Instructor)
+                .Include(a=>a.ActivityMembers)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (activity == null)
             {
                 return NotFound();
             }
 
-            return View(activity);
+            return View(activity.ToVM());
         }
 
         // GET: Activity/Create
@@ -62,13 +73,15 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile file, [Bind("Id,ActivityName,Recommendation,Address,MemberLimit,NumOfMember,Description,GatheringTime,Deadline,DateOfCreated,InstructorId,CategoryId")] ActivityVM activity)
+        public async Task<IActionResult> Create(IFormFile file, [Bind("Id,ActivityName,Recommendation,Address,MemberLimit,Description,GatheringTime,Deadline,DateOfCreated,InstructorId,CategoryId")] ActivityVM activity)
         {
             //上傳照片
             (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
             if (!uploadSuccess.Item1)
             {
                 ViewBag.photoError = uploadSuccess.Item2;
+                ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
+                ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
                 return View(activity);
             }
             else
@@ -76,15 +89,29 @@ namespace ProjectFUEN.Controllers
                 activity.CoverImage = uploadSuccess.Item3;
 
             }
-            if (ModelState.IsValid)
+
+
+
+            //if (ModelState.IsValid)
+            //{
+            try
             {
                 _context.Add(activity.ToEntity());
                 await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
-            ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
-            return View(activity);
+            catch (Exception)
+            {
+                ViewData["CategoryId"] = new SelectList(_context.ActivityCategories, "Id", "CategoryName", activity.CategoryId);
+                ViewData["InstructorId"] = new SelectList(_context.Instructors, "Id", "InstructorName", activity.InstructorId);
+                return View(activity);
+
+            }
+               
+                
+            //}
+            
         }
 
         // GET: Activity/Edit/5
@@ -95,7 +122,11 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activities.FindAsync(id);
+            var activity = await _context.Activities
+                .Include(a => a.Category)
+                .Include(a => a.Instructor)
+                .Include(a => a.ActivityMembers)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (activity == null)
             {
                 return NotFound();

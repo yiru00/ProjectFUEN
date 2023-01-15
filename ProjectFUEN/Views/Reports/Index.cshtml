@@ -15,7 +15,7 @@
     </div>
 
     <div class="d-flex">
-        <button id="del" class="btn-primary me-auto">Delete</button>
+        <button id="del" class="btn btn-primary me-auto">Delete</button>
 
         <div>
             <label for="searchText">Account: </label>
@@ -59,7 +59,7 @@
                 @Html.DisplayFor(modelItem => item.ReportTime)
             </td>
             <td>
-                <button class="btn btn-primary">Delete</button>
+                <button class="btn btn-primary" id="@item.PhotoId" reporter="@item.MemberId">Delete</button>
             </td>
         </tr>
 }
@@ -187,6 +187,76 @@
             }
         })
 
+        // Delete Comment, Photo
+        $("tbody").on("click", "button", function () {
+            let isComment = $("select").val();
+            let memberId = $(this).attr("reporter");
+            let targetId = $(this).prop("id");
+            const trs = $(`tbody [id=${targetId}]`)
+            const tds = $(this).parent().parent().find("td");
+            let text = `${tds.eq(2).text().trim()}`
+
+            // Comment
+            if (isComment === "1") {
+                $.ajax({
+                    type: "GET",
+                    url: `https://localhost:7027/Reports/GetOneCommentReport?id=${targetId}`,
+                    async: false
+                }).done(function (data) {
+                    text = data.comment;
+
+                }).fail(function (err) {
+                    console.log(err.statusText)
+                })
+            }
+
+            Swal.fire({
+                title: "Are you sure?",
+                html: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Removed!',
+                        `${text} has removed`,
+                        'success'
+                    ).then((result) => {
+                        // Delete DB Photo
+                        if (isComment === "0") {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeletePhoto?memberId=${memberId}&photoId=${targetId}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+                        // Delete DB Comment
+                        else {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeleteComment?memberId=${memberId}&commentId=${targetId}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+
+                        // Remove Trs
+                        for (let i = 0; i < trs.length; i++) {
+                            trs.eq(i).parent().parent().remove();
+                        }
+                    })
+                }
+            })
+        });
+
         // 顯示Table
         function showTable(data) {
             let isComment = $("select").val();
@@ -216,7 +286,11 @@
 
             for (let item of data) {
                 let targetData = item.photo
-                if (isComment === "1") targetData = item.comment
+                let id = item.photoId
+                if (isComment === "1") {
+                    targetData = item.comment.substring(0, 10) + "...";
+                    id = item.commentId
+                }
 
                 let tbody = $(`<tr id="local">
                                 <td>
@@ -232,7 +306,7 @@
                                     ${item.reportTime}
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary">Delete</button>
+                                    <button class="btn btn-primary" id="${id}" reporter="${item.memberId}">Delete</button>
                                 </td>
                             </tr>`)
 

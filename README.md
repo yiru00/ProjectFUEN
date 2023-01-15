@@ -11,6 +11,17 @@
    [V] DropdownList
    [V]Search
 
+4. [V]PhotoVM add ReporterId
+   [V]CommentVM add ReporterId
+   [V]PhotoVM Photo MemberId
+   [V]CommentVM Comment MemberId
+   [V]Delete Photo Action
+   [V]Delete Comment Action
+   [V]AddToIndiscriminate Method
+   [V]DB 建立 Trigger
+   [V]Sweetalert
+   [V]Action GetComment
+
 [X]Add to BlackList
 [X]GUID Code
 [X]Show Photo

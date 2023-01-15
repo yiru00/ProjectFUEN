@@ -21,7 +21,8 @@
    [V]DB 建立 Trigger
    [V]Sweetalert
    [V]Action GetComment
+   [V]Add to BlackList
 
-[X]Add to BlackList
+[X]Delete Report
 [X]GUID Code
 [X]Show Photo

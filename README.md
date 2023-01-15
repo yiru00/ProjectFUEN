@@ -6,7 +6,10 @@
    [V]Adjust Aciton Index
    [V]建立 Extensions EntityToVM
 
-[X] DropdownList
+3. [V]Index 控制項
+   [V]Group Checkboxs
+   [V] DropdownList
+
 [X]CheckBox
 [X]Search
 [X]Add to BlackList

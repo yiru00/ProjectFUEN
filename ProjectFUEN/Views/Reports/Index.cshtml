@@ -6,9 +6,31 @@
 
 <h1>Reports</h1>
 
+<div>
+    <div class="mb-4">
+        <select id="select">
+            <option value="0">Photo</option>
+            <option value="1">Comment</option>
+        </select>
+    </div>
+
+    <div class="d-flex">
+        <button id="del" class="btn-primary me-auto">Delete</button>
+
+        <div>
+            <label for="searchText">Account: </label>
+            <input type="text" id="searchText" />
+        </div>
+    </div>
+</div>
+
+
 <table class="table">
     <thead>
         <tr>
+            <th>
+                <input type="checkbox" id="globalCheckbox"/>
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Reporter)
             </th>
@@ -23,7 +45,10 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr id="local">
+            <td>
+                <input type="checkbox"/>
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Reporter)
             </td>
@@ -40,3 +65,119 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // 全部勾選checkbox, global的checkbox也會勾選
+        // const localElement = $("#local input[type='checkbox']");
+        // const $globalElement = $("#globalCheckbox");
+        //let localLength = localElement.length;
+
+        // 點擊Global的checkbox, local全部都勾選
+        $("thead").on("click", "#globalCheckbox", function () {
+            let localLength = $("#local input[type='checkbox']").length;
+
+            if ($("#globalCheckbox").prop("checked")) {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $("#local input[type='checkbox']").eq(i);
+
+                    item.prop("checked", true);
+                }
+            } else {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $("#local input[type='checkbox']").eq(i);
+
+                    item.prop("checked", false);
+                }
+            }
+        });
+
+        // 當local的checkbox全部被勾選, global的checkbox被勾選
+        // 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
+        $("tbody").on("click", "#local input[type='checkbox']", function () {
+            let localLength = $("#local input[type='checkbox']").length;
+            let count = 0;
+            for (let i = 0; i < localLength; i++) {
+                let item = $("#local input[type='checkbox']").eq(i);
+
+                if (item.prop("checked")) count++;
+            }
+            if (count === localLength) $("#globalCheckbox").prop("checked", true);
+            else $("#globalCheckbox").prop("checked", false);
+        });
+
+        // 下拉選單, 選擇哪一個執行API
+        $("select").on("change", function () {
+
+            // if成立執行show Photo之Table
+            if ($(this).val() === "0") {
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7027/Reports/GetAllPhotoReport"
+                }).done(function (data) {
+                    showTable(data);
+                }).fail(function (err) {
+                    console.log(err.statusText)
+                })
+            }
+            else {
+                // Show Comment table
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7027/Reports/GetAllCommentReport"
+                }).done(function (data) {
+                    showTable(data);
+                }).fail(function (err) {
+                    console.log(err.statusText)
+                })
+            }
+        });
+
+        // 顯示Table
+        function showTable(data) {
+            let isComment = $("select").val();
+            let targetHead = "Photo";
+            if (isComment === "1") targetHead = "Comment";
+
+            $("thead").empty();
+            $("tbody").empty();
+
+            let thead = $(`<tr>
+                            <th>
+                                <input type="checkbox" id="globalChechbox"/>
+                            </th>
+                            <th>
+                                Reporter
+                            </th>
+                            <th>
+                                ${targetHead}
+                            </th>
+                            <th>
+                            </th>
+                        </tr>`);
+            $("thead").append(thead);
+
+            for (let item of data) {
+                let targetData = item.photo
+                if (isComment === "1") targetData = item.comment
+
+                let tbody = $(`<tr id="local">
+                                <td>
+                                    <input type="checkbox" id="${item.id}"/>
+                                </td>
+                                <td>
+                                    ${item.reporter}
+                                </td>
+                                <td>
+                                    ${targetData}
+                                </td>
+                                <td>
+                                    <button class="btn-primary">Delete</button>
+                                </td>
+                            </tr>`)
+
+                $("tbody").append(tbody);
+            }
+        }
+    </script>
+}

@@ -75,6 +75,9 @@
 
         // 點擊Global的checkbox, local全部都勾選
         $("thead").on("click", "#globalCheckbox", function () {
+
+            console.log("XXXX")
+
             let localLength = $("#local input[type='checkbox']").length;
 
             if ($("#globalCheckbox").prop("checked")) {
@@ -113,7 +116,7 @@
             if ($(this).val() === "0") {
                 $.ajax({
                     type: "GET",
-                    url: "https://localhost:7027/Reports/GetAllPhotoReport"
+                    url: "https://localhost:7027/Reports/GetAllPhotoReports"
                 }).done(function (data) {
                     showTable(data);
                 }).fail(function (err) {
@@ -124,7 +127,7 @@
                 // Show Comment table
                 $.ajax({
                     type: "GET",
-                    url: "https://localhost:7027/Reports/GetAllCommentReport"
+                    url: "https://localhost:7027/Reports/GetAllCommentReports"
                 }).done(function (data) {
                     showTable(data);
                 }).fail(function (err) {
@@ -132,6 +135,57 @@
                 })
             }
         });
+
+        // Search button
+        $("#searchText").on("keyup", function () {
+            let isComment = $("select").val();
+            let searchText = $("#searchText").val();
+
+            if (isComment === "0") {
+                if (searchText !== "") {
+                    $.ajax({
+                        type: "GET",
+                        url: `https://localhost:7027/Reports/GetPhotoReport?account=${searchText}`
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:7027/Reports/GetAllPhotoReports"
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+            }
+            else {
+                if (searchText !== "") {
+                    $.ajax({
+                        type: "GET",
+                        url: `https://localhost:7027/Reports/GetCommentReport?account=${searchText}`
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:7027/Reports/GetAllCommentReports"
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+            }
+        })
 
         // 顯示Table
         function showTable(data) {
@@ -144,13 +198,16 @@
 
             let thead = $(`<tr>
                             <th>
-                                <input type="checkbox" id="globalChechbox"/>
+                                <input type="checkbox" id="globalCheckbox"/>
                             </th>
                             <th>
                                 Reporter
                             </th>
                             <th>
                                 ${targetHead}
+                            </th>
+                            <th>
+                                ReportTime
                             </th>
                             <th>
                             </th>
@@ -172,7 +229,10 @@
                                     ${targetData}
                                 </td>
                                 <td>
-                                    <button class="btn-primary">Delete</button>
+                                    ${item.reportTime}
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary">Delete</button>
                                 </td>
                             </tr>`)
 

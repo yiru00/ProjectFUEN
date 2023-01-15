@@ -9,9 +9,8 @@
 3. [V]Index 控制項
    [V]Group Checkboxs
    [V] DropdownList
+   [V]Search
 
-[X]CheckBox
-[X]Search
 [X]Add to BlackList
 [X]GUID Code
 [X]Show Photo

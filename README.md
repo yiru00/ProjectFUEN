@@ -23,6 +23,13 @@
    [V]Action GetComment
    [V]Add to BlackList
 
-[X]Delete Report
+5. [V]CommentVM add Id
+   [V]PhotoVM Photo Id
+   [V]Delete report JS Code
+   [V]Delete comment report Action
+   [V]Delete photo report Action
+
+[X]Report Detail
 [X]GUID Code
 [X]Show Photo
+[!]Array 是否可以傳遞 Integer

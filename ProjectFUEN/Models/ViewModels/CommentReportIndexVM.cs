@@ -2,6 +2,7 @@
 {
     public class CommentReportIndexVM
     {
+		public int Id { get; set; }
 		public int ReporterId { get; set; }
 		public string Reporter { get; set; }
 		public int CommentId { get; set; }

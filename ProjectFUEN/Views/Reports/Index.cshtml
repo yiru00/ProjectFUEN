@@ -47,7 +47,7 @@
 @foreach (var item in Model) {
         <tr id="local">
             <td>
-                <input type="checkbox"/>
+                <input type="checkbox" id="@item.Id" reporter="@item.ReporterId"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Reporter)
@@ -59,7 +59,7 @@
                 @Html.DisplayFor(modelItem => item.ReportTime)
             </td>
             <td>
-                <button class="btn btn-primary" id="@item.PhotoId" reporter="@item.MemberId">Delete</button>
+                <button class="btn btn-primary" id="@item.PhotoId" member="@item.MemberId">Delete</button>
             </td>
         </tr>
 }
@@ -68,16 +68,8 @@
 
 @section Scripts {
     <script>
-        // 全部勾選checkbox, global的checkbox也會勾選
-        // const localElement = $("#local input[type='checkbox']");
-        // const $globalElement = $("#globalCheckbox");
-        //let localLength = localElement.length;
-
         // 點擊Global的checkbox, local全部都勾選
         $("thead").on("click", "#globalCheckbox", function () {
-
-            console.log("XXXX")
-
             let localLength = $("#local input[type='checkbox']").length;
 
             if ($("#globalCheckbox").prop("checked")) {
@@ -190,7 +182,7 @@
         // Delete Comment, Photo
         $("tbody").on("click", "button", function () {
             let isComment = $("select").val();
-            let memberId = $(this).attr("reporter");
+            let memberId = $(this).attr("member");
             let targetId = $(this).prop("id");
             const trs = $(`tbody [id=${targetId}]`)
             const tds = $(this).parent().parent().find("td");
@@ -257,6 +249,72 @@
             })
         });
 
+        // Delete Multi-Report
+        $("#del").on("click", function() {
+            const reports = [];
+            const reporters = [];
+            const trs = [];
+            let isComment = $("select").val();
+
+            let localLength = $("#local input[type='checkbox']").length;
+            for (let i = 0; i < localLength; i++) {
+                let item = $("#local input[type='checkbox']").eq(i);
+
+                if(item.prop("checked")) {
+                    trs.push(item.parent().parent())
+                    reports.push(item.prop("id"))
+                    reporters.push(item.attr("reporter"))
+                }
+            }
+
+            let text = `Total Report: ${trs.length}`
+
+            // 彈跳視窗
+            Swal.fire({
+                title: "Are you sure?",
+                html: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Removed!',
+                        'success'
+                    ).then((result) => {
+                        // Delete DB report
+                        if (isComment === "0") {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeletePhotoReport?strreports=${reports}&strreporters=${reporters}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+                        else {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeleteCommentReport?strreports=${reports}&strreporters=${reporters}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+
+                        // Remove tr
+                        for (let tr of trs) {
+                            tr.remove();
+                        }
+                    })
+                }
+            })
+        })
+
         // 顯示Table
         function showTable(data) {
             let isComment = $("select").val();
@@ -294,7 +352,7 @@
 
                 let tbody = $(`<tr id="local">
                                 <td>
-                                    <input type="checkbox" id="${item.id}"/>
+                                    <input type="checkbox" id="${item.id}" reporter="${item.reporterId}"/>
                                 </td>
                                 <td>
                                     ${item.reporter}
@@ -306,7 +364,7 @@
                                     ${item.reportTime}
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary" id="${id}" reporter="${item.memberId}">Delete</button>
+                                    <button class="btn btn-primary" id="${id}" member="${item.memberId}">Delete</button>
                                 </td>
                             </tr>`)
 

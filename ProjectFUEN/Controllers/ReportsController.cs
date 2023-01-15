@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -107,6 +110,55 @@ namespace ProjectFUEN.Controllers
             _context.Remove(comment);
             _context.SaveChanges();
         }
+
+		[HttpDelete]
+		public void DeletePhotoReport(string strreports, string strreporters)
+		{
+			int[] reports = strreports.Split(',').Select(x => int.Parse(x)).ToArray();
+			int[] reporters = strreporters.Split(',').Select(x => int.Parse(x)).ToArray();
+
+			// 將這些Reporter加進Indiscriminate
+			foreach (var reporterId in reporters)
+			{
+				AddToIndiscriminate(reporterId);
+
+			}
+
+			// Remove這些Reporter
+			List<PhotoReport> commentReports = new List<PhotoReport>();
+			foreach (var id in reports)
+			{
+				commentReports.Add(_context.PhotoReports.First(c => c.Id == id));
+			}
+
+			_context.RemoveRange(commentReports);
+			_context.SaveChanges();
+		}
+
+		[HttpDelete]
+		public void DeleteCommentReport(string strreports, string strreporters)
+		{
+			int[] reports = strreports.Split(',').Select(x => int.Parse(x)).ToArray();
+			int[] reporters = strreporters.Split(',').Select(x => int.Parse(x)).ToArray();
+
+			//將這些Reporter加進Indiscriminate
+
+			foreach (var reporterId in reporters)
+			{
+				AddToIndiscriminate(reporterId);
+
+			}
+
+			// Remove這些Reporter
+			List<CommentReport> commentReports = new List<CommentReport>();
+			foreach (var id in reports)
+			{
+				commentReports.Add(_context.CommentReports.First(c => c.Id == id));
+			}
+
+			_context.RemoveRange(commentReports);
+			_context.SaveChanges();
+		}
 
 		private void AddToIndiscriminate(int memberId)
         {

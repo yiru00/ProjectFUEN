@@ -9,7 +9,8 @@ namespace ProjectFUEN.Models.Infrastructures.ExtensionMethods
         {
             return new PhotoReportIndexVM()
             {
-                ReporterId = (source.Reporter.HasValue) ? source.Reporter.Value : -1,
+				Id = source.Id,
+				ReporterId = (source.Reporter.HasValue) ? source.Reporter.Value : -1,
                 Reporter = source.ReporterNavigation.EmailAccount,
                 Photo = source.Photo.Source,
                 PhotoId = source.Photo.Id,
@@ -22,6 +23,7 @@ namespace ProjectFUEN.Models.Infrastructures.ExtensionMethods
 		{
 			return new CommentReportIndexVM()
 			{
+                Id = source.Id,
                 ReporterId = (source.Reporter.HasValue) ? source.Reporter.Value : -1,
 				Reporter = source.ReporterNavigation.EmailAccount,
 				Comment = source.Comment.Content,

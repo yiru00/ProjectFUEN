@@ -3,7 +3,13 @@
 @{
     ViewData["Title"] = "編輯活動";
 }
-<div class="d-flex justify-content-between align-items-center p-2"><h1>編輯活動</h1><a asp-action="Index">回到活動總覽</a></div>
+<div class="d-flex align-items-center p-2">
+    <h1>編輯活動</h1>
+    <button class="btn btn-primary ms-5">
+        <a class="text-center text-white text-decoration-none" asp-action="Index">列表</a>
+    </button>
+ 
+</div>
 
 <hr />
 <div class="row p-2">
@@ -16,8 +22,9 @@
             <input type="hidden" asp-for="InstructorName" />
             <input type="hidden" asp-for="CategoryName" />
             <input type="hidden" asp-for="CoverImage" class="control-label" />
+           
             <div class="d-flex row gx-4">
-                <div class="col-4">
+                <div class="col-lg-4 col-12">
                     <div class="form-group my-2">
                         <label asp-for="ActivityName" class="control-label"></label>
                         <input asp-for="ActivityName" class="form-control" />
@@ -44,7 +51,7 @@
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-lg-4 col-12">
                     <div class="form-group my-2">
                         <label asp-for="GatheringTime" class="control-label"></label>
                         <input type="text" asp-for="GatheringTime" class="form-control bg-white" readonly />
@@ -72,7 +79,7 @@
                         <span asp-validation-for="DateOfCreated" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-4 ">
+                <div class="col-lg-4 col-12">
                     <div class="form-group my-2">
                         <label asp-for="Description" class="control-label"></label>
                         <textarea asp-for="Description" class="form-control" maxlength="300" rows="4"></textarea>
@@ -80,13 +87,13 @@
                     </div>
                     
                     @* 圖片上傳*@
-                    <div class="form-group my-2 d-flex flex-column">
+                    <div class="form-group my-2 d-flex flex-column ">
                         <label class="control-label" for="myimg">活動圖片</label>
                         <div class="input-group">
                             <input class="form-control" type="file" name="file" id="myimg" accept="image/*" />
                         </div>
                         <p class="text-danger">@ViewBag.photoError</p>
-                        <img id="preview" style="max-height:200px;" src="/UploadedFiles/@Model.CoverImage" />
+                        <img id="preview" style="width:400px;height:300px;object-fit:cover"  src="/UploadedFiles/@Model.CoverImage"  />
                     </div>
                 </div>
             </div>

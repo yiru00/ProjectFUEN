@@ -7,6 +7,7 @@ namespace ProjectFUEN.Models.ViewModels
         public int ActivityId { get; set; }
         public string ActivityName { get; set; }
         public string ActivityAddress { get; set; }
+        public DateTime ActivityTime { get; set; }
         public string EmailAccount { get; set; }
         public string RealName { get; set; }
 
@@ -26,8 +27,8 @@ namespace ProjectFUEN.Models.ViewModels
                 EmailAccount =source.Member.EmailAccount,
                 RealName=source.Member.RealName,
                 Mobile=source.Member.Mobile,
-                DateJoined=source.DateJoined
-
+                DateJoined=source.DateJoined,
+                ActivityTime=source.Activity.GatheringTime
             };
         }
 

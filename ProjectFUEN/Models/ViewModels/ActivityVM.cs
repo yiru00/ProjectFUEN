@@ -28,8 +28,7 @@ namespace ProjectFUEN.Models.ViewModels
         [Required(ErrorMessage = "必填")]
         public int MemberLimit { get; set; }
         
-        [Display(Name = "參加人數")]
-        [Required(ErrorMessage = "必填")]
+        [Display(Name = "報名人數")]
         public int ?NumOfMember { get; set; }
         
         [Display(Name = "活動說明")]

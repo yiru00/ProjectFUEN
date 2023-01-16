@@ -1,185 +1,185 @@
 ﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.ActivityVM>
 
 @{
-    ViewData["Title"] = "活動總覽";
+	ViewData["Title"] = "活動總覽";
 }
 @section Styles{
-    <style>
-        @@media print {
-        .no-print {
-            display: none;
-        }
-    }
-    </style>
+	<style>
+		@@media print {
+			.no-print {
+				display: none;
+			}
+		}
+	</style>
 
 }
 
-<h1 class="no-print">Index</h1>
+<div class="d-flex no-print align-items-center p-2">
+	<h1 class="no-print">活動總覽</h1>
+	<button class="btn btn-primary ms-5">
+		<a class="text-center text-white text-decoration-none" asp-action="Create">新增</a>
+	</button>
+</div>
+<div class="p-2">
+<table class="table no-print ">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.ActivityName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.InstructorName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.CategoryName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Address)
+			</th>
 
-<p class="no-print">
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table no-print">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ActivityName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
+			<th>
+				@Html.DisplayNameFor(model => model.NumOfMember)
+			</th>
 
-            <th>
-                報名人數
-            </th>
+			<th>
+				@Html.DisplayNameFor(model => model.GatheringTime)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Deadline)
+			</th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.GatheringTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deadline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
-            </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.InstructorName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActivityName)
-                </td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ActivityName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.InstructorName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CategoryName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Address)
+				</td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NumOfMember)
+				</td>
 
-                <td>@Html.DisplayFor(modelItem => item.NumOfMember)</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.GatheringTime)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Deadline)
+				</td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.GatheringTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Deadline)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateOfCreated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InstructorName)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                   
-                    <button type="button" id="@item.Id" class="btn btn-primary getMembers border-0 bg-body" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
-                </td>
-            </tr>
-        }
-    </tbody>
+				<td class="d-flex justify-content-around">
+					<a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
+					<a asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info text-black fs-5"></i></a>
+					<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
+					<button type="button" id="@item.Id" class="btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
 
-
+</div>
 
 <div class="modal " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
-             
-            </div>
-            <div class="modal-body">
-                <div class="d-flex justify-content-between">
-                    <h5>參加會員</h5>
-                    <button class="border-0 p-1 mb-1 no-print bg-body" onclick="window.print()"><i class="fa-solid fa-print fs-5"></i></button>
-                </div>
-                
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>帳號</th>
-                            <th>姓名</th>
-                            <th>電話</th>
-                            <th>加入時間</th>
+	<div class="modal-dialog modal-dialog-scrollable modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
 
-                        </tr>
-                    </thead>
-                    <tbody class="member">
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary no-print" data-bs-dismiss="modal">Close</button>
-                
-            </div>
-        </div>
-    </div>
+			</div>
+			<div class="modal-body">
+				<div class="d-flex justify-content-between">
+					<h5>參加會員</h5>
+					<button class="border-0 p-1 mb-1 no-print bg-body" onclick="window.print()"><i class="fa-solid fa-print fs-5"></i></button>
+				</div>
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th>帳號</th>
+							<th>姓名</th>
+							<th>電話</th>
+							<th>加入時間</th>
+
+						</tr>
+					</thead>
+					<tbody class="member">
+						<tr>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary no-print" data-bs-dismiss="modal">Close</button>
+
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts{
-    <script>
-        let getMembers = $(".getMembers")
-        let id;
+	<script>
+		let getMembers = $(".getMembers")
+		let id;
 
-        $(".getMembers").on('click', function () {
-            id = $(this).attr("id")
-            $(".member").html("");
-             $(".modal-title").html("");
-            $.ajax({
-                type: "GET",
-                url: "https://localhost:7027/Activity/MemberDetails?id=" + id,
-                data: "json"
-            })
-                .done(function (data) {
-                    //alert(JSON.stringify(data))
-                    //console.log(data[0]["activityName"])
-                    let activityName=data[0]["activityName"]
-                    let activityAddress=data[0]["activityAddress"]
-                    $(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
-                                             <p class=" m-0">地點：${activityAddress}</p>`)
-                    for (let i = 0; i < data.length; i++) {
-                        //console.log(data[i]["emailAccount"])
-                        let emailAccount = data[i]["emailAccount"]
-                        let realName = data[i]["realName"]
-                        let mobile = data[i]["mobile"]
-                        let dateJoined = data[i]["dateJoined"]
+		$(".getMembers").on('click', function () {
+			id = $(this).attr("id")
+			$(".member").html("");
+			$(".modal-title").html("");
+			$.ajax({
+				type: "GET",
+				url: "https://localhost:7027/Activity/MemberDetails?id=" + id,
+				data: "json"
+			})
+				.done(function (data) {
+					//alert(JSON.stringify(data))
+					//console.log(data[0]["activityName"])
+					let activityName = data[0]["activityName"]
+					let activityAddress = data[0]["activityAddress"]
+					let activityTime = data[0]["activityTime"]
+					$(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
+													 <p class=" m-0">時間：${activityTime}</p>
+													 <p class=" m-0">地點：${activityAddress}</p>`)
+					for (let i = 0; i < data.length; i++) {
+						//console.log(data[i]["emailAccount"])
+						let emailAccount = data[i]["emailAccount"]
+						let realName = data[i]["realName"]
+						let mobile = data[i]["mobile"]
+						let dateJoined = data[i]["dateJoined"]
 
-                        $(".member").prepend(`<tr>
-                                                 <th>${emailAccount}</th>
-                                                 <th>${realName}</th>
-                                                 <th>${mobile}</th>
-                                                 <th>${dateJoined}</th>
-                                             </tr>`)
-                    }
-                })
-                .fail(function (err) {
-                    history.go(0);
-                })
+						$(".member").prepend(`<tr>
+														 <th>${emailAccount}</th>
+														 <th>${realName}</th>
+														 <th>${mobile}</th>
+														 <th>${dateJoined}</th>
+													 </tr>`)
+					}
+				})
+				.fail(function (err) {
+					history.go(0);
+				})
 
 
 
-        })
+		})
 
-    </script>
+	</script>
 }

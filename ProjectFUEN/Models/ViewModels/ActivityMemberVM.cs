@@ -6,6 +6,7 @@ namespace ProjectFUEN.Models.ViewModels
     {
         public int ActivityId { get; set; }
         public string ActivityName { get; set; }
+        public string ActivityAddress { get; set; }
         public string EmailAccount { get; set; }
         public string RealName { get; set; }
 
@@ -21,7 +22,8 @@ namespace ProjectFUEN.Models.ViewModels
             {
                 ActivityId=source.ActivityId,
                 ActivityName=source.Activity.ActivityName,
-                EmailAccount=source.Member.EmailAccount,
+                ActivityAddress=source.Activity.Address,
+                EmailAccount =source.Member.EmailAccount,
                 RealName=source.Member.RealName,
                 Mobile=source.Member.Mobile,
                 DateJoined=source.DateJoined

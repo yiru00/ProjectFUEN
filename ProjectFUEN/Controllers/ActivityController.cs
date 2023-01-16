@@ -33,7 +33,8 @@ namespace ProjectFUEN.Controllers
         [HttpGet]
         public List<ActivityMemberVM> MemberDetails(int id)
         {
-            var activity = _context.ActivityMembers.Include(a => a.Activity).Include(a => a.Member).Where(m => m.ActivityId == id).Select(m => m.ToActivityMemberVM()).ToList();
+            //按照參加時間排
+            var activity = _context.ActivityMembers.Include(a => a.Activity).Include(a => a.Member).Where(m => m.ActivityId == id).OrderBy(x => x.DateJoined).Select(m => m.ToActivityMemberVM()).ToList();
             return activity;
 
         }
@@ -90,10 +91,6 @@ namespace ProjectFUEN.Controllers
 
             }
 
-
-
-            //if (ModelState.IsValid)
-            //{
             try
             {
                 _context.Add(activity.ToEntity());
@@ -108,9 +105,6 @@ namespace ProjectFUEN.Controllers
                 return View(activity);
 
             }
-
-
-            //}
 
         }
 
@@ -157,9 +151,7 @@ namespace ProjectFUEN.Controllers
                 //判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
                 (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
-
-                //上傳檔案失敗(沒上傳東西/上傳圖檔以外的)
-                if (!uploadSuccess.Item1)//上傳失敗 item1=false
+                if (!uploadSuccess.Item1) //上傳檔案失敗(沒上傳東西/上傳圖檔以外的)
                 {
 
                     if (uploadSuccess.Item2 == "記得選取檔案") //未上傳任何檔案，用原有的

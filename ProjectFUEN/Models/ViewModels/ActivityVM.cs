@@ -8,38 +8,47 @@ namespace ProjectFUEN.Models.ViewModels
 	public class ActivityVM
 	{
 		public int Id { get; set; }
-		
+
+        [Display(Name ="活動圖片")]
 		public string ?CoverImage { get; set; }
 
 		[Display(Name = "活動名稱")]
+        [Required(ErrorMessage ="必填")]
 		public string ActivityName { get; set; }
         
         [Display(Name = "推薦器材")]
+        [Required(ErrorMessage = "必填")]
         public string Recommendation { get; set; }
         
         [Display(Name = "地點")]
+        [Required(ErrorMessage = "必填")]
         public string Address { get; set; }
         
         [Display(Name = "活動名額")]
+        [Required(ErrorMessage = "必填")]
         public int MemberLimit { get; set; }
         
         [Display(Name = "參加人數")]
+        [Required(ErrorMessage = "必填")]
         public int ?NumOfMember { get; set; }
         
         [Display(Name = "活動說明")]
+        [Required(ErrorMessage = "必填")]
         public string Description { get; set; }
         
         [Display(Name = "活動集合時間")]
+        [Required(ErrorMessage = "必填")]
         public DateTime GatheringTime { get; set; }
 
         [Display(Name = "報名截止時間")]
+        [Required(ErrorMessage = "必填")]
         public DateTime Deadline { get; set; }
         
         [Display(Name = "活動刊登時間")]
         public DateTime DateOfCreated { get; set; }
 		
         [Display(Name = "講師")]
-		public int? InstructorId { get; set; }
+        public int? InstructorId { get; set; }
 
         [Display(Name = "分類")]
         public int? CategoryId { get; set; }

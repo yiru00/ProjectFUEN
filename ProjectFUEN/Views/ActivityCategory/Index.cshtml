@@ -1,13 +1,17 @@
 ﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.ActivityCategoryVM>
 
 @{
-    ViewData["Title"] = "拍攝類型總覽";
+    ViewData["Title"] = "拍攝類型列表";
 }
 
 
-<p>
-    <a asp-action="Create">新增</a>
-</p>
+<div class="d-flex no-print align-items-center p-2">
+    <h1 class="no-print">拍攝類型列表</h1>
+    <button class="btn btn-primary ms-5">
+        <a class="text-center text-white text-decoration-none" asp-action="Create">新增</a>
+    </button>
+</div>
+<hr>
 <table class="table">
     <thead>
         <tr>

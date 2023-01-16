@@ -12,7 +12,7 @@
 	</button>
 </div>
 
-
+<hr>
 	<div class="row d-flex flex-wrap p-2" >
 		@foreach (var item in Model)
 		{
@@ -38,10 +38,10 @@
 @section Scripts{
 	<script>
 		let cardText = $(".card-text");
-		console.log(cardText);
+		//console.log(cardText);
 		for (let i = 0; i < cardText.length; i++) {
 			let str = cardText[i].innerText;
-			console.log(str.length);
+			//console.log(str.length);
 			if (str.length >= 15) {
 				let newStr = cardText[i].innerText.slice(0, 12) + " ...";
 				cardText[i].innerText = newStr;

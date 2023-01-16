@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.ActivityVM>
 
 @{
-	ViewData["Title"] = "活動總覽";
+	ViewData["Title"] = "活動列表";
 }
 @section Styles{
 	<style>
@@ -15,11 +15,12 @@
 }
 
 <div class="d-flex no-print align-items-center p-2">
-	<h1 class="no-print">活動總覽</h1>
+	<h1 class="no-print">活動列表</h1>
 	<button class="btn btn-primary ms-5">
 		<a class="text-center text-white text-decoration-none" asp-action="Create">新增</a>
 	</button>
 </div>
+<hr />
 <div class="p-2">
 <table class="table no-print ">
 	<thead>

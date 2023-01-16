@@ -4,7 +4,12 @@
 	ViewData["Title"] = "問與答";
 }
 
-<table class="table">
+<div class=" p-2">
+	<h1 class="no-print">問與答</h1>
+</div>
+</hr>
+<div class="p-2">
+	<table class="table">
 	<thead>
 		<tr>
 			<th>
@@ -36,7 +41,7 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.EmailAccount)
 				</td>
-				<td>
+				<td class="qcontent">
 					@Html.DisplayFor(modelItem => item.QuestionContent)
 				</td>
 				<td>
@@ -54,6 +59,8 @@
 		}
 	</tbody>
 </table>
+</div>
+
 
 
 
@@ -225,6 +232,18 @@
 			}
 		})
 
+
+		//表格預覽
+		let qcontent = $(".qcontent");
+		console.log(qcontent);
+		for (let i = 0; i < qcontent.length; i++) {
+			let str = qcontent[i].innerText;
+			console.log(str.length);
+			if (str.length >= 15) {
+				let newStr = qcontent[i].innerText.slice(0, 15) + "  ...";
+				qcontent[i].innerText = newStr;
+			}
+		}
 	</script>
 
 }

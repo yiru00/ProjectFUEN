@@ -31,6 +31,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[AlbumItems]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Albums]",
          "ObjectType": 0
       },
@@ -47,6 +51,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[CommentReports]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Comments]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Coupons]",
          "ObjectType": 0
       },
@@ -60,6 +72,10 @@
       },
       {
          "Name": "[dbo].[Favorites]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FollowInfos]",
          "ObjectType": 0
       },
       {
@@ -83,6 +99,18 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[OthersCollections]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OwnCollections]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PhotoReports]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Photos]",
          "ObjectType": 0
       },
@@ -103,7 +131,19 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[TagItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Tags]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[UsedCoupons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Views]",
          "ObjectType": 0
       }
    ],

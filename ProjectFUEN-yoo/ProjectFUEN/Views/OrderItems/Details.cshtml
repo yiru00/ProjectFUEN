@@ -1,0 +1,84 @@
+﻿@model ProjectFUEN.Models.EFModels.OrderItem
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>OrderItem</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Product.ProductSpec)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Product.ProductSpec)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.State)
+        </dt>
+        <dd class="col-sm-10">
+            @GetStateName(Model.Order.State)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-controller="OrderDetails" asp-action="Index">Back to List</a>
+</div>
+
+@functions {
+    public string GetStateName(int state)
+    {
+        string StateName = "";
+        switch (state)
+        {
+            case 0:
+                StateName = "未出貨";
+                break;
+            case 1:
+                StateName = "已出貨";
+                break;
+            case 2:
+                StateName = "運送中";
+                break;
+            case 3:
+                StateName = "已簽收";
+                break;
+            case 4:
+                StateName = "已完成";
+                break;
+            default:
+                StateName = "訂單異常";
+                break;
+
+        }
+        return StateName;
+    }
+}

@@ -17,6 +17,7 @@ namespace ProjectFUEN.Models.EFModels
         public DateTime DateCreated { get; set; }
         public int ActivityId { get; set; }
         public int MemberId { get; set; }
+        public bool State { get; set; }
 
         public virtual Activity Activity { get; set; }
         public virtual Member Member { get; set; }

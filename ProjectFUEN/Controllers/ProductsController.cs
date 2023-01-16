@@ -19,20 +19,20 @@ namespace ProjectFUEN.Controllers
 {
     public class ProductsController : Controller
     {
-        FileManager fileManager;
+        FileManager2 fileManager;
         private readonly ProjectFUENContext _context;
         private IProductPhotoService productPhotoService;
 
         public ProductsController(ProjectFUENContext context)
         {
-            fileManager = new FileManager();
+            fileManager = new FileManager2();
             _context = context;
             IProductPhotoRepository repo = new ProductPhotoRepository(_context);
             this.productPhotoService = new IProductPhotoService(repo);
         }
 
         // GET: Products
-        public ActionResult Index()
+        public IActionResult Index(string search)
         {
 
             //var projectFUENContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
@@ -55,6 +55,7 @@ namespace ProjectFUEN.Controllers
                 .Select(p => new ProductIndexVm
                 {
                     Id = p.Id,
+                    Name = p.Name,
                     CategoryName = p.CategoryName,
                     BrandName = p.BrandName,
                     Price = p.Price,
@@ -62,6 +63,7 @@ namespace ProjectFUEN.Controllers
                     ManufactorDate = p.ManufactorDate,
                     ProductSpec = p.ProductSpec,
                 });
+            if (!String.IsNullOrEmpty(search)) data = data.Where(s => s.Name.Contains(search)).ToList();
             return View(data);
 
         }
@@ -130,6 +132,7 @@ namespace ProjectFUEN.Controllers
                 ProductSpec= vm.ProductSpec,
                 BrandId = vm.BrandId,
                 CategoryId = vm.CategoryId
+               
             };
             product.ProductPhotos.AddRange(vm.Sources.Select(x => new ProductPhoto()
             {
@@ -157,7 +160,7 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
 
-            ProductVm vm = new ProductVm()
+            ProductEditVm vm = new ProductEditVm()
             {
                 Id= product.Id,
                 BrandId = product.BrandId,
@@ -169,13 +172,6 @@ namespace ProjectFUEN.Controllers
                 ManufactorDate= product.ManufactorDate,
             };
 
-            List<string> photoNames = new List<string>();
-            foreach (var fileName in product.ProductPhotos)
-            {
-                photoNames.Add(fileName.Source);
-            }
-            vm.FileNames = photoNames;
-
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(vm);
@@ -186,30 +182,31 @@ namespace ProjectFUEN.Controllers
          //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProductVm vm)
+        public async Task<IActionResult> Edit(int id, ProductEditVm vm)
         {
 
             if (id != vm.Id)
             {
                 return NotFound();
             }
-            foreach (var file in vm.Sources)
-            {
-                //上傳照片
-                (bool isCopied, string message, string Source) uploadSuccess = fileManager.UploadFile(file);
-
-                // 失敗呈現在View上面
-                if (!uploadSuccess.isCopied)
-                {
-                    ViewBag.photo = uploadSuccess.message;
-                    return View(vm);
-                }
-            }
+           
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(vm);
+                    var product = _context.Products.First(x => x.Id == id);
+
+                    product.CategoryId = vm.CategoryId;
+                    product.BrandId = vm.BrandId;
+                    product.Id = vm.Id;
+                    product.Name = vm.Name;
+                    product.Price = vm.Price;
+                    product.ManufactorDate = vm.ManufactorDate;
+                    product.Inventory = vm.Inventory;
+                    product.ProductSpec = vm.ProductSpec;
+
+                    _context.Update(product);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -270,6 +267,13 @@ namespace ProjectFUEN.Controllers
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);
+        }
+        public async Task<IActionResult> DeleteoOneSelf(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,19 +1,20 @@
-﻿@*@model IEnumerable<ProjectFUEN.Models.VM.ProductPhotoVM>*@
-@model IEnumerable<ProjectFUEN.Models.EFModels.ProductPhoto>
+﻿@model IEnumerable<ProjectFUEN.Models.EFModels.ProductPhoto>
+@*@model IEnumerable<ProjectFUEN.Models.VM.ProductPhotoVM>*@
 @{
     ViewData["Title"] = "產品圖";
 }
 
-<h1>Index</h1>
-
+<h1>
+    <b>商品圖片管理</b>
+</h1>
 <p>
-    <a asp-action="Create">新增</a>
+    <a href='@Url.Action("Create", "ProductPhotoes")' class="btn btn-info">新增</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Product)
+                @Html.DisplayNameFor(model => model.ProductId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Source)
@@ -24,23 +25,39 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-             <td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductId)
+                </td>
+          @*   <td>
                 @Html.DisplayFor(modelItem => item.Product.Name)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Source)
             </td>
+                 <td>
+                      <p class="text-danger">@ViewBag.photoError</p>
+                    <img id="preview" style="max-height:200px;" src="/ProductImgFiles/@item.Source" />
+                    </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="d-flex w-100">@Html.DisplayFor(modelItem => item.Product.Name)</a>
 
                 </td>
          
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+
+                    <td>  
+                    @Html.ActionLink("修改", "Edit", new { id=item.Id }, new { @class = "btn btn-primary" }) 
+                    @*@Html.ActionLink("明細", "Details", new { id=item.Id }, new { @class = "btn btn-warning" })*@
+                    @Html.ActionLink("刪除", "DeleteoOneSelf", new { id=item.Id }, new { @class = "btn btn-danger",@onclick="return Confirm_Form()" })
+                </td>
         </tr>
 }
     </tbody>
 </table>
+<script>
+    function Confirm_Form() {
+        if (!confirm("您確定要刪除嗎?"))
+            return false;
+    }
+</script>
+
+

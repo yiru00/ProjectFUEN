@@ -11,32 +11,34 @@ using ProjectFUEN.Models.Infrastructures.Repositories;
 using ProjectFUEN.Models.Services.interfaces;
 using ProjectFUEN.Models.Services;
 using ProjectFUEN.Models.VM;
+using NuGet.Packaging;
 
 namespace ProjectFUEN.Controllers
 {
     public class ProductPhotoesController : Controller
     {
-        FileManager fileManager;
+        FileManager2 fileManager;
         private readonly ProjectFUENContext _context;
         private IProductPhotoService productPhotoService;
 
         public ProductPhotoesController(ProjectFUENContext context)
         {
-            fileManager = new FileManager();
+            fileManager = new FileManager2();
             _context = context;
             IProductPhotoRepository repo = new ProductPhotoRepository(_context);
             this.productPhotoService = new IProductPhotoService(repo);
         }
 
 
-        // GET: ProductPhotoes1
+        //GET: ProductPhotoes1
         public async Task<IActionResult> Index()
         //public ActionResult Index()
         {
             var projectFUENContext = _context.ProductPhotos.Include(p => p.Product);
             return View(await _context.ProductPhotos.ToListAsync());
-        
+
         }
+      
 
         // GET: ProductPhotoes1/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -72,7 +74,6 @@ namespace ProjectFUEN.Controllers
         public IActionResult Create(ProductPhotoVM vm)
 
         {
-
             if (!ModelState.IsValid) return View(vm);
 
 
@@ -90,24 +91,38 @@ namespace ProjectFUEN.Controllers
                 }
             }
             //存取資料庫
-            ProductPhoto productPhoto = new ProductPhoto()
+            ProductPhotoVM productPhoto = new ProductPhotoVM()
             {
                 Id = vm.Id,
                 ProductId = vm.ProductId,
-                Source = vm.Source
+                Source = vm.Source,
+                Sources= vm.Sources,
+               
             };
-
 
             if (ModelState.IsValid)
             {
-                _context.Add(vm.ToEntity());
-                _context.SaveChangesAsync();
+                var product = _context.Products.Include(x => x.ProductPhotos).First(x => x.Id == vm.ProductId);
+
+                List<ProductPhoto> photos = new List<ProductPhoto>();
+
+
+                foreach (var item in vm.Sources)
+                {
+                    photos.Add(new ProductPhoto()
+                    {
+                        Source = item.FileName
+                    });
+                }
+
+                product.ProductPhotos.AddRange(photos);
+
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
             return View(productPhoto);
         }
-
         // GET: ProductPhotoes1/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -248,6 +263,13 @@ namespace ProjectFUEN.Controllers
         private bool ProductPhotoExists(int id)
         {
           return _context.ProductPhotos.Any(e => e.Id == id);
+        }
+        public async Task<IActionResult> DeleteoOneSelf(int id)
+        {
+            var photo = await _context.ProductPhotos.FindAsync(id);
+            _context.ProductPhotos.Remove(photo);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", photo.ProductId);
         }
     }
 }

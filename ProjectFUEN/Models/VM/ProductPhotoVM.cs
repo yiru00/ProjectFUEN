@@ -28,4 +28,16 @@ namespace ProjectFUEN.Models.VM
             };
         }
     }
+    public static partial class PhotoExts
+    {
+        public static ProductPhoto ToEntity(this ProductPhotoVM source)
+        {
+            return new ProductPhoto
+            {
+                Id = source.Id,
+                ProductId = source.ProductId,
+                Source = source.Source,
+            };
+        }
+    }
 }

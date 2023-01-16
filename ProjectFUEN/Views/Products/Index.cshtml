@@ -4,10 +4,15 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>
+    <b>商品管理</b>
+</h1>
+<form asp-asp-controller="Products" asp-action="Index" method="get">
+    商品名稱查詢: <input type="text" name="search" />
+    <button type="submit">查詢</button>
+</form>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href='@Url.Action("Create", "Products")' class="btn btn-info">新增</a>
 </p>
 <table class="table">
     <thead>
@@ -31,10 +36,10 @@
                 @Html.DisplayNameFor(model => model.ProductSpec)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Brand)
+                @Html.DisplayNameFor(model => model.BrandName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.CategoryName)
             </th>
             <th></th>
         </tr>
@@ -55,23 +60,31 @@
                 @Html.DisplayFor(modelItem => item.ReleaseDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Inventory)
+                    @Html.DisplayFor(modelItem => item.Inventory)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductSpec)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Brand.Name)
+                    @Html.DisplayFor(modelItem => item.BrandName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
+                @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
-            <td>
-                    @Html.ActionLink("修改", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("明細", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("刪除", "Delete", new { id=item.Id })
-            </td>
+                <td>
+                    @Html.ActionLink("修改", "Edit", new { id=item.Id }, new { @class = "btn btn-primary" }) 
+                    @Html.ActionLink("明細", "Details", new { id=item.Id }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("刪除", "DeleteoOneSelf", new { id=item.Id }, new { @class = "btn btn-danger",@onclick="return Confirm_Form()" })
+                    @Html.ActionLink("圖片維護", "Index","ProductPhotoes" ,new { id=item.Id}, new { @class = "btn btn-info" })
+                </td>
         </tr>
 }
     </tbody>
 </table>
+<script>
+    function Confirm_Form() {
+        if (!confirm("您確定要刪除嗎?"))
+            return false;
+    }
+</script>
+

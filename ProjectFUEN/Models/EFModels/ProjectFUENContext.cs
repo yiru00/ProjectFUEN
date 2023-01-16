@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using ProjectFUEN.Models.VM;
 
 namespace ProjectFUEN.Models.EFModels
 {
@@ -63,9 +62,8 @@ namespace ProjectFUEN.Models.EFModels
 
                 entity.Property(e => e.CoverImage)
                     .IsRequired()
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .IsFixedLength();
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.DateOfCreated)
                     .HasColumnType("datetime")
@@ -89,9 +87,9 @@ namespace ProjectFUEN.Models.EFModels
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK__Activitie__Categ__34C8D9D1");
 
-                entity.HasOne(d => d.Istructor)
+                entity.HasOne(d => d.Instructor)
                     .WithMany(p => p.Activities)
-                    .HasForeignKey(d => d.IstructorId)
+                    .HasForeignKey(d => d.InstructorId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK__Activitie__Istru__33D4B598");
             });
@@ -217,13 +215,11 @@ namespace ProjectFUEN.Models.EFModels
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Comments__Member__6442E2C9");
 
                 entity.HasOne(d => d.Photo)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.PhotoId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Comments__PhotoI__65370702");
             });
 
@@ -331,9 +327,8 @@ namespace ProjectFUEN.Models.EFModels
 
                 entity.Property(e => e.ResumePhoto)
                     .IsRequired()
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .IsFixedLength();
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Member>(entity =>
@@ -674,9 +669,5 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        //public DbSet<ProjectFUEN.Models.VM.CategoryIndexVM> CategoryIndexVM { get; set; }
-
-        //public DbSet<ProjectFUEN.Models.VM.ProductIndexVm> ProductIndexVm { get; set; }
     }
 }

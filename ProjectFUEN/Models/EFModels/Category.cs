@@ -2,8 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace ProjectFUEN.Models.EFModels
 {
@@ -15,7 +13,6 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         public int Id { get; set; }
-        [Display(Name = "分類名稱")]
         public string Name { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }

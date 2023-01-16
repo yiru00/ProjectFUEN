@@ -1,12 +1,12 @@
-﻿@model ProjectFUEN.Models.VM.ProductVm
+﻿@model ProjectFUEN.Models.VM.ProductEditVm
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Product</h4>
+<h1>
+    <b>商品管理-修改</b>
+</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -52,7 +52,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-            <div class="form-group">
+           @* <div class="form-group">
                 <div class="col-md-10">
 
                     <input type="file" multiple="multiple" asp-for="Sources" id="myimg" accept="image/*" />
@@ -69,7 +69,7 @@
                 
 
 
-            </div>
+            </div>*@
         </form>
     </div>
 </div>
@@ -80,7 +80,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        <script>
+      @*  <script>
         $('#myimg').on('change', function (e) {
             $("#preview").empty();
             for(let file of this.files){
@@ -90,5 +90,5 @@
             }
         });
 
-    </script>
+    </script>*@
 }

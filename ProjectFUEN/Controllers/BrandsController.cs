@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectFUEN.Models.EFModels;
+using ProjectFUEN.Models.VM;
 
 namespace ProjectFUEN.Controllers
 {
@@ -19,9 +20,15 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: Brands
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return View(await _context.Brands.ToListAsync());
+            var data = _context.Brands
+           .Select(x => new BrandVM
+           {
+               Id = x.Id,
+               Name = x.Name,
+           }).ToList();
+            return View(data);
         }
 
         // GET: Brands/Details/5
@@ -31,9 +38,10 @@ namespace ProjectFUEN.Controllers
             {
                 return NotFound();
             }
-
-            var brand = await _context.Brands
-                .FirstOrDefaultAsync(m => m.Id == id);
+            BrandVM brand = new BrandVM();
+            var data = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
+            brand.Id = data.Id;
+            brand.Name = data.Name;
             if (brand == null)
             {
                 return NotFound();
@@ -71,15 +79,16 @@ namespace ProjectFUEN.Controllers
             {
                 return NotFound();
             }
-
-            var brand = await _context.Brands.FindAsync(id);
+            BrandVM brand = new BrandVM();
+            var data = await _context.Brands.FindAsync(id);
+            brand.Id = data.Id;
+            brand.Name = data.Name;
             if (brand == null)
             {
                 return NotFound();
             }
             return View(brand);
         }
-
         // POST: Brands/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -122,9 +131,10 @@ namespace ProjectFUEN.Controllers
             {
                 return NotFound();
             }
-
-            var brand = await _context.Brands
-                .FirstOrDefaultAsync(m => m.Id == id);
+            BrandVM brand = new BrandVM();
+            var data = await _context.Brands.FirstOrDefaultAsync(m => m.Id == id);
+            brand.Id = data.Id;
+            brand.Name = data.Name;
             if (brand == null)
             {
                 return NotFound();
@@ -134,7 +144,6 @@ namespace ProjectFUEN.Controllers
         }
 
         // POST: Brands/Delete/5
-        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -147,11 +156,17 @@ namespace ProjectFUEN.Controllers
             {
                 _context.Brands.Remove(brand);
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> DeleteoOneSelf(int id)
+        {
+            var brand = await _context.Brands.FindAsync(id);
+            _context.Brands.Remove(brand);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
         private bool BrandExists(int id)
         {
           return _context.Brands.Any(e => e.Id == id);

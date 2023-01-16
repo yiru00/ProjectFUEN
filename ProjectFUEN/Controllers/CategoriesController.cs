@@ -85,8 +85,10 @@ namespace ProjectFUEN.Controllers
             {
                 return NotFound();
             }
-
-            var category = await _context.Categories.FindAsync(id);
+            CategoryIndexVM category = new CategoryIndexVM();
+            var data = await _context.Categories.FindAsync(id);
+            category.Id = data.Id;
+            category.Name = data.Name;
             if (category == null)
             {
                 return NotFound();
@@ -165,7 +167,13 @@ namespace ProjectFUEN.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        public async Task<IActionResult> DeleteoOneSelf(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
         private bool CategoryExists(int id)
         {
           return _context.Categories.Any(e => e.Id == id);

@@ -28,6 +28,8 @@ namespace ProjectFUEN.Models.VM
         [Display(Name = "產品圖")]
         public IEnumerable<IFormFile> Sources { get; set; }
 
-       // public IEnumerable<String> FileNames { get; set; }
+        // public IEnumerable<String> FileNames { get; set; }
+
+        // public IEnumerable<String> FileNames { get; set; }
     }
 }

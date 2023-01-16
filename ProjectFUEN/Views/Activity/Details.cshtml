@@ -3,19 +3,24 @@
 @{
     ViewData["Title"] = "活動詳情";
 }
+@section Styles{
+    <style>
+        @@media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+
+}
 
 <h1>Details</h1>
-
+ <button type="button" id="@Model.Id" class="btn btn-primary getMembers border-0 bg-body" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
 <div>
     <h4>Activity</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CoverImage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CoverImage)
-        </dd>
+        
         <dt class = "col-sm-2">
            活動圖片
         </dt>
@@ -46,7 +51,12 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MemberLimit)
         </dd>
-       
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumOfMember)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumOfMember)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -90,3 +100,90 @@
     <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
     <a asp-action="Index">Back to List</a>
 </div>
+<div class="modal " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between">
+                    <h5>參加會員</h5>
+                    <button class="border-0 p-1 mb-1 no-print bg-body" onclick="window.print()"><i class="fa-solid fa-print fs-5"></i></button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>帳號</th>
+                            <th>姓名</th>
+                            <th>電話</th>
+                            <th>加入時間</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="member">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary no-print" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let getMembers = $(".getMembers")
+        let id;
+
+        $(".getMembers").on('click', function () {
+            id = $(this).attr("id")
+            $(".member").html("");
+            $(".modal-title").html("");
+            $.ajax({
+                type: "GET",
+                url: "https://localhost:7027/Activity/MemberDetails?id=" + id,
+                data: "json"
+            })
+                .done(function (data) {
+                    //alert(JSON.stringify(data))
+                    //console.log(data[0]["activityName"])
+                    let activityName = data[0]["activityName"]
+                    let activityAddress = data[0]["activityAddress"]
+                    $(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
+                                                     <p class=" m-0">地點：${activityAddress}</p>`)
+                    for (let i = 0; i < data.length; i++) {
+                        //console.log(data[i]["emailAccount"])
+                        let emailAccount = data[i]["emailAccount"]
+                        let realName = data[i]["realName"]
+                        let mobile = data[i]["mobile"]
+                        let dateJoined = data[i]["dateJoined"]
+
+                        $(".member").prepend(`<tr>
+                                                         <th>${emailAccount}</th>
+                                                         <th>${realName}</th>
+                                                         <th>${mobile}</th>
+                                                         <th>${dateJoined}</th>
+                                                     </tr>`)
+                    }
+                })
+                .fail(function (err) {
+                    history.go(0);
+                })
+
+
+
+        })
+
+    </script>
+}

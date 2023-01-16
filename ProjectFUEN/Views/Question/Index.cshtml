@@ -47,8 +47,7 @@
 				</td>
 
 				<td>
-					
-					<a data-state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion " data-bs-toggle="modal" @*data-bs-target="#CreateModal"*@>123</a>
+					<a data-state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion " data-bs-toggle="modal" @*data-bs-target="#CreateModal"*@></a>
 @*	<a data-state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion " data-bs-toggle="modal" data-bs-target="#EditModal">修改</a>*@
 				</td>
 			</tr>
@@ -75,7 +74,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="message-text" class="col-form-label">回答:</label>
-						<textarea class="form-control answerContent" id="message-text"></textarea>
+						<textarea class="form-control answerContent" id="message-text" maxlength="300" rows="4"></textarea>
 						<p class="msgErr text-danger"></p>
 					</div>
 					<div class="form-group">
@@ -92,7 +91,7 @@
 @*編輯答案*@
 
 <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog ">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">回覆問題</h5>
@@ -107,7 +106,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="message-text" class="col-form-label">回答:</label>
-						<textarea class="form-control editContent" id="message-text"></textarea>
+						<textarea class="form-control editContent" id="message-text" maxlength="300" rows="4"></textarea>
 						<p class="msgErr text-danger"></p>
 					</div>
 					<div class="form-group">

@@ -23,7 +23,7 @@ namespace ProjectFUEN.Models
 				string extension = Path.GetExtension(fileName);
 				extension= extension.ToLower();
 				//3 check the file extension as png
-				if (extension == ".png" || extension == ".jepg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
+				if (extension == ".png" || extension == ".jpeg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
 				{
 					string path = Directory.GetCurrentDirectory();
 					string newFileName = GetNewFileName(path, fileName);

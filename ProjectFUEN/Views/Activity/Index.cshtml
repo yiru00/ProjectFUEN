@@ -137,7 +137,9 @@
             })
                 .done(function (data) {
                     //alert(JSON.stringify(data))
-                    $(".modal-title").text(data[0]["ActivityName"])
+                    //console.log(data[0]["activityName"])
+                    let activityName=data[0]["activityName"]
+                    $(".modal-title").text(`活動：${activityName}`)
                     for (let i = 0; i < data.length; i++) {
                         //console.log(data[i]["emailAccount"])
                         let emailAccount = data[i]["emailAccount"]

@@ -1,38 +1,50 @@
-﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Instructor>
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.InstructorVM>
 
 @{
-    ViewData["Title"] = "講師總覽";
+    ViewData["Title"] = "講師列表";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">新增</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.InstructorName)
-            </th>
-            <th>講師照片</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                 <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.InstructorName)</a>
-                
-            </td>
-                <td><img id="preview" style="max-height:80px;max-width:fit-content" src="/UploadedFiles/@item.ResumePhoto" /></td>
+<div class="d-flex no-print align-items-center p-2">
+    <h1 class="no-print">講師列表</h1>
+    <button class="btn btn-primary ms-5">
+        <a class="text-center text-white text-decoration-none" asp-action="Create">新增</a>
+    </button>
+</div>
+
+<div class="d-flex flex-wrap p-2">
+@foreach(var item in Model){
+    <div class="col-lg-2 col-12">
+    <div class="card" style="width:280px;">
+        <a asp-action="Details" asp-route-id="@item.Id"><img class="card-img-top" style="width:280px;height:200px;object-fit:cover" src="/UploadedFiles/@item.ResumePhoto" alt="Card image cap"></a>
+      <div class="card-body">
+        <h4 class="card-title">@item.InstructorName</h4>
+        <p class="card-text">@item.Description</p>
+        <div class="d-flex justify-content-end">
+            <div >
+                  <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
+                  <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
+            </div>
+        </div>
             
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
-            </td>
-        </tr>
+      </div>
+    </div>
+    </div>
 }
-    </tbody>
-</table>
+</div>
+
+
+@section Scripts{
+<script>
+        let cardText = $(".card-text");
+        console.log(cardText);
+        for (let i = 0; i < cardText.length; i++) {
+            let str=cardText[i].innerText;
+            console.log(str.length);
+            if (str.length >= 15) {
+                let newStr=cardText[i].innerText.slice(0,12)+" ...";
+                cardText[i].innerText = newStr;
+            } 
+        }
+</script>
+}

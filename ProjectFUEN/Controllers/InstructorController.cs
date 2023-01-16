@@ -28,7 +28,7 @@ namespace ProjectFUEN.Controllers
 		// GET: Instructor
 		public async Task<IActionResult> Index()
 		{
-			return View(await _context.Instructors.ToListAsync());
+			return View(await _context.Instructors.Select(x=>x.ToVM()).ToListAsync());
 		}
 
 		// GET: Instructor/Details/5
@@ -46,7 +46,7 @@ namespace ProjectFUEN.Controllers
 				return NotFound();
 			}
 
-			return View(instructor);
+			return View(instructor.ToVM());
 		}
 
 		// GET: Instructor/Create

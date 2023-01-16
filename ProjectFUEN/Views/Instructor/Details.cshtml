@@ -1,10 +1,19 @@
-﻿@model ProjectFUEN.Models.EFModels.Instructor
+﻿@model ProjectFUEN.Models.ViewModels.InstructorVM
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="d-flex p-2 align-items-center">
+	<h1>講師詳情</h1>
+	<div class="ms-5">
+		<a type="submit" asp-action="Edit" asp-route-id="@Model?.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a> |
+		<a asp-action="Delete" asp-route-id="@Model.Id"><i class="fa-regular fa-trash-can text-black fs-5"></i></a> |
+		<a asp-action="Index"><i class="fa-solid fa-list-ul text-black fs-5"></i></a> |
+		
+	</div>
+
+</div>
 
 <div>
     <h4>Instructor</h4>

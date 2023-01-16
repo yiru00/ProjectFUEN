@@ -4,41 +4,45 @@
     ViewData["Title"] = "Reports";
 }
 
-<h1>Reports</h1>
+<div class="mt-4 ms-4">
 
-<div>
-    <div class="mb-4">
-        <select id="select">
-            <option value="0">Photo</option>
+    <div class="mb-4 d-flex">
+        <h1><i class="fa-solid fa-bullhorn"></i>  Reports</h1>
+        <div class="form-floating me-3 ms-4" >
+            <select class="form-select"  id="select">
+            <option value="0" >Photo</option>
             <option value="1">Comment</option>
-        </select>
+            </select>
+            <label for="select" class="input-text" style="font-size:15px">choose</label>
+		</div>
+
+        <div class="form-floating">
+            <input type="text" id="searchText" placeholder="Account" class="form-control" />
+            <label for="searchText"><i class="fa-solid fa-magnifying-glass"></i><span class="text-muted ms-2">Account</span></label>
+		</div>
+
     </div>
 
-    <div class="d-flex">
-        <button id="del" class="btn btn-primary me-auto">Delete</button>
+    
+     <button id="del" class="btn btn-outline-danger me-auto mt-4"><i class="fa-solid fa-check"></i>  Delete</button>
 
-        <div>
-            <label for="searchText">Account: </label>
-            <input type="text" id="searchText" />
-        </div>
-    </div>
 </div>
 
 
-<table class="table">
+<table class="table table-hover ms-4">
     <thead>
         <tr>
             <th>
-                <input type="checkbox" id="globalCheckbox"/>
+                <input type="checkbox" class="form-check-input" id="globalCheckbox"/>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reporter)
+                <i class="fa-solid fa-user"></i> @Html.DisplayNameFor(model => model.Reporter)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Photo)
+                <i class="fa-regular fa-image"></i> @Html.DisplayNameFor(model => model.Photo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReportTime)
+                <i class="fa-regular fa-calendar"></i> @Html.DisplayNameFor(model => model.ReportTime)
             </th>
             <th></th>
         </tr>
@@ -47,7 +51,7 @@
 @foreach (var item in Model) {
         <tr id="local">
             <td>
-                <input type="checkbox" id="@item.Id" reporter="@item.ReporterId"/>
+                <input type="checkbox" class="form-check-input" id="@item.Id" reporter="@item.ReporterId"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Reporter)
@@ -59,7 +63,7 @@
                 @Html.DisplayFor(modelItem => item.ReportTime)
             </td>
             <td>
-                <button class="btn btn-primary" id="@item.PhotoId" member="@item.MemberId">Delete</button>
+                <button class="btn btn-primary" id="@item.PhotoId" member="@item.MemberId"><i class="fa-regular fa-trash-can"></i></button>
             </td>
         </tr>
 }
@@ -205,7 +209,8 @@
             Swal.fire({
                 title: "Are you sure?",
                 html: text,
-                icon: 'warning',
+                icon: 'error',
+                iconHtml:`<i class="fa-regular fa-trash-can"></i>`,
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -273,7 +278,8 @@
             Swal.fire({
                 title: "Are you sure?",
                 html: text,
-                icon: 'warning',
+                icon: 'error',
+                iconHtml: `<i class="fa-regular fa-trash-can"></i>`,
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -326,16 +332,16 @@
 
             let thead = $(`<tr>
                             <th>
-                                <input type="checkbox" id="globalCheckbox"/>
+                                <input type="checkbox"  class="form-check-input" id="globalCheckbox"/>
                             </th>
                             <th>
-                                Reporter
+                                        <i class="fa-solid fa-user"></i> Reporter
                             </th>
                             <th>
-                                ${targetHead}
+                                <i class="fa-regular fa-image"></i> ${targetHead}
                             </th>
                             <th>
-                                ReportTime
+                                <i class="fa-regular fa-calendar"></i> ReportTime
                             </th>
                             <th>
                             </th>
@@ -352,7 +358,7 @@
 
                 let tbody = $(`<tr id="local">
                                 <td>
-                                    <input type="checkbox" id="${item.id}" reporter="${item.reporterId}"/>
+                                    <input type="checkbox" class="form-check-input" id="${item.id}" reporter="${item.reporterId}"/>
                                 </td>
                                 <td>
                                     ${item.reporter}
@@ -364,7 +370,7 @@
                                     ${item.reportTime}
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary" id="${id}" member="${item.memberId}">Delete</button>
+                                    <button class="btn btn-primary" id="${id}" member="${item.memberId}"><i class="fa-regular fa-trash-can"></i></button>
                                 </td>
                             </tr>`)
 

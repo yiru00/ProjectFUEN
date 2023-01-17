@@ -22,7 +22,7 @@ namespace fileUpload.Models
 				//2 Get the extension of the file
 				string extension = Path.GetExtension(fileName);
                 //3 check the file extension as png
-                if (extension == ".png" || extension == ".jepg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
+                if (extension == ".PNG" || extension == ".jepg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
                 {
                     string path = Directory.GetCurrentDirectory();
 					//string newFileName = GetNewFileName(path, fileName);/
@@ -43,31 +43,13 @@ namespace fileUpload.Models
 				{
 					message = "檔案必須是圖片檔案";
 				}
-
 			}
 			else
 			{
 				message = "記得選取檔案";
 			}
-
 			return (isCopied, message, Source);
-
 		}
-
-		//private string GetNewFileName(string path, string fileName)
-		//{
-		//	string ext = Path.GetExtension(fileName);  //得到副檔名(包含.)
-		//	string newFileName = string.Empty;
-		//	string fullPath = string.Empty;
-
-		//	do
-		//	{
-		//		fullPath = System.IO.Path.Combine(path, newFileName);
-		//	} while (System.IO.File.Exists(fullPath));
-		//	return newFileName;
-		//}
 	}
-
-
 }
 

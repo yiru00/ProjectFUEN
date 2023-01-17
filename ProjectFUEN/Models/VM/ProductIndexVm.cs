@@ -26,6 +26,7 @@ namespace ProjectFUEN.Models.VM
         public DateTime ReleaseDate { get; set; }
         [Display(Name = "庫存量")]
         public int Inventory { get; set; }
+        [Display(Name = "產品明細")]
         public string ProductSpec { get; set; }
         public virtual Product Product { get; set; }
         public virtual Brand Brand { get; set; }

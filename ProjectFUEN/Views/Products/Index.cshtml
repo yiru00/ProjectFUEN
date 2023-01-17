@@ -2,8 +2,12 @@
 
 @{
     ViewData["Title"] = "Index";
+    var pagedList = (IPagedList)ViewBag.ProductIndexVm;
 }
-
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent
+@using X.PagedList.Web.Common
 <h1>
     <b>商品管理</b>
 </h1>
@@ -15,6 +19,7 @@
     <a href='@Url.Action("Create", "Products")' class="btn btn-info">新增</a>
 </p>
 <table class="table">
+
     <thead>
         <tr>
             <th>
@@ -45,6 +50,15 @@
         </tr>
     </thead>
     <tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="5">
+                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+            </td>
+        </tr>
+    </tfoot>
+
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -75,7 +89,7 @@
                     @Html.ActionLink("修改", "Edit", new { id=item.Id }, new { @class = "btn btn-primary" }) 
                     @Html.ActionLink("明細", "Details", new { id=item.Id }, new { @class = "btn btn-warning" })
                     @Html.ActionLink("刪除", "DeleteoOneSelf", new { id=item.Id }, new { @class = "btn btn-danger",@onclick="return Confirm_Form()" })
-                    @Html.ActionLink("圖片維護", "Index","ProductPhotoes" ,new { id=item.Id}, new { @class = "btn btn-info" })
+                    @Html.ActionLink("圖片", "Index","ProductPhotoes" ,new { id=item.Id}, new { @class = "btn btn-info" })
                 </td>
         </tr>
 }
@@ -87,4 +101,14 @@
             return false;
     }
 </script>
-
+    <table class="table">
+    @Html.PagedListPager(pagedList, page =>
+    Url.Action("Index", new { page = page }),
+    new PagedListRenderOptions(){
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" },
+        LinkToFirstPageFormat = "<< 第一頁",
+        LinkToPreviousPageFormat = "< 前一頁",
+        LinkToNextPageFormat = "後一頁 >",
+        LinkToLastPageFormat = "最末頁 >>"
+})

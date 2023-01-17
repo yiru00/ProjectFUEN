@@ -11,6 +11,7 @@ namespace ProjectFUEN.Models.VM
         [Required]
         public int ProductId { get; set; }
         public string? Source { get; set; }
+        [Display(Name = "商品圖檔")]
         public IEnumerable<IFormFile> Sources { get; set; }
 
         //public virtual Product Product { get; set; }

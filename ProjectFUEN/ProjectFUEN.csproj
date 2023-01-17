@@ -7,6 +7,11 @@
     <UserSecretsId>aspnet-ProjectFUEN-417c8fce-eded-4234-b925-97ebb68c98c2</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Models\Services\" />
+    <None Remove="Models\DTOs\" />
+    <None Remove="Models\ViewModels\" />
+    <None Remove="Models\Infrastructures\" />
+    <None Remove="Models\EFModels\" />
     <None Update="Views\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
@@ -24,14 +29,17 @@
 
   <ItemGroup>
     <Folder Include="Models\EFModels\" />
+    <Folder Include="Models\EFModels\" />
+    <Folder Include="Models\Infrastructures\Repositories\" />
     <Folder Include="Models\Services\" />
-    <Folder Include="Models\DTOs\" />
-    <Folder Include="Models\ViewModels\" />
-    <Folder Include="Models\Infrastructures\" />
+    <Folder Include="wwwroot\UploadedFiles\" />
+    <Folder Include="Models\Services\" />
     <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="Models\Infrastructures\Repositories\" />
     <Folder Include="Models\EFModels\" />
     <Folder Include="Views\Templates\" />
     <Folder Include="wwwroot\ProductImgFiles\" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

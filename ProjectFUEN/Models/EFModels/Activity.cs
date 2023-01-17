@@ -20,16 +20,15 @@ namespace ProjectFUEN.Models.EFModels
         public string Recommendation { get; set; }
         public string Address { get; set; }
         public int MemberLimit { get; set; }
-        public int NumOfMember { get; set; }
         public string Description { get; set; }
         public DateTime GatheringTime { get; set; }
         public DateTime Deadline { get; set; }
         public DateTime DateOfCreated { get; set; }
-        public int? IstructorId { get; set; }
+        public int? InstructorId { get; set; }
         public int? CategoryId { get; set; }
 
         public virtual ActivityCategory Category { get; set; }
-        public virtual Instructor Istructor { get; set; }
+        public virtual Instructor Instructor { get; set; }
         public virtual ICollection<ActivityCollection> ActivityCollections { get; set; }
         public virtual ICollection<ActivityMember> ActivityMembers { get; set; }
         public virtual ICollection<Question> Questions { get; set; }

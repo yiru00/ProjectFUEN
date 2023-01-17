@@ -5,19 +5,17 @@ using System.Collections.Generic;
 
 namespace ProjectFUEN.Models.EFModels
 {
-    public partial class Album
+    public partial class Tag
     {
-        public Album()
+        public Tag()
         {
-            AlbumItems = new HashSet<AlbumItem>();
+            Photos = new HashSet<Photo>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int MemberId { get; set; }
         public DateTime CreatedTime { get; set; }
 
-        public virtual Member Member { get; set; }
-        public virtual ICollection<AlbumItem> AlbumItems { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
     }
 }

@@ -11,7 +11,7 @@
 			}
 		}
 
-		</style>
+	</style>
 }
 
 <div class="d-flex no-print align-items-center p-2">
@@ -22,19 +22,24 @@
 </div>
 <hr />
 <div class="p-2">
-	<input type="text" id="customSearch" class="input-group" style="width:200px;">
-	<table class="table no-print table-hover" id="table"
-									data-toggle="table"
-									data-search="true"
-		   data-search-selector="#customSearch"
-									data-search-highlight="true"
+	<div id="toolbar">
+		<button id="button" class="btn btn-secondary"><i class="fa-regular fa-trash-can fs-5"></i> 刪除</button>
+	</div>
 
->
+	<input type="text" id="customSearch" class="input-group" style="width:200px;" />
+
+	<table class="table no-print table-hover" id="table"
+		   data-toggle="table"
+		   data-search="true"
+		   data-search-selector="#customSearch"
+		   data-search-highlight="true">
 		<thead>
 			<tr>
-				<th data-field="ActivityName" class="d-none">
+				<th data-checkbox="true"></th>
+				<th data-field="Id" class="d-none">
 					@Html.DisplayNameFor(model => model.Id)
 				</th>
+				
 				<th data-field="ActivityName" data-sortable="true">
 					@Html.DisplayNameFor(model => model.ActivityName)
 				</th>
@@ -67,6 +72,7 @@
 			@foreach (var item in Model)
 			{
 				<tr>
+					<td></td>
 					<td class="d-none">
 						@Html.DisplayFor(modelItem => item.Id)
 					</td>
@@ -97,7 +103,7 @@
 					<td class="d-flex justify-content-around">
 						<a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
 						<a asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info text-black fs-5"></i></a>
-						<a id="@item.Id" class="delete" ><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
+						<a id="@item.Id" class="delete"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
 						<button type="button" id="@item.Id" class="btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
 					</td>
 				</tr>
@@ -172,8 +178,8 @@
 					let activityAddress = data[0]["activityAddress"]
 					let activityTime = data[0]["activityTime"]
 					$(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
-															 <p class=" m-0">時間：${activityTime}</p>
-															 <p class=" m-0">地點：${activityAddress}</p>`)
+																	 <p class=" m-0">時間：${activityTime}</p>
+																	 <p class=" m-0">地點：${activityAddress}</p>`)
 					for (let i = 0; i < data.length; i++) {
 						//console.log(data[i]["emailAccount"])
 						let emailAccount = data[i]["emailAccount"]
@@ -182,22 +188,20 @@
 						let dateJoined = data[i]["dateJoined"]
 
 						$(".member").prepend(`<tr>
-																 <th>${emailAccount}</th>
-																 <th>${realName}</th>
-																 <th>${mobile}</th>
-																 <th>${dateJoined}</th>
-															 </tr>`)
+																		 <th>${emailAccount}</th>
+																		 <th>${realName}</th>
+																		 <th>${mobile}</th>
+																		 <th>${dateJoined}</th>
+																	 </tr>`)
 					}
 				})
 				.fail(function (err) {
 					history.go(0);
 				})
 		})
-
-		//刪除
-		$(".delete").on('click', function () {
-
-
+		 let $table = $('#table')
+		 let $button = $('#button')
+		$button.click(function () {
 			const swalWithBootstrapButtons = Swal.mixin({
 				customClass: {
 					confirmButton: 'btn btn-success',
@@ -216,26 +220,84 @@
 				reverseButtons: true
 			}).then((result) => {
 				if (result.isConfirmed) {
-					let deleteid = $(this).attr("id");
-
-					//HTTPDELETE
-					$.ajax({
-						type: "DELETE",
-						url: "https://localhost:7027/Activity/Delete/" + deleteid
+					//接收選取的id
+					let ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+						console.log(row.Id)
+						return row.Id
 					})
-						.done(function (data) {
-							history.go(0);
+					console.log(ids)
+					$table.bootstrapTable('remove', {
+						field: 'Id',
+						values: ids
+					})
+					//foreach delete
+					for(let i=0;i<ids.length;i++){
+					console.log(ids[i]);
+						//HTTPDELETE
+						$.ajax({
+							type: "DELETE",
+							url: "https://localhost:7027/Activity/Delete/" + ids[i]
 						})
-						.fail(function (err) { });
+							.done(function (data) {
+								history.go(0);
+							})
+							.fail(function (err) { });
+
+					}
 
 				} else if (
-					/* Read more about handling dismissals below */
+					
 					result.dismiss === Swal.DismissReason.cancel
 				) {
 					history.go(0);
 				}
 			})
+
+
 		})
+			
+			//刪除
+			$(".delete").on('click', function () {
+
+
+				const swalWithBootstrapButtons = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-success',
+						cancelButton: 'btn btn-danger'
+					},
+					buttonsStyling: false
+				})
+
+				swalWithBootstrapButtons.fire({
+					title: '確定刪除?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: '確定',
+					cancelButtonText: '取消',
+					reverseButtons: true
+				}).then((result) => {
+					if (result.isConfirmed) {
+						let deleteid = $(this).attr("id");
+
+						//HTTPDELETE
+						$.ajax({
+							type: "DELETE",
+							url: "https://localhost:7027/Activity/Delete/" + deleteid
+						})
+							.done(function (data) {
+								history.go(0);
+							})
+							.fail(function (err) { });
+
+					} else if (
+						/* Read more about handling dismissals below */
+						result.dismiss === Swal.DismissReason.cancel
+					) {
+						history.go(0);
+					}
+				})
+			})
 
 
 	</script>

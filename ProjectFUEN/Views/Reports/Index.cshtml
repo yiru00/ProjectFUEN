@@ -57,7 +57,7 @@
                 @Html.DisplayFor(modelItem => item.Reporter)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Photo)
+                <img style="height:50px;width:50px;object-fit:cover" src= "Images/@item.Photo" alt="XXX">
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReportTime)
@@ -72,20 +72,25 @@
 
 @section Scripts {
     <script>
+        // 放所有checkbox的Id
+        let checkboxId = [];
+
         // 點擊Global的checkbox, local全部都勾選
         $("thead").on("click", "#globalCheckbox", function () {
             let localLength = $("#local input[type='checkbox']").length;
 
+            checkboxId = [];
+
             if ($("#globalCheckbox").prop("checked")) {
                 for (let i = 0; i < localLength; i++) {
                     let item = $("#local input[type='checkbox']").eq(i);
-
+                    checkboxId.push(item.prop("id"));
                     item.prop("checked", true);
                 }
             } else {
                 for (let i = 0; i < localLength; i++) {
                     let item = $("#local input[type='checkbox']").eq(i);
-
+                    checkboxId.pop(item.prop("id"))
                     item.prop("checked", false);
                 }
             }
@@ -94,8 +99,12 @@
         // 當local的checkbox全部被勾選, global的checkbox被勾選
         // 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
         $("tbody").on("click", "#local input[type='checkbox']", function () {
+            if ($(this).prop("checked")) checkboxId.push($(this).prop("id"));
+            else checkboxId.splice(checkboxId.indexOf($(this).prop("id")), 1)
+
             let localLength = $("#local input[type='checkbox']").length;
             let count = 0;
+
             for (let i = 0; i < localLength; i++) {
                 let item = $("#local input[type='checkbox']").eq(i);
 
@@ -141,7 +150,8 @@
                 if (searchText !== "") {
                     $.ajax({
                         type: "GET",
-                        url: `https://localhost:7027/Reports/GetPhotoReport?account=${searchText}`
+                        url: `https://localhost:7027/Reports/GetPhotoReport?account=${searchText}`,
+                        async: false
                     }).done(function (data) {
                         showTable(data);
                     }).fail(function (err) {
@@ -151,7 +161,8 @@
                 else {
                     $.ajax({
                         type: "GET",
-                        url: "https://localhost:7027/Reports/GetAllPhotoReports"
+                        url: "https://localhost:7027/Reports/GetAllPhotoReports",
+                        async: false
                     }).done(function (data) {
                         showTable(data);
                     }).fail(function (err) {
@@ -163,7 +174,8 @@
                 if (searchText !== "") {
                     $.ajax({
                         type: "GET",
-                        url: `https://localhost:7027/Reports/GetCommentReport?account=${searchText}`
+                        url: `https://localhost:7027/Reports/GetCommentReport?account=${searchText}`,
+                        async: false
                     }).done(function (data) {
                         showTable(data);
                     }).fail(function (err) {
@@ -173,13 +185,35 @@
                 else {
                     $.ajax({
                         type: "GET",
-                        url: "https://localhost:7027/Reports/GetAllCommentReports"
+                        url: "https://localhost:7027/Reports/GetAllCommentReports",
+                        async: false
                     }).done(function (data) {
                         showTable(data);
                     }).fail(function (err) {
                         console.log(err.statusText)
                     })
                 }
+            }
+
+
+            // Search後, 將checkbox填入
+            let count = 0;
+            let localLength = $("#local input[type='checkbox']").length;
+
+            for (let i = 0; i < localLength; i++) {
+                
+                for(let itemId of checkboxId) {
+                    let item = $("#local input[type='checkbox']").eq(i);
+                    
+                    if (itemId == item.prop("id")) {
+                        count++;
+                        item.prop("checked", true);
+                        break;
+                    }
+                }
+
+                if (count === localLength) $("#globalCheckbox").prop("checked", true);
+                else $("#globalCheckbox").prop("checked", false);
             }
         })
 
@@ -190,7 +224,7 @@
             let targetId = $(this).prop("id");
             const trs = $(`tbody [id=${targetId}]`)
             const tds = $(this).parent().parent().find("td");
-            let text = `${tds.eq(2).text().trim()}`
+            let text = $(tds.eq(2).children().css("width", "300px").css("height", "200px"))
 
             // Comment
             if (isComment === "1") {
@@ -252,6 +286,8 @@
                     })
                 }
             })
+
+            $(tds.eq(2).children().css("width", "50px").css("height", "50px"))
         });
 
         // Delete Multi-Report

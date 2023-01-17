@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ProjectFUEN.Models.VM.BrandVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>品牌管理</h1>
+
+<p>
+    <a href='@Url.Action("Create", "Brands")' class="btn btn-info">新增</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                    @Html.ActionLink("修改", "Edit", new { id=item.Id }, new { @class = "btn btn-primary" }) 
+                    @*@Html.ActionLink("明細", "Details", new { id=item.Id }, new { @class = "btn btn-warning" })*@
+                    @Html.ActionLink("刪除", "DeleteoOneSelf", new { id=item.Id }, new { @class = "btn btn-danger",@onclick="return Confirm_Form()" })
+                </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script>
+function Confirm_Form()
+    {
+        if (!confirm("您確定要刪除嗎?"))
+            return false;
+    }
+</script>

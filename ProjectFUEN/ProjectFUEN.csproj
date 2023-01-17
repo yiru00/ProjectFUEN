@@ -6,16 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ProjectFUEN-417c8fce-eded-4234-b925-97ebb68c98c2</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Models\Services\" />
-    <None Remove="Models\DTOs\" />
-    <None Remove="Models\ViewModels\" />
-    <None Remove="Models\Infrastructures\" />
-    <None Remove="Models\Infrastructures\ExtensionMethods\" />
-    <None Remove="Models\Infrastructures\Repositories\" />
-    <None Remove="Models\EFModels\" />
-  </ItemGroup>
   <ItemGroup>
     <None Update="Views\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
@@ -29,6 +19,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.12" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,5 +32,6 @@
     <Folder Include="Models\Infrastructures\Repositories\" />
     <Folder Include="Models\EFModels\" />
     <Folder Include="Views\Templates\" />
+    <Folder Include="wwwroot\ProductImgFiles\" />
   </ItemGroup>
 </Project>

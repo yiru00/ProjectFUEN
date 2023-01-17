@@ -35,7 +35,7 @@ namespace ProjectFUEN.Controllers
 
 			if (!string.IsNullOrEmpty(account)) members = members.Where(x => x.EmailAccount != null && x.EmailAccount.Contains(account));
 
-			if (selectCity != "請選擇縣市...") members = members.Where(x => x.Address != null && x.Address.Contains(selectCity));
+			if (selectCity != "請選擇") members = members.Where(x => x.Address != null && x.Address.Contains(selectCity));
 
             return members.Select(x => x.EntityoIndexVM()).ToList();
 		}

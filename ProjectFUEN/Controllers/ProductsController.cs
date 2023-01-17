@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
+using ProjectFUEN.Models;
 using ProjectFUEN.Models.EFModels;
 using ProjectFUEN.Models.Infrastructures.Repositories;
 using ProjectFUEN.Models.Services;
 using ProjectFUEN.Models.Services.interfaces;
 using ProjectFUEN.Models.VM;
+using X.PagedList;
 
 namespace ProjectFUEN.Controllers
 {
@@ -32,11 +34,12 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: Products
-        public IActionResult Index(string search)
+        public IActionResult Index(string search, int? page = 1)
         {
-
-            //var projectFUENContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
-            //return View(await projectFUENContext.ToListAsync());
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.ProductIndexVm = GetPagedProcess(page, pageSize);
 
             var data = _context.Products
                 .Select(p => new
@@ -47,6 +50,7 @@ namespace ProjectFUEN.Controllers
                     p.ReleaseDate,
                     p.ManufactorDate,
                     p.ProductSpec,
+                    p.Inventory,
 
                     CategoryName = p.Category.Name,
                     BrandName = p.Brand.Name
@@ -62,10 +66,48 @@ namespace ProjectFUEN.Controllers
                     ReleaseDate = p.ReleaseDate,
                     ManufactorDate = p.ManufactorDate,
                     ProductSpec = p.ProductSpec,
+                    Inventory=p.Inventory
                 });
-            if (!String.IsNullOrEmpty(search)) data = data.Where(s => s.Name.Contains(search)).ToList();
-            return View(data);
 
+
+
+
+            if (!String.IsNullOrEmpty(search)) data = data.Where(s => s.Name.Contains(search)).ToList();
+            //if (!String.IsNullOrEmpty(search)) data = data.Where(s => s.CategoryName.Contains(search)).ToList();
+            //if (!String.IsNullOrEmpty(search)) data = data.Where(s => s.BrandName.Contains(search)).ToList();
+
+            return View(data.Skip<ProductIndexVm>(pageSize * ((page ?? 1) - 1)).Take(pageSize).ToList());
+            //return View(data);
+
+        }
+        protected IPagedList<ProductIndexVm> GetPagedProcess(int? page, int pageSize)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetStuffFromDatabase();
+            IPagedList<ProductIndexVm> pagelist = listUnpaged.ToPagedList(page ?? 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        protected IQueryable<ProductIndexVm> GetStuffFromDatabase()
+        {
+            var product = _context.Products.Select(x => new ProductIndexVm()
+            {
+                Id= x.Id,
+                Name= x.Name,
+                Price= x.Price,
+                Inventory= x.Inventory,
+                ManufactorDate= x.ManufactorDate,
+                ReleaseDate= x.ReleaseDate,
+                Brand= x.Brand,
+                Category= x.Category,
+                ProductSpec= x.ProductSpec,
+            });
+            return product;
         }
 
         // GET: Products/Details/5

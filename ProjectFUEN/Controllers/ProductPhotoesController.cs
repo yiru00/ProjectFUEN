@@ -31,11 +31,11 @@ namespace ProjectFUEN.Controllers
 
 
         //GET: ProductPhotoes1
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         //public ActionResult Index()
         {
-            var projectFUENContext = _context.ProductPhotos.Include(p => p.Product);
-            return View(await _context.ProductPhotos.ToListAsync());
+            var projectFUENContext = _context.ProductPhotos.Where(x => x.ProductId==id);
+            return View(projectFUENContext);
 
         }
       
@@ -118,7 +118,8 @@ namespace ProjectFUEN.Controllers
                 product.ProductPhotos.AddRange(photos);
 
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return Redirect("Index/" + vm.ProductId);
+            
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
             return View(productPhoto);
@@ -138,6 +139,7 @@ namespace ProjectFUEN.Controllers
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
             return View(productPhoto);
+
         }
 
         // POST: ProductPhotoes1/Edit/5
@@ -168,8 +170,6 @@ namespace ProjectFUEN.Controllers
                     {
                         _context.Update(productPhoto.ToEntity());
                         await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
-
                     }
                 }
                 else if (uploadSuccess.Item2 == "檔案必須是圖片檔案")//上傳成圖檔以外的
@@ -186,40 +186,18 @@ namespace ProjectFUEN.Controllers
                     productPhoto.Source = uploadSuccess.Item3; //傳入新檔名
                     _context.Update(productPhoto.ToEntity());
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    //return RedirectToAction(nameof(Index)+"%2F"+productPhoto.ProductId);
+                    //7027/ProductPhotoes/Index/1018
+                    return RedirectToAction("Index", "ProductPhotoes", new { id = productPhoto.ProductId });
+                 ///////////////////////////////   ////////////////////////////////////////////////////////////////////////////
+
                 }
                 else //上傳圖檔以外的(ppt.pdf...)
                 {
                     ViewBag.photoError = uploadSuccess.Item2;
                     return View(productPhoto);
                 }
-                //ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
-                //return View(productPhoto);
-
             }
-
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        _context.Update(productPhoto);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!ProductPhotoExists(productPhoto.Id))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
-            //}
-           
         }
 
         // GET: ProductPhotoes1/Delete/5
@@ -248,7 +226,7 @@ namespace ProjectFUEN.Controllers
         {
             if (_context.ProductPhotos == null)
             {
-                return Problem("Entity set 'ProjectFUENContext.ProductPhotos'  is null.");
+                return Problem("Entity set 'ProjectFUENContext.ProductPhotos' is null.");
             }
             var productPhoto = await _context.ProductPhotos.FindAsync(id);
             if (productPhoto != null)
@@ -257,7 +235,8 @@ namespace ProjectFUEN.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index) +"/"+ productPhoto.ProductId);
+            //return Redirect("Index/" + productPhoto.ProductId);
         }
 
         private bool ProductPhotoExists(int id)
@@ -269,7 +248,9 @@ namespace ProjectFUEN.Controllers
             var photo = await _context.ProductPhotos.FindAsync(id);
             _context.ProductPhotos.Remove(photo);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", photo.ProductId);
+            //return RedirectToAction("Index", photo.ProductId);
+            return RedirectToAction("Index", "ProductPhotoes", new { id = photo.ProductId });
+
         }
     }
 }

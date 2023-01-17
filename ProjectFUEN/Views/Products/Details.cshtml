@@ -4,56 +4,56 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>  <b>商品管理-明細</b></h1>
 
 <div>
-    <h4>Product</h4>
+    
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            商品名稱
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+            價格
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Price)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ManufactorDate)
+            製造日期
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ManufactorDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
+            上架日期
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ReleaseDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Inventory)
+            庫存量
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Inventory)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductSpec)
+            產品明細
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ProductSpec)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Brand)
+           商品品牌
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Brand.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
+            商品分類
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Category.Name)

@@ -21,26 +21,29 @@
 
             @using (Html.BeginForm("Search", "OrderDetails", FormMethod.Get))
             {
-                <div class="col-md-4 list-group-horizontal">
-                    <input type="text" name="account" class="" value="" id="Searchtext" placeholder="請輸入.." />
-                      <div class="col-md-4">出貨狀態:@Html.DropDownList("state", state, new { @class = "form-control" })</div>
-                    <input type="submit" class="btn btn-dark " value="Search" id="SearchClick" />
+                <div class="input-group col-12 d-flex justify-content-center  ">
+
+
+
+
+
+
+
+
+                    @*<div class="col-4">出貨狀態:@Html.DropDownList("state", state, new { @class = "form-control" })</div>*@
+                    <div class="col-4">出貨狀態:@Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.SelectList, new { @class = "order-state form-control" })</div>
+                    <div class="input-group justify-content-center">
+                        <input type="text" name="account" class=" " value="" id="Searchtext" placeholder="請輸入.." />
+                        <button type="submit" class=" btn btn-dark   " value="" id="SearchClick">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
 
                 </div>
-            }
-            <select name="state1">
-                <option value="0">未出貨</option>
-                <option value="1">已出貨</option>
-                <option value="2">已簽收</option>
-            </select>
 
-            @*
-            <div class="col-md-4 list-group-horizontal">
-            <input type="text" name="MemberName" class="" value="" id="Searchtext" placeholder="請輸入.."/>
-            <input type="button" class="btn btn-dark " value="Search" id="SearchClick" />
-            <button class="btn btn-dark" id="SearchClick">Search</button>
-            </div>
-            *@
+            }
+
+
 
 
 
@@ -48,6 +51,9 @@
 
     </div>
 </div>
+
+
+
 
 <table class="table">
     <thead>
@@ -105,22 +111,31 @@
             </tr>
         }
     </tbody>
-    <tfoot>
-        <tr>
-            <td class="text-muted" colspan="5">
-                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
-                每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
-            </td>
-        </tr>
-    </tfoot>
-
-    <div style="align-content:center" class="text-dark page-custom1">
-
-        @(Html.Pager(pagedList)
-            .Url(page => Url.Action("Search", new { page }))
-            .Build())
-    </div>
+      
 </table>
+<div class="text-muted mx-auto ">
+    <div class="align-items-center mx-auto w-50">
+        @Html.PagedListPager((IPagedList)pagedList, page =>
+        Url.Action("Index", new { page = page }),
+
+        new PagedListRenderOptions {
+
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" },
+
+        LinkToFirstPageFormat="<<第一頁",
+        LinkToPreviousPageFormat="<前一頁",
+        LinkToNextPageFormat="後一頁>",
+        LinkToLastPageFormat="最末頁>>"
+        })
+    </div>
+
+
+
+    第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+    每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+
+</div>
 
 
 @section Scripts
@@ -162,6 +177,9 @@
         //    .fail(function(err){err.statuxtext});
 
         //} )
+        $(".order-state").on("change", function () {
+            $("#SearchClick").trigger("click");
+        })
 
     </script>
 }
@@ -186,9 +204,7 @@
             case 4:
                 StateName = "已完成";
                 break;
-            default:
-                StateName = "訂單異常";
-                break;
+            
 
         }
         return StateName;

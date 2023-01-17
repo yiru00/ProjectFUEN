@@ -130,38 +130,33 @@ namespace ProjectFUEN.Controllers
 
         }
 
+        public IEnumerable<SelectListItem> GetState(int? State = null)
+        {
+            List<SelectListItem> res = new List<SelectListItem>();
+
+            res.Add(new SelectListItem { Value = string.Empty, Text = "請選擇...", Selected = State == null });
+
+            for (int i = 0; i < 4; i++)
+            {
+                res.Add(new SelectListItem { Value = i.ToString(), Text = GetStateName(i), Selected = State == i });
+            }
+
+            return res.AsEnumerable();
+        }
+
         //public IEnumerable<SelectListItem> GetState(int? State)
         //{
-        //    var defaultdata = _context.OrderDetails.Select(x => x.State);
-        //    var selectList =_context.OrderDetails.AsEnumerable().Select(C=> new List<SelectListItem>
+        //    var items = _context.OrderDetails
+        //    .AsEnumerable()
+        //    .Select(c => new SelectListItem
         //    {
-        //        new SelectListItem{Value=C.State.ToString()},
-        //        new SelectListItem{Text="text-0",Value="value-0" },
-        //        new SelectListItem{Text="text-1",Value="value-1" },
-        //        new SelectListItem{Text="text-2",Value="value-2" },
-        //        new SelectListItem{Text="text-3",Value="value-3" }
-        //    } );
+        //        Value = c.State.ToString(),
+        //        Text = GetStateName(c.State),
+        //        Selected = (State.HasValue && c.State == State.Value)
+        //    }).Prepend(new SelectListItem { Value = string.Empty, Text = "請選擇..." });
 
-
-
-        //    selectList.Where(q => q.Value == "value-2").First().Selected = true;
-        //    ViewBag.SelectList = selectList;
-
+        //    return items;
         //}
-
-        public IEnumerable<SelectListItem> GetState(int? State)
-        {
-            var items = _context.OrderDetails
-            .AsEnumerable()
-            .Select(c => new SelectListItem
-            {
-                Value = c.State.ToString(),
-                Text = GetStateName(c.State),
-                Selected = (State.HasValue && c.State == State.Value)
-            }).Prepend(new SelectListItem { Value = string.Empty, Text = "請選擇..." });
-
-            return items;
-        }
 
         //[HttpGet]
         //public async Task<IActionResult> Search(string account)
@@ -285,7 +280,7 @@ namespace ProjectFUEN.Controllers
 
             //ViewData["MemberId"] = new SelectList(_context.Members, "Id", "EmailAccount", orderDetail.MemberId);
             ViewBag.MemberId = orderDetail.Member.EmailAccount;
-            ViewData["State"] = new SelectList(_context.OrderDetails, "State", "State", orderDetail.State);
+            ViewData["State"] = GetState(orderDetail.State);
 
             return View(orderDetail);
         }
@@ -392,11 +387,7 @@ namespace ProjectFUEN.Controllers
                     break;
                 case 4:
                     StateName = "已完成";
-                    break;
-                default:
-                    StateName = "訂單異常";
-                    break;
-
+                    break;               
             }
             return StateName;
         }

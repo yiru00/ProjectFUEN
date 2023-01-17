@@ -61,25 +61,93 @@ namespace ProjectFUEN.Models.ViewModels
     {
         public static ActivityVM ToVM(this Activity source)
         {
-            return new ActivityVM
+            if (source.CategoryId == null && source.InstructorId == null)
             {
-                Id = source.Id,
-                CoverImage= source.CoverImage,
-                ActivityName= source.ActivityName,
-                Recommendation= source.Recommendation,
-                Address= source.Address,
-                MemberLimit= source.MemberLimit,
-                NumOfMember=source.ActivityMembers.Count,
-                Description=source.Description,
-                GatheringTime= source.GatheringTime,
-                Deadline= source.Deadline,
-                DateOfCreated= source.DateOfCreated,
-                InstructorId= source.InstructorId,
-                CategoryId = source.CategoryId,
-                CategoryName=source.Category.CategoryName,
-                InstructorName=source.Instructor.InstructorName
+                return new ActivityVM
+                {
+                    Id = source.Id,
+                    CoverImage = source.CoverImage,
+                    ActivityName = source.ActivityName,
+                    Recommendation = source.Recommendation,
+                    Address = source.Address,
+                    MemberLimit = source.MemberLimit,
+                    NumOfMember = source.ActivityMembers.Count,
+                    Description = source.Description,
+                    GatheringTime = source.GatheringTime,
+                    Deadline = source.Deadline,
+                    DateOfCreated = source.DateOfCreated,
+                    InstructorId = 0,
+                    CategoryId = 0,
+                    CategoryName = "未選取分類",
+                    InstructorName = "未選取講師"
+                };
+            }
+            else if (source.InstructorId == null)
+            {
+                return new ActivityVM
+                {
+                    Id = source.Id,
+                    CoverImage = source.CoverImage,
+                    ActivityName = source.ActivityName,
+                    Recommendation = source.Recommendation,
+                    Address = source.Address,
+                    MemberLimit = source.MemberLimit,
+                    NumOfMember = source.ActivityMembers.Count,
+                    Description = source.Description,
+                    GatheringTime = source.GatheringTime,
+                    Deadline = source.Deadline,
+                    DateOfCreated = source.DateOfCreated,
+                    InstructorId = 0,
+                    CategoryId = source.CategoryId,
+                    CategoryName = source.Category.CategoryName,
+                    InstructorName = "未選取講師"
 
-            };
+                };
+            }
+            else if(source.CategoryId == null)
+			{
+				return new ActivityVM
+				{
+					Id = source.Id,
+					CoverImage = source.CoverImage,
+					ActivityName = source.ActivityName,
+					Recommendation = source.Recommendation,
+					Address = source.Address,
+					MemberLimit = source.MemberLimit,
+					NumOfMember = source.ActivityMembers.Count,
+					Description = source.Description,
+					GatheringTime = source.GatheringTime,
+					Deadline = source.Deadline,
+					DateOfCreated = source.DateOfCreated,
+					InstructorId = source.InstructorId,
+					CategoryId = 0,
+					CategoryName = "未選取分類",
+					InstructorName = source.Instructor.InstructorName
+				};
+			}
+			
+			else {
+				return new ActivityVM
+				{
+					Id = source.Id,
+					CoverImage = source.CoverImage,
+					ActivityName = source.ActivityName,
+					Recommendation = source.Recommendation,
+					Address = source.Address,
+					MemberLimit = source.MemberLimit,
+					NumOfMember = source.ActivityMembers.Count,
+					Description = source.Description,
+					GatheringTime = source.GatheringTime,
+					Deadline = source.Deadline,
+					DateOfCreated = source.DateOfCreated,
+					InstructorId = source.InstructorId,
+					CategoryId = source.CategoryId,
+					CategoryName = source.Category.CategoryName,
+					InstructorName = source.Instructor.InstructorName
+
+				};
+			}
+            
         }
 
 

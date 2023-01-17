@@ -10,10 +10,13 @@ namespace ProjectFUEN.Models.ViewModels
         public int Id { get; set; }
 
         [Display(Name = "編號順序")]
+        [Required(ErrorMessage ="必填")]
         public int DisplayOrder { get; set; }
 
         [Display(Name = "類型名稱")]
-        public string CategoryName { get; set; }
+		[Required(ErrorMessage = "必填")]
+        [MaxLength(50)]
+		public string CategoryName { get; set; }
     }
     public static partial class ActivityCategoryExts
     {

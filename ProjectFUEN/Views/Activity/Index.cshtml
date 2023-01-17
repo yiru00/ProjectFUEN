@@ -22,76 +22,76 @@
 </div>
 <hr />
 <div class="p-2">
-<table class="table no-print ">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.ActivityName)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.InstructorName)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.CategoryName)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Address)
-			</th>
-
-			<th>
-				@Html.DisplayNameFor(model => model.NumOfMember)
-			</th>
-
-			<th>
-				@Html.DisplayNameFor(model => model.GatheringTime)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Deadline)
-			</th>
-
-
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
+	<table class="table no-print ">
+		<thead>
 			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.ActivityName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.InstructorName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.CategoryName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Address)
+				</th>
 
-				<td>
-					@Html.DisplayFor(modelItem => item.ActivityName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.InstructorName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CategoryName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Address)
-				</td>
+				<th>
+					@Html.DisplayNameFor(model => model.NumOfMember)
+				</th>
 
-				<td>
-					@Html.DisplayFor(modelItem => item.NumOfMember)
-				</td>
+				<th>
+					@Html.DisplayNameFor(model => model.GatheringTime)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Deadline)
+				</th>
 
-				<td>
-					@Html.DisplayFor(modelItem => item.GatheringTime)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Deadline)
-				</td>
 
-				<td class="d-flex justify-content-around">
-					<a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
-					<a asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info text-black fs-5"></i></a>
-					<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
-					<button type="button" id="@item.Id" class="btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
-				</td>
+				<th></th>
 			</tr>
-		}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+
+					<td>
+						@Html.DisplayFor(modelItem => item.ActivityName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.InstructorName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.CategoryName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Address)
+					</td>
+
+					<td>
+						@Html.DisplayFor(modelItem => item.NumOfMember)
+					</td>
+
+					<td>
+						@Html.DisplayFor(modelItem => item.GatheringTime)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Deadline)
+					</td>
+
+					<td class="d-flex justify-content-around">
+						<a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
+						<a asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info text-black fs-5"></i></a>
+						<a id="@item.Id" class="delete" ><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
+						<button type="button" id="@item.Id" class="btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 
 </div>
 
@@ -157,8 +157,8 @@
 					let activityAddress = data[0]["activityAddress"]
 					let activityTime = data[0]["activityTime"]
 					$(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
-													 <p class=" m-0">時間：${activityTime}</p>
-													 <p class=" m-0">地點：${activityAddress}</p>`)
+															 <p class=" m-0">時間：${activityTime}</p>
+															 <p class=" m-0">地點：${activityAddress}</p>`)
 					for (let i = 0; i < data.length; i++) {
 						//console.log(data[i]["emailAccount"])
 						let emailAccount = data[i]["emailAccount"]
@@ -167,20 +167,61 @@
 						let dateJoined = data[i]["dateJoined"]
 
 						$(".member").prepend(`<tr>
-														 <th>${emailAccount}</th>
-														 <th>${realName}</th>
-														 <th>${mobile}</th>
-														 <th>${dateJoined}</th>
-													 </tr>`)
+																 <th>${emailAccount}</th>
+																 <th>${realName}</th>
+																 <th>${mobile}</th>
+																 <th>${dateJoined}</th>
+															 </tr>`)
 					}
 				})
 				.fail(function (err) {
 					history.go(0);
 				})
-
-
-
 		})
+
+		//刪除
+		$(".delete").on('click', function () {
+
+
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-success',
+					cancelButton: 'btn btn-danger'
+				},
+				buttonsStyling: false
+			})
+
+			swalWithBootstrapButtons.fire({
+				title: '確定刪除?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: '確定',
+				cancelButtonText: '取消',
+				reverseButtons: true
+			}).then((result) => {
+				if (result.isConfirmed) {
+					let deleteid = $(this).attr("id");
+
+					//HTTPDELETE
+					$.ajax({
+						type: "DELETE",
+						url: "https://localhost:7027/Activity/Delete/" + deleteid
+					})
+						.done(function (data) {
+							history.go(0);
+						})
+						.fail(function (err) { });
+
+				} else if (
+					/* Read more about handling dismissals below */
+					result.dismiss === Swal.DismissReason.cancel
+				) {
+					history.go(0);
+				}
+			})
+		})
+
 
 	</script>
 }

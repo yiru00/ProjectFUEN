@@ -12,6 +12,7 @@
     </button>
 </div>
 <hr>
+<div class="p-2">
 <table class="table">
     <thead>
         <tr>
@@ -33,18 +34,58 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
-            <td>
-                    <a asp-action="Edit" asp-route-DisplayOrder="@item.DisplayOrder"><i class="fa-regular fa-pen-to-square"></i></a> |
-                    <a asp-action="Delete" asp-route-DisplayOrder="@item.DisplayOrder"><i class="fa-regular fa-trash-can"></i></a>
+                <td class="d-flex">
+                    <a asp-action="Edit" asp-route-DisplayOrder="@item.DisplayOrder"><i class="fa-regular fa-pen-to-square text-black fs-5 me-4"></i></a>
+                    <a id="@item.Id" class="delete"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-
+</div>
 @section Scripts{
     <script>
+        $(".delete").on('click', function () {
 
+
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-success',
+					cancelButton: 'btn btn-danger'
+				},
+				buttonsStyling: false
+			})
+
+			swalWithBootstrapButtons.fire({
+				title: '確定刪除?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: '確定',
+				cancelButtonText: '取消',
+				reverseButtons: true
+			}).then((result) => {
+				if (result.isConfirmed) {
+					let deleteid = $(this).attr("id");
+					console.log(deleteid)
+					//HTTPDELETE
+					$.ajax({
+						type: "DELETE",
+						url: "https://localhost:7027/ActivityCategory/Delete/" + deleteid
+					})
+						.done(function (data) {
+							history.go(0);
+						})
+						.fail(function (err) { });
+
+				} else if (
+					/* Read more about handling dismissals below */
+					result.dismiss === Swal.DismissReason.cancel
+				) {
+					history.go(0);
+				}
+			})
+		})
     </script>
 
 }

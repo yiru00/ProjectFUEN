@@ -160,40 +160,39 @@ namespace ProjectFUEN.Controllers
 		}
 
 		// GET: Instructor/Delete/5
-		public async Task<IActionResult> Delete(int? id)
-		{
-			if (id == null || _context.Instructors == null)
-			{
-				return NotFound();
-			}
+		//public async Task<IActionResult> Delete(int? id)
+		//{
+		//	if (id == null || _context.Instructors == null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			var instructor = await _context.Instructors
-				.FirstOrDefaultAsync(m => m.Id == id);
-			if (instructor == null)
-			{
-				return NotFound();
-			}
+		//	var instructor = await _context.Instructors
+		//		.FirstOrDefaultAsync(m => m.Id == id);
+		//	if (instructor == null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			return View(instructor);
-		}
+		//	return View(instructor);
+		//}
 
 		// POST: Instructor/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
+		[HttpDelete]
+		public bool Delete(int id)
 		{
 			if (_context.Instructors == null)
 			{
-				return Problem("Entity set 'ProjectFUENContext.Instructors'  is null.");
+				return false;
 			}
-			var instructor = await _context.Instructors.FindAsync(id);
+			var instructor =  _context.Instructors.Find(id);
 			if (instructor != null)
 			{
 				_context.Instructors.Remove(instructor);
 			}
 
-			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
+			 _context.SaveChanges();
+			return true;
 		}
 
 		private bool InstructorExists(int id)

@@ -28,10 +28,9 @@ namespace ProjectFUEN.Controllers
 
         // GET: ActivityCategory
         [HttpGet]
-        public  ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var data = activityCategoryService.GetAll().Select(c => c.ToVM());
-              return View(data);
+            return View(await _context.ActivityCategories.Select(x => x.ToVM()).ToListAsync());
         }
         
         
@@ -136,45 +135,45 @@ namespace ProjectFUEN.Controllers
 
         }
 
-        // GET: ActivityCategory/Delete/5
-        public async Task<IActionResult> Delete(int? DisplayOrder)
-        {
-            if (DisplayOrder == null || _context.ActivityCategories == null)
-            {
-                ViewBag.url = "./Index";
-                ViewBag.message = "記得選取欲刪除的拍攝類別";
-                return View("../ErrorPage/page404");
-            }
-            
-			var activityCategory = await _context.ActivityCategories
-                .FirstOrDefaultAsync(m => m.DisplayOrder == DisplayOrder);
-            if (activityCategory == null)
-            {
-                ViewBag.url = "./Index";
-                ViewBag.message = "找不到欲刪除的拍攝類別";
-                return View("../ErrorPage/page404");
-            }
+        //     // GET: ActivityCategory/Delete/5
+        //     public async Task<IActionResult> Delete(int? DisplayOrder)
+        //     {
+        //         if (DisplayOrder == null || _context.ActivityCategories == null)
+        //         {
+        //             ViewBag.url = "./Index";
+        //             ViewBag.message = "記得選取欲刪除的拍攝類別";
+        //             return View("../ErrorPage/page404");
+        //         }
 
-            return View(activityCategory.ToDto().ToVM());
-        }
+        //var activityCategory = await _context.ActivityCategories
+        //             .FirstOrDefaultAsync(m => m.DisplayOrder == DisplayOrder);
+        //         if (activityCategory == null)
+        //         {
+        //             ViewBag.url = "./Index";
+        //             ViewBag.message = "找不到欲刪除的拍攝類別";
+        //             return View("../ErrorPage/page404");
+        //         }
 
-        // POST: ActivityCategory/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int DisplayOrder)
+        //         return View(activityCategory.ToDto().ToVM());
+        //     }
+
+        // Delete: ActivityCategory/Delete/5
+        [HttpDelete]
+        
+        public bool Delete(int id)
         {
             if (_context.ActivityCategories == null)
             {
-                return Problem("Entity set 'ProjectFUENContext.ActivityCategories'  is null.");
+                return false;
             }
-            var activityCategory =  _context.ActivityCategories.FirstOrDefault(x => x.DisplayOrder == DisplayOrder);
+            var activityCategory =  _context.ActivityCategories.FirstOrDefault(x => x.Id == id);
             if (activityCategory != null)
             {
                 _context.ActivityCategories.Remove(activityCategory);
             }
             
              _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return true;
         }
 
         private bool ActivityCategoryExists(int DisplayOrder)

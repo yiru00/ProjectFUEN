@@ -25,7 +25,7 @@
 						<div class="d-flex justify-content-end">
 							<div>
 								<a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
-								<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
+								<a id="@item.Id" class="delete"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
 							</div>
 						</div>
 					</div>
@@ -47,5 +47,47 @@
 				cardText[i].innerText = newStr;
 			}
 		}
+
+		$(".delete").on('click', function () {
+
+
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-success',
+					cancelButton: 'btn btn-danger'
+				},
+				buttonsStyling: false
+			})
+
+			swalWithBootstrapButtons.fire({
+				title: '確定刪除?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: '確定',
+				cancelButtonText: '取消',
+				reverseButtons: true
+			}).then((result) => {
+				if (result.isConfirmed) {
+					let deleteid = $(this).attr("id");
+
+					//HTTPDELETE
+					$.ajax({
+						type: "DELETE",
+						url: "https://localhost:7027/Instructor/Delete/" + deleteid
+					})
+						.done(function (data) {
+							history.go(0);
+						})
+						.fail(function (err) { });
+
+				} else if (
+					/* Read more about handling dismissals below */
+					result.dismiss === Swal.DismissReason.cancel
+				) {
+					history.go(0);
+				}
+			})
+		})
 	</script>
 }

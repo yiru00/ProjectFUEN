@@ -26,6 +26,7 @@ namespace ProjectFUEN.Controllers
         public async Task<IActionResult> Index()
         {
             var projectFUENContext = _context.Activities.Include(a => a.Category).Include(a => a.Instructor).Include(a => a.ActivityMembers).Select(a => a.ToVM());
+
             return View(await projectFUENContext.ToListAsync());
         }
 
@@ -186,42 +187,42 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: Activity/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Activities == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null || _context.Activities == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var activity = await _context.Activities
-                .Include(a => a.Category)
-                .Include(a => a.Instructor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (activity == null)
-            {
-                return NotFound();
-            }
+        //    var activity = await _context.Activities
+        //        .Include(a => a.Category)
+        //        .Include(a => a.Instructor)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (activity == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(activity);
-        }
+        //    return View(activity);
+        //}
 
         // POST: Activity/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        
+        public bool Delete(int id)
         {
             if (_context.Activities == null)
             {
-                return Problem("Entity set 'ProjectFUENContext.Activities'  is null.");
+                return false;
             }
-            var activity = await _context.Activities.FindAsync(id);
+            var activity = _context.Activities.Find(id);
             if (activity != null)
             {
                 _context.Activities.Remove(activity);
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+             _context.SaveChanges();
+            return true;
         }
 
         private bool ActivityExists(int id)

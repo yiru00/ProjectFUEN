@@ -10,8 +10,8 @@
 				display: none;
 			}
 		}
-	</style>
 
+		</style>
 }
 
 <div class="d-flex no-print align-items-center p-2">
@@ -22,30 +22,40 @@
 </div>
 <hr />
 <div class="p-2">
-	<table class="table no-print ">
+	<input type="text" id="customSearch" class="input-group" style="width:200px;">
+	<table class="table no-print table-hover" id="table"
+									data-toggle="table"
+									data-search="true"
+		   data-search-selector="#customSearch"
+									data-search-highlight="true"
+
+>
 		<thead>
 			<tr>
-				<th>
+				<th data-field="ActivityName" class="d-none">
+					@Html.DisplayNameFor(model => model.Id)
+				</th>
+				<th data-field="ActivityName" data-sortable="true">
 					@Html.DisplayNameFor(model => model.ActivityName)
 				</th>
-				<th>
+				<th data-field="InstructorName" data-sortable="true">
 					@Html.DisplayNameFor(model => model.InstructorName)
 				</th>
-				<th>
+				<th data-field="CategoryName" data-sortable="true">
 					@Html.DisplayNameFor(model => model.CategoryName)
 				</th>
-				<th>
+				<th data-field="Address">
 					@Html.DisplayNameFor(model => model.Address)
 				</th>
 
-				<th>
+				<th data-field="NumOfMember" data-sortable="true">
 					@Html.DisplayNameFor(model => model.NumOfMember)
 				</th>
 
-				<th>
+				<th data-field="GatheringTime" data-sortable="true">
 					@Html.DisplayNameFor(model => model.GatheringTime)
 				</th>
-				<th>
+				<th data-field="Deadline" data-sortable="true">
 					@Html.DisplayNameFor(model => model.Deadline)
 				</th>
 
@@ -57,7 +67,9 @@
 			@foreach (var item in Model)
 			{
 				<tr>
-
+					<td class="d-none">
+						@Html.DisplayFor(modelItem => item.Id)
+					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.ActivityName)
 					</td>
@@ -94,6 +106,8 @@
 	</table>
 
 </div>
+
+
 
 <div class="modal " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -137,6 +151,7 @@
 </div>
 
 @section Scripts{
+
 	<script>
 		let getMembers = $(".getMembers")
 		let id;

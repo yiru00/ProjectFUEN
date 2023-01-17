@@ -11,10 +11,10 @@
 @using X.PagedList.Mvc.Core.Fluent
 @using X.PagedList.Web.Common
 
-<h1>Index</h1>
+<h1>商城活動管理</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-warning">新增商城活動</a>
 </p>
 <table class="table">
     <thead>
@@ -50,10 +50,14 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <img id="preview" style="max-height:220px ;" src="/UploadedFiles/@item.Photo" />
+             </td>
+             <td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">編輯</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-light">詳細資料</a>
                 @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-                <a class="Delete" id=@item.Id eventName=@item.EventName style="cursor:pointer">刪除</a>
+                <a class="Delete btn btn-danger" id=@item.Id eventName=@item.EventName style="cursor:pointer">刪除</a>
             </td>
         </tr>
 }

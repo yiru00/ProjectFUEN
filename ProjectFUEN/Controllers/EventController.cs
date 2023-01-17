@@ -177,23 +177,21 @@ namespace ProjectFUEN.Controllers
         // GET: Event/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            //if (id == null || _context.Events == null)
-            //{
-            //    return NotFound();
-            //}
-            ViewBag.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
+            if (id == null || _context.Events == null)
+            {
+                return NotFound();
+            }
 
-            return View();
             //EventVM vm = new EventVM();
             //vm.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
             //return View(vm);
 
-            //var @event = await _context.Events.FindAsync(id);
-            //if (@event == null)
-            //{
-            //    return NotFound();
-            //}
-            //return View(@event.ToVM());
+            var @event = await _context.Events.FindAsync(id);
+            if (@event == null)
+            {
+                return NotFound();
+            }
+            return View(@event.ToVM());
         }
 
         // POST: Event/Edit/5
@@ -201,46 +199,18 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM vm, int[] checkBoxes)
+        public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM @event)
         {
-            var dataInDb = await _context.Events.Where(x => x.Id != vm.Id).FirstOrDefaultAsync(e => e.EventName == vm.EventName);
+            var dataInDb = await _context.Events.Where(x => x.Id != @event.Id).FirstOrDefaultAsync(e => e.EventName == @event.EventName);
             if (dataInDb != null)
             {
                 ModelState.AddModelError("EventName", "這個 活動名稱 已經取過了!");
-                return View(vm);
+                return View(@event);
             }
-
-            if (!ModelState.IsValid) return (View(vm));
-
-            Event eventEntity = new Event();
-
-            // 照儲存到資料夾
-            (bool isCopied, string message, string File) uploadSuccess = fileManager.UploadFile(vm.File);
-
-            // Insert to DB
-            eventEntity.Id = vm.Id;
-            eventEntity.EventName = vm.EventName;
-            eventEntity.StartDate = vm.StartDate;
-            eventEntity.EndDate = vm.EndDate;
-
-            // 找出以勾選的Proudcts
-            List<Product> products = new List<Product>();
-
-            foreach (int Id in vm.CheckBoxes)
-            {
-                products.Add(await _context.Products.FirstAsync(x => x.Id == id));
-            }
-
-            eventEntity.Products.AddRange(products);
-
-            _context.Add(eventEntity);
-            await _context.SaveChangesAsync();
-
-
 
 
             //判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
-            //(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
+            (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
             //上傳檔案失敗(沒上傳東西/上傳圖檔以外的)=>
             //有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
@@ -254,7 +224,7 @@ namespace ProjectFUEN.Controllers
                     ModelState.Remove("file");
                     if (ModelState.IsValid)
                     {
-                        _context.Update(vm.ToEntity());
+                        _context.Update(@event.ToEntity());
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
 
@@ -263,28 +233,26 @@ namespace ProjectFUEN.Controllers
                 else if (uploadSuccess.Item2 == "檔案必須是圖片檔案")//上傳成圖檔以外的
                 {
                     ViewBag.photoError = uploadSuccess.Item2; //錯誤訊息
-                    return View(vm);
+                    return View(@event);
                 }
-                return View(vm);
+                return View(@event);
             }
             else //有上傳檔案
             {
                 if (uploadSuccess.Item2 == "") //上傳圖檔，錯誤訊息=""
                 {
-                    vm.Photo = uploadSuccess.Item3; //傳入新檔名
-                    _context.Update(vm.ToEntity());
+                    @event.Photo = uploadSuccess.Item3; //傳入新檔名
+                    _context.Update(@event.ToEntity());
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 else //上傳圖檔以外的(ppt.pdf...)
                 {
                     ViewBag.photoError = uploadSuccess.Item2;
-                    return View(vm);
+                    return View(@event);
                 }
 
             }
-
-            return RedirectToAction(nameof(Index));
 
             //if (ModelState.IsValid)
             //{

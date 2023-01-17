@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjectFUEN.Models.EFModels;
 
@@ -13,6 +14,8 @@ var ProjectFUENconnectionString = builder.Configuration.GetConnectionString("Pro
 builder.Services.AddDbContext<ProjectFUENContext>(options =>
 	options.UseSqlServer(ProjectFUENconnectionString));
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => options.LoginPath = "/Login/Index");
 
 var app = builder.Build();
 
@@ -32,6 +35,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

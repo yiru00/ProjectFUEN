@@ -22,8 +22,21 @@
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="@Url.Action("Index", "Home")"><i class="fa-solid fa-house-chimney"></i></a>
 
-    </nav>
+        @{
+            if(!User.Identity.IsAuthenticated)
+            {
+                <a class="nav-link text-white ms-auto" asp-controller="Login" asp-action="Index">Login</a>
+            }
+            else
+            {
+				<div class="ms-auto d-flex aligin-items-center">
+                    <span class="text-white">@User.Identity.Name</span>
+                    <a class="nav-link text-white" asp-controller="Login" asp-action="SignOut">LogOut</a>
+                </div>
+            }
+        }
 
+    </nav>
     <div id="layoutSidenav">
         <!--side bar-->
         <div id="layoutSidenav_nav">

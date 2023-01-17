@@ -41,8 +41,8 @@
                             <div class="collapse" id="collapseMembers" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
 
-                                    <a href="@Url.Action("", "")" class="nav-link">會員管理</a>
-                                    <a href="@Url.Action("", "")" class="nav-link">黑名單</a>
+                                    <a href="@Url.Action("Index", "Members")" class="nav-link">會員管理</a>
+                                    <a href="@Url.Action("Index", "BlackLists")" class="nav-link">黑名單</a>
                                 </nav>
                             </div>
                         </div>
@@ -121,6 +121,7 @@
             </footer>
         </div>
     </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="~/js/scripts.js"></script>

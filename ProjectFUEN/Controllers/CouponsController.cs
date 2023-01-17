@@ -45,7 +45,7 @@ namespace ProjectFUEN.Controllers
             //[ ]細節-> 改html模板
             //[V]GET 改 POST
 
-            couponService.SendCoupon(couponCode);
+            //couponService.SendCoupon(couponCode);
         }
 
         // GET: Coupons/Create

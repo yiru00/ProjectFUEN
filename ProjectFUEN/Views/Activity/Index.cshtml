@@ -21,20 +21,21 @@
 	</button>
 </div>
 <hr />
-<div class="p-2">
+<div class="p-2 no-print">
 	<div id="toolbar">
 		<button id="remove" class="btn btn-secondary" disabled><i class="fa-regular fa-trash-can fs-5"></i> 刪除</button>
 	</div>
 
-	<input type="text" id="customSearch" class="input-group" style="width:200px;" placeholder="搜尋" />
+	<input type="text" id="customSearch" class="form-control no-print my-2" style="width:200px;" placeholder="搜尋" />
 
-	<table class="table no-print table-hover" id="table"
+	<table class="table no-print" id="table"
 		   data-toggle="table"
+		    data-pagination="true"
 		   data-search="true"
 		   data-search-selector="#customSearch"
 		   data-search-highlight="true">
 		<thead>
-			<tr>
+			<tr class="text-center" style="vertical-align: middle">
 				<th data-checkbox="true"></th>
 				<th data-field="Id" class="d-none">
 					@Html.DisplayNameFor(model => model.Id)
@@ -72,7 +73,7 @@
 		<tbody>
 			@foreach (var item in Model)
 			{
-				<tr>
+				<tr class="text-center style="vertical-align: middle">
 					<td></td>
 					<td class="d-none">
 						@Html.DisplayFor(modelItem => item.Id)

@@ -43,7 +43,7 @@ namespace ProjectFUEN.Controllers
 
 			member.IsInBlackList = false;
 
-			_context.SaveChangesAsync();
+			_context.SaveChanges();
 		}
 	}
 }

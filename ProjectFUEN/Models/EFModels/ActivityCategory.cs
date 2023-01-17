@@ -13,8 +13,8 @@ namespace ProjectFUEN.Models.EFModels
         }
 
         public int Id { get; set; }
-        public string CategoryName { get; set; }
         public int DisplayOrder { get; set; }
+        public string CategoryName { get; set; }
 
         public virtual ICollection<Activity> Activities { get; set; }
     }

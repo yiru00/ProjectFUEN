@@ -23,10 +23,10 @@
 <hr />
 <div class="p-2">
 	<div id="toolbar">
-		<button id="button" class="btn btn-secondary"><i class="fa-regular fa-trash-can fs-5"></i> 刪除</button>
+		<button id="remove" class="btn btn-secondary" disabled><i class="fa-regular fa-trash-can fs-5"></i> 刪除</button>
 	</div>
 
-	<input type="text" id="customSearch" class="input-group" style="width:200px;" />
+	<input type="text" id="customSearch" class="input-group" style="width:200px;" placeholder="搜尋" />
 
 	<table class="table no-print table-hover" id="table"
 		   data-toggle="table"
@@ -39,7 +39,7 @@
 				<th data-field="Id" class="d-none">
 					@Html.DisplayNameFor(model => model.Id)
 				</th>
-				
+
 				<th data-field="ActivityName" data-sortable="true">
 					@Html.DisplayNameFor(model => model.ActivityName)
 				</th>
@@ -65,6 +65,7 @@
 				</th>
 
 
+				<th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents">報名會員</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -99,13 +100,15 @@
 					<td>
 						@Html.DisplayFor(modelItem => item.Deadline)
 					</td>
-
+					<td>
+@*						<button type="button" id="@item.Id" class="btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
+*@					</td>
 					<td class="d-flex justify-content-around">
 						<a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
 						<a asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info text-black fs-5"></i></a>
-						<a id="@item.Id" class="delete"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>
-						<button type="button" id="@item.Id" class="btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-regular fa-address-book text-black fs-5"></i></button>
+						@*<a id="@item.Id" class="delete"><i class="fa-regular fa-trash-can text-black fs-5"></i></a>*@
 					</td>
+					
 				</tr>
 			}
 		</tbody>
@@ -178,8 +181,8 @@
 					let activityAddress = data[0]["activityAddress"]
 					let activityTime = data[0]["activityTime"]
 					$(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
-																	 <p class=" m-0">時間：${activityTime}</p>
-																	 <p class=" m-0">地點：${activityAddress}</p>`)
+																			 <p class=" m-0">時間：${activityTime}</p>
+																			 <p class=" m-0">地點：${activityAddress}</p>`)
 					for (let i = 0; i < data.length; i++) {
 						//console.log(data[i]["emailAccount"])
 						let emailAccount = data[i]["emailAccount"]
@@ -188,20 +191,32 @@
 						let dateJoined = data[i]["dateJoined"]
 
 						$(".member").prepend(`<tr>
-																		 <th>${emailAccount}</th>
-																		 <th>${realName}</th>
-																		 <th>${mobile}</th>
-																		 <th>${dateJoined}</th>
-																	 </tr>`)
+																				 <th>${emailAccount}</th>
+																				 <th>${realName}</th>
+																				 <th>${mobile}</th>
+																				 <th>${dateJoined}</th>
+																			 </tr>`)
 					}
 				})
 				.fail(function (err) {
 					history.go(0);
 				})
 		})
-		 let $table = $('#table')
-		 let $button = $('#button')
-		$button.click(function () {
+
+		let $table = $('#table')
+		let $remove = $('#remove')
+		
+		//有選取東西=>可刪除
+		$table.on('check.bs.table uncheck.bs.table ' +
+			'check-all.bs.table uncheck-all.bs.table',
+			function () {
+				$remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+			})
+
+
+		//刪除
+		$remove.click(function () {
 			const swalWithBootstrapButtons = Swal.mixin({
 				customClass: {
 					confirmButton: 'btn btn-success',
@@ -225,14 +240,15 @@
 						console.log(row.Id)
 						return row.Id
 					})
-					console.log(ids)
+					//console.log(ids)
 					$table.bootstrapTable('remove', {
 						field: 'Id',
 						values: ids
 					})
+
 					//foreach delete
-					for(let i=0;i<ids.length;i++){
-					console.log(ids[i]);
+					for (let i = 0; i < ids.length; i++) {
+						console.log(ids[i]);
 						//HTTPDELETE
 						$.ajax({
 							type: "DELETE",
@@ -246,59 +262,62 @@
 					}
 
 				} else if (
-					
+
 					result.dismiss === Swal.DismissReason.cancel
 				) {
 					history.go(0);
 				}
 			})
 
-
 		})
-			
-			//刪除
-			$(".delete").on('click', function () {
+		  function operateFormatter(value, row, index) {
+    return [
+				'<a type="button" class= "btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">',
+				'<i class="fa-regular fa-address-book text-black fs-5" ></i>'
+				,'</a>']
+				.join('')
+  }
 
-
-				const swalWithBootstrapButtons = Swal.mixin({
-					customClass: {
-						confirmButton: 'btn btn-success',
-						cancelButton: 'btn btn-danger'
-					},
-					buttonsStyling: false
+  window.operateEvents = {
+    'click .getMembers': function (e, value, row, index) {
+      //console.log(row["Id"])
+				let id = row["Id"]
+				$(".member").html("");
+				$(".modal-title").html("");
+				$.ajax({
+					type: "GET",
+					url: "https://localhost:7027/Activity/MemberDetails?id=" + id,
+					data: "json"
 				})
+					.done(function (data) {
+						//alert(JSON.stringify(data))
+						console.log(data[0]["activityName"])
+						let activityName = data[0]["activityName"]
+						let activityAddress = data[0]["activityAddress"]
+						let activityTime = data[0]["activityTime"]
+						$(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
+																					 <p class=" m-0">時間：${activityTime}</p>
+																					 <p class=" m-0">地點：${activityAddress}</p>`)
+						for (let i = 0; i < data.length; i++) {
+							//console.log(data[i]["emailAccount"])
+							let emailAccount = data[i]["emailAccount"]
+							let realName = data[i]["realName"]
+							let mobile = data[i]["mobile"]
+							let dateJoined = data[i]["dateJoined"]
 
-				swalWithBootstrapButtons.fire({
-					title: '確定刪除?',
-					text: "You won't be able to revert this!",
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonText: '確定',
-					cancelButtonText: '取消',
-					reverseButtons: true
-				}).then((result) => {
-					if (result.isConfirmed) {
-						let deleteid = $(this).attr("id");
-
-						//HTTPDELETE
-						$.ajax({
-							type: "DELETE",
-							url: "https://localhost:7027/Activity/Delete/" + deleteid
-						})
-							.done(function (data) {
-								history.go(0);
-							})
-							.fail(function (err) { });
-
-					} else if (
-						/* Read more about handling dismissals below */
-						result.dismiss === Swal.DismissReason.cancel
-					) {
+							$(".member").prepend(`<tr>
+																						 <th>${emailAccount}</th>
+																						 <th>${realName}</th>
+																						 <th>${mobile}</th>
+																						 <th>${dateJoined}</th>
+																					 </tr>`)
+						}
+					})
+					.fail(function (err) {
 						history.go(0);
-					}
-				})
-			})
-
+					})
+    }
+  }
 
 	</script>
 }

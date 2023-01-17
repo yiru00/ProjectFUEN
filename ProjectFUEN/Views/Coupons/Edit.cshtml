@@ -3,9 +3,8 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1><i class="fa-regular fa-pen-to-square fs-2"></i> Edit Coupon</h1>
 
-<h4>Coupon</h4>
 <hr />
 <div class="row">
     <div class="col-md-5">
@@ -13,17 +12,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
+                <label asp-for="Code" class="col-form-label"></label>
                 <input asp-for="Code" class="form-control" readonly/>
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="col-form-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Discount" class="control-label"></label>
+                <label asp-for="Discount" class="col-form-label"></label>
                     <div class="input-group">
                         <div class="col-3">
                         <select class="form-select me-3 w-10 discountT" asp-for="discountType">
@@ -37,24 +36,24 @@
                 <span asp-validation-for="Discount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LeastCost" class="control-label"></label>
+                <label asp-for="LeastCost" class="col-form-label"></label>
                 <input asp-for="LeastCost" class="form-control" />
                 <span asp-validation-for="LeastCost" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Count" class="control-label"></label>
+                <label asp-for="Count" class="col-form-label"></label>
                 <input asp-for="Count" class="form-control" />
                 <span asp-validation-for="Count" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back</a>
+<div class="mt-4">
+    <a asp-action="Index" class="text-decoration-none"><i class="fa-solid fa-right-to-bracket fs-4"></i><span class="text-decoration-none fs-4 ms-1 fw-bold">Back</span></a>
 </div>
 
 @section Scripts {

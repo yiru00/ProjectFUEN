@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using fileUpload.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
+using NuGet.Protocol;
 using ProjectFUEN.Models.DTOs;
 using ProjectFUEN.Models.EFModels;
 using ProjectFUEN.Models.ViewModels;
+using X.PagedList;
 
 namespace ProjectFUEN.Controllers
 {
@@ -25,18 +30,71 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: Event
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //      return View(await _context.Events.ToListAsync());
+        //}
+
+        // 已勾選的Data也要傳遞到後端
+        //public IEnumerable<ProductIndexVM> Search(string productName, string strcheckBoxes)
+        //{
+        //    //IEnumerable<int> checkBoxes = strcheckBoxes.Split(",").Select(x => int.Parse(x));
+
+        //    IEnumerable<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category);
+
+        //    if (!string.IsNullOrEmpty(productName)) products = products.Where(x => x.Name.Contains(productName));
+
+        //    return products.ToList().Select(x => new ProductIndexVM()
+        //    {
+        //        Id = x.Id,
+        //        Name = x.Name,
+        //        BrandId = x.BrandId,
+        //        BrandName = x.Brand.Name,
+        //        CategoryId = x.CategoryId,
+        //        CategoryName = x.Category.Name,
+        //        Price = x.Price,
+        //    });
+        //}
+
+
+        public async Task<IActionResult> Index(int? page = 1)
         {
-              return View(await _context.Events.ToListAsync());
+            //每頁幾筆
+            const int pageSize = 6;
+            //處理頁數
+            ViewBag.Event = GetPagedProcess(page, pageSize);//填入頁面資料
+            //填入頁面資料
+            return View(await _context.Events.Skip<Event>(pageSize * ((page ?? 1) - 1)).Take(pageSize).ToListAsync());
         }
 
-        // GET: Event/Details/5
+        protected IPagedList<Event> GetPagedProcess(int? page, int pageSize)
+        {// 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1) return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetStuffFromDatabase();
+            IPagedList<Event> pagelist = listUnpaged.ToPagedList(page ?? 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+
+            return pagelist;
+        }
+
+        protected IQueryable<Event> GetStuffFromDatabase()
+        {
+            return _context.Events;
+        }
+
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Events == null)
             {
                 return NotFound();
             }
+            //ViewBag.Products = await _context.Products.Include(x => x.Brand).Include(x => x.Category).FirstOrDefaultAsync(m => m.Id == id);
+
+            //return View();
 
             var @event = await _context.Events.Include(x => x.Products)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -48,13 +106,30 @@ namespace ProjectFUEN.Controllers
             return View(@event);
         }
 
+        // GET: Event/Details/5
+        //public async Task<IActionResult> Details(in? id)
+        //{
+        //    if (id == null || _context.Events == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewBag.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
+
+        //    return View();
+        //    var @event = await _context.Events.Include(x => x.Products)
+        //        .FirstAsync(m => m.Id == id);
+        //    if (@event == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //}
+
         // GET: Event/Create
         public IActionResult Create()
         {
-            EventVM vm = new EventVM();
-            vm.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
+            ViewBag.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
 
-            return View(vm);
+            return View();
         }
 
         // POST: Event/Create
@@ -62,56 +137,63 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile file, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM @event, ICollection<int> checkboxes)
+        public async Task<IActionResult> Create(EventCreateVM vm, int[] checkBoxes)
         {
-            var dataInDb = await _context.Events.FirstOrDefaultAsync(e => e.EventName == @event.EventName);
-            if (dataInDb != null)
-            {
-                ModelState.AddModelError("EventName", "這個 活動名稱 已經取過了!");
-            }
+            if (!ModelState.IsValid) return (View(vm));
 
-            (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
-            if (!uploadSuccess.Item1)
-            {
-                ViewBag.photo = uploadSuccess.Item2;
-                return View(@event);
-            }
+            Event eventEntity = new Event();
+
+            // 照儲存到資料夾
+            (bool isCopied, string message, string File) uploadSuccess = fileManager.UploadFile(vm.File);
+            if (uploadSuccess.isCopied) eventEntity.Photo = uploadSuccess.File;
             else
             {
-                @event.Photo = uploadSuccess.Item3;
-
+                ViewBag.photo = uploadSuccess.message;
+                return View(vm);
             }
 
-            if (ModelState.IsValid)
+            // Insert to DB
+            eventEntity.Id = vm.Id;
+            eventEntity.EventName = vm.EventName;
+            eventEntity.StartDate = vm.StartDate;
+            eventEntity.EndDate = vm.EndDate;
+
+            // 找出以勾選的Proudcts
+            List<Product> products = new List<Product>();
+
+            foreach (int id in vm.CheckBoxes)
             {
-                //var events = _context.Events.ToList();
-                //events.Products
-
-                _context.Add(@event.ToEntity());
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                products.Add(await _context.Products.FirstAsync(x => x.Id == id));
             }
-            return View(@event);
+
+            eventEntity.Products.AddRange(products);
+
+            _context.Add(eventEntity);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Event/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Events == null)
-            {
-                return NotFound();
-            }
+            //if (id == null || _context.Events == null)
+            //{
+            //    return NotFound();
+            //}
+            ViewBag.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
 
+            return View();
             //EventVM vm = new EventVM();
             //vm.Products = _context.Products.Include(x => x.Brand).Include(x => x.Category).ToList();
             //return View(vm);
 
-            var @event = await _context.Events.FindAsync(id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-            return View(@event.ToVM());
+            //var @event = await _context.Events.FindAsync(id);
+            //if (@event == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(@event.ToVM());
         }
 
         // POST: Event/Edit/5
@@ -119,18 +201,46 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM @event)
+        public async Task<IActionResult> Edit(IFormFile file, int id, [Bind("Id,EventName,Photo,StartDate,EndDate")] EventVM vm, int[] checkBoxes)
         {
-            var dataInDb =await _context.Events.Where(x => x.Id != @event.Id).FirstOrDefaultAsync(e => e .EventName == @event.EventName);
+            var dataInDb = await _context.Events.Where(x => x.Id != vm.Id).FirstOrDefaultAsync(e => e.EventName == vm.EventName);
             if (dataInDb != null)
             {
                 ModelState.AddModelError("EventName", "這個 活動名稱 已經取過了!");
-                return View(@event);
+                return View(vm);
             }
+
+            if (!ModelState.IsValid) return (View(vm));
+
+            Event eventEntity = new Event();
+
+            // 照儲存到資料夾
+            (bool isCopied, string message, string File) uploadSuccess = fileManager.UploadFile(vm.File);
+
+            // Insert to DB
+            eventEntity.Id = vm.Id;
+            eventEntity.EventName = vm.EventName;
+            eventEntity.StartDate = vm.StartDate;
+            eventEntity.EndDate = vm.EndDate;
+
+            // 找出以勾選的Proudcts
+            List<Product> products = new List<Product>();
+
+            foreach (int Id in vm.CheckBoxes)
+            {
+                products.Add(await _context.Products.FirstAsync(x => x.Id == id));
+            }
+
+            eventEntity.Products.AddRange(products);
+
+            _context.Add(eventEntity);
+            await _context.SaveChangesAsync();
+
+
 
 
             //判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
-            (bool, string, string) uploadSuccess = fileManager.UploadFile(file);
+            //(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
 
             //上傳檔案失敗(沒上傳東西/上傳圖檔以外的)=>
             //有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
@@ -144,7 +254,7 @@ namespace ProjectFUEN.Controllers
                     ModelState.Remove("file");
                     if (ModelState.IsValid)
                     {
-                        _context.Update(@event.ToEntity());
+                        _context.Update(vm.ToEntity());
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
 
@@ -153,27 +263,28 @@ namespace ProjectFUEN.Controllers
                 else if (uploadSuccess.Item2 == "檔案必須是圖片檔案")//上傳成圖檔以外的
                 {
                     ViewBag.photoError = uploadSuccess.Item2; //錯誤訊息
-                    return View(@event);
+                    return View(vm);
                 }
-                return View(@event);
+                return View(vm);
             }
             else //有上傳檔案
             {
                 if (uploadSuccess.Item2 == "") //上傳圖檔，錯誤訊息=""
                 {
-                    @event.Photo = uploadSuccess.Item3; //傳入新檔名
-                    _context.Update(@event.ToEntity());
+                    vm.Photo = uploadSuccess.Item3; //傳入新檔名
+                    _context.Update(vm.ToEntity());
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 else //上傳圖檔以外的(ppt.pdf...)
                 {
                     ViewBag.photoError = uploadSuccess.Item2;
-                    return View(@event);
+                    return View(vm);
                 }
 
             }
 
+            return RedirectToAction(nameof(Index));
 
             //if (ModelState.IsValid)
             //{
@@ -229,14 +340,14 @@ namespace ProjectFUEN.Controllers
             {
                 _context.Events.Remove(@event);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EventExists(int id)
         {
-          return _context.Events.Any(e => e.Id == id);
+            return _context.Events.Any(e => e.Id == id);
         }
     }
 }

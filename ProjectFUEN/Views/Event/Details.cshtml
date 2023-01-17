@@ -3,8 +3,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    //Event e = Model;
-    //List<Product> products = Model.Products.ToList();
 }
 
 <h1>Details</h1>
@@ -37,47 +35,55 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
         </dd>
-
-
-        <dt class="col-sm-2">
-            @*@Html.DisplayNameFor(model => model.Products.ToArray()[0])*@
-            @*@products[0].ProductSpec*@
-        </dt>
-        <dd class="col-sm-10">
-            @*@products[0].Price*@
-            @* @Html.DisplayFor(model => model.Products.ToArray()[0])*@
-        </dd>
-        }
+        
 
     </dl>
 
 </div>
 
+@*<table class="table">
+    <thead id="thead">
+        <tr class="row-cols-3">
+            <td class="col-1"><input type="checkbox"></td>
+            <td>商品名稱</td>
+            <td>品牌</td>
+            <td>類別</td>
+            <td>價格</td>
+        </tr>
+    </thead>*@
+
 <table class="table">
     <thead>
         <tr>
-            <td>產品名稱</td>
-            <td>產品規格</td>
+            <td>商品名稱</td>
             <td>價格</td>
+            <td>商品庫存</td>
+            <td>上架時間</td>
         </tr>
     </thead>
+    <tbody id="tbody" >
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Inventory</td>
+                <td>@item.ReleaseDate</td>
+            </tr>
 
-    <tbody>
-    @foreach (var item in Model.Products)
-    {
-        <tr>
-            <td>小魚</td>
-            <td>@item.ProductSpec</td>
-            <td>@item.Price</td>
-        </tr>
-    }
+
+           @* <tr class="row-cols-3">
+                <td class="col-1"><input type="checkbox" name="checkBoxes" value="@item.Id"></td>
+                <td>@item.Name</td>
+                <td>@item.Brand.Name</td>
+                <td>@item.Category.Name</td>
+                <td>@item.Price</td>
+            </tr>*@
+        }
     </tbody>
 </table>
 
-<div>
-    <input type="submit" value="Edit" class="btn btn-primary" />
-</div>
 <br />
-<div>
-    <a asp-action="Index">返回活動總覽</a>
+<div class="form-group">
+    <a asp-action="Index" class="btn btn-secondary">返回活動總覽</a>
 </div>

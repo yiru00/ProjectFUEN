@@ -26,6 +26,9 @@ namespace ProjectFUEN.Models.ViewModels
         public DateTime EndDate { get; set; }
 
         public ICollection<Product> Products { get; set; }
+        public int[] CheckBoxes { get; set; }
+
+        public IFormFile File { get; set; }
 
     }
 
@@ -40,7 +43,7 @@ namespace ProjectFUEN.Models.ViewModels
                 Photo = source.Photo,
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
-                //Products = source.Products
+                Products = source.Products
             };
         }
     }

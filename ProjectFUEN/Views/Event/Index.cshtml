@@ -1,8 +1,15 @@
-﻿@model IEnumerable<ProjectFUEN.Models.EFModels.Event>
+﻿@using X.PagedList
+@model IEnumerable<ProjectFUEN.Models.EFModels.Event>
 
 @{
     ViewData["Title"] = "Index";
+    var pagedList = (IPagedList)ViewBag.Event;
 }
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent
+@using X.PagedList.Web.Common
 
 <h1>Index</h1>
 
@@ -51,7 +58,26 @@
         </tr>
 }
     </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="5">
+                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+            </td>
+        </tr>
+    </tfoot>
 </table>
+
+@Html.PagedListPager(pagedList, page =>
+    Url.Action("Index", new { page = page }),
+    new PagedListRenderOptions(){
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" },
+        LinkToFirstPageFormat = "<< 第一頁",
+        LinkToPreviousPageFormat = "< 前一頁",
+        LinkToNextPageFormat = "後一頁 >",
+        LinkToLastPageFormat = "最末頁 >>"
+})
 
 @section Scripts {
     <script>

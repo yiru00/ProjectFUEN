@@ -22,7 +22,7 @@ namespace fileUpload.Models
                 //2 Get the extension of the file
                 string extension = Path.GetExtension(fileName);
                 //3 check the file extension as png
-                if (extension == ".png" || extension == ".jepg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
+                if (extension == ".png" || extension == ".jpeg" || extension == ".jpg" || extension == ".gif" || extension == "webp" || extension == "svg" || extension == "tiff" || extension == "icon")
                 {
                     string path = Directory.GetCurrentDirectory();
                     string newFileName = GetNewFileName(path, fileName);
@@ -62,7 +62,7 @@ namespace fileUpload.Models
 
             do
             {
-                newFileName = Guid.NewGuid().ToString("N").Substring(0, 28) + ext;  //guid會有dash-，ToString("N")去掉dash
+                newFileName = Guid.NewGuid().ToString("N").Substring(0, 25) + ext;  //guid會有dash-，ToString("N")去掉dash
                 fullPath = System.IO.Path.Combine(path, newFileName);
             } while (System.IO.File.Exists(fullPath));
             return newFileName;

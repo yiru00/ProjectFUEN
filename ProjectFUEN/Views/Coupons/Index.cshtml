@@ -7,17 +7,19 @@
 
 <div class="d-flex">
     <h1><i class="fa-solid fa-ticket"></i> Coupons</h1>
-    <a asp-action="Create" class="ms-2 fs-2  text-decoration-none"><i class="fa-regular fa-square-plus fs-2"></i></a>
+    <a asp-action="Create" class="ms-2 fs-2  text-decoration-none"><i class="fa-regular fa-square-plus fs-3"></i></a>
+</div>
+
+<div class="form-floating w-25">
+    <input type="text" id="customSearch" class="form-control" placeholder="Code/Name">
+    <label for="customSearch"><i class="fa-solid fa-magnifying-glass"></i><span class="opacity-50 ms-2">Code/Name</span></label>
 </div>
 
 <div id="toolbar">
   <button id="checkdeletebtn" class="btn btn-outline-danger" disabled><i class="fa-solid fa-check"></i>  Delete</button>
 </div>
 
-<div class="form-floating w-25">
-    <input type="text" id="customSearch" class="form-control" placeholder="Name/Code">
-    <label for="customSearch"><i class="fa-solid fa-magnifying-glass"></i><span class="opacity-50 ms-2">Name/Code</span></label>
-</div>
+
 
 <table id="table"
        class="table table-hover"
@@ -25,6 +27,7 @@
        data-toolbar="#toolbar"
        data-pagination="true"
        data-show-columns="true"
+       data-show-columns-toggle-all="true"
        data-search="true"
        data-search-selector="#customSearch"
        data-search-highlight="true">
@@ -227,7 +230,7 @@
         window.operateEvents1 = {
               'click .sendCoupon': function (e, value, row, index)
               {
-                console.log('You click sendCoupon action, row: ' + JSON.stringify(row["Name"]))
+                //console.log('You click sendCoupon action, row: ' + JSON.stringify(row["Name"]))
 
                         Swal.fire({
                             title: 'Send ' + JSON.stringify(row["Name"]),

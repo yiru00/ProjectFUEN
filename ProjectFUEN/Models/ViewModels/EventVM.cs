@@ -10,25 +10,22 @@ namespace ProjectFUEN.Models.ViewModels
 
         [Display(Name = "活動名稱")]
         [Required(ErrorMessage = "{0} 必填")]
-        public string ?EventName { get; set; }
+        public string? EventName { get; set; }
 
         [Display(Name = "活動照片")]
-        public string ?Photo { get; set; }
+        public string? Photo { get; set; }
 
-
+        [Required(ErrorMessage = "開始日期必填")]
         [Display(Name = "開始日期")]
-        [DataType(DataType.DateTime, ErrorMessage = "格式有誤")]
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 
-
+        [Required(ErrorMessage = "結束日期必填")]
         [Display(Name = "結束日期")]
-        [DataType(DataType.DateTime, ErrorMessage = "格式有誤")]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         public ICollection<Product> Products { get; set; }
-        public int[] CheckBoxes { get; set; }
-
-        public IFormFile File { get; set; }
 
     }
 

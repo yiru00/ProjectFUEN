@@ -43,7 +43,7 @@ asp-controller="Event" asp-action="Create">
                     <span class="input-group-addon">
                         <i class="glyphicon glyphicon-calendar"></i>
                     </span>*@
-                </div>
+                @*</div>*@
 
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
@@ -57,7 +57,7 @@ asp-controller="Event" asp-action="Create">
     <br />
     <h2>商品</h2>
     <br/>
-    <div class="form-group overflow-scroll" style="height:500px">
+        <div class="form-group overflow-scroll col-md-9" style="height:500px">
             @*<div>
                 <label for="productText" class="form-label">商品名稱 </label>
                 <input type="text" name="SearchString" id="productText" class="form-control" style="width:495px" />

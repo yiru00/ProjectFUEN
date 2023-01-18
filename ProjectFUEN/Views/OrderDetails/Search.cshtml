@@ -6,52 +6,45 @@
 
 @{
     ViewData["Title"] = "Index";
-    var accountname = ViewBag.accountname as string;
+   
     var pagedList = (IPagedList)ViewBag.OrderDetailDto;
     var state = ViewBag.state as IEnumerable<SelectListItem>;
 }
 
-<h1>訂單管理</h1>
-
-<div class="col-xs-12 ">
-    <div class="caption align-items-xl-center ">
-        <h3></h3>
-        <div class="row list-group-horizontal ">
 
 
-            @using (Html.BeginForm("Search", "OrderDetails", FormMethod.Get))
-            {
-                <div class="input-group col-12 d-flex justify-content-center  ">
+<div class="col-10 mb-5 mt-5 ">
+	
+	<div class="caption align-items-xl-center ">
+		
+		<div class="row list-group-horizontal ">
 
+			
+			@using (Html.BeginForm("Search", "OrderDetails", FormMethod.Get))
+			{
+			
+				<div class=" input-group col-12 align-items-center d justify-content-center">
+                    
+					<div class="input-group align-content-center d-flex col-4 ">
+                        <h2 class="ms-3">訂單管理</h2>
+						<div class="col-2  ms-3 ">@Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.SelectList, new { @class = "order-state form-control" })</div>
+						<input type="text" name="account" class="col-6 ms-3 " value="" id="Searchtext" placeholder="請輸入.." />
+						<button type="submit" class="btn btn-dark SearchClick" value="" id="SearchClick">
+							<i class="fa-solid fa-magnifying-glass "></i>
+						</button>
+					</div>
 
-
-
-
-
-
-
-                    @*<div class="col-4">出貨狀態:@Html.DropDownList("state", state, new { @class = "form-control" })</div>*@
-                    <div class="col-4">出貨狀態:@Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.SelectList, new { @class = "order-state form-control" })</div>
-                    <div class="input-group justify-content-center">
-                        <input type="text" name="account" class=" " value="" id="Searchtext" placeholder="請輸入.." />
-                        <button type="submit" class=" btn btn-dark   " value="" id="SearchClick">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-
-                </div>
-
-            }
+				</div>
+			}
 
 
 
 
 
-        </div>
+		</div>
 
-    </div>
+	</div>
 </div>
-
 
 
 
@@ -101,18 +94,18 @@
 
                 <td>
 
-                    <a asp-action="Edit" asp-route-id="@item.Id" data-fancybox data-type="iframe" class="fc1">
-                        編輯
+                    <a class="FunBtn text-dark fc1" asp-action="Edit" asp-route-id="@item.Id" data-fancybox data-type="iframe">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </a> |
                     @* <a asp-action="Edit" asp-route-id="@item.Id">編輯</a> |*@
-                    <a asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id">詳細資訊</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">刪除</a>
+                    <a class="FunBtn text-dark" asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> |
+                    <a class="deleteOrder FunBtn text-dark" id="@item.Id" style="cursor:pointer"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>
         }
-    </tbody>
-      
+    </tbody>    
 </table>
+
 <div class="text-muted mx-auto ">
     <div class="align-items-center mx-auto w-50">
         @Html.PagedListPager((IPagedList)pagedList, page =>
@@ -124,8 +117,8 @@
         PageClasses = new string[] { "page-link" },
 
         LinkToFirstPageFormat="<<第一頁",
-        LinkToPreviousPageFormat="<前一頁",
-        LinkToNextPageFormat="後一頁>",
+        LinkToPreviousPageFormat="<",
+        LinkToNextPageFormat=">",
         LinkToLastPageFormat="最末頁>>"
         })
     </div>
@@ -155,31 +148,45 @@
             }
         });
 
-        $(".pagination li").css({
-            "background-color": "yellow",
-            "margin-right": "0.25em",
-            "margin-left": "0.25em"
 
-        })
-        $(".pagination .active").css({ "background-color": "#ccc" })
-        $(".pagination .PagedList-skipToNext").css({ "background-color": "red" })
 
-        //$("#SearchClick").on("click", function () {
-
-        //    $.ajax({
-        //        type:"GET",
-        //        url: "https://localhost:7027/OrderDetails/Search/?account=" + $("#Searchtext").val()
-
-        //    }).done(function(data){
-        //        console.log(data)
-
-        //    })
-        //    .fail(function(err){err.statuxtext});
-
-        //} )
         $(".order-state").on("change", function () {
             $("#SearchClick").trigger("click");
         })
+
+
+        $(".deleteOrder").on("click", function () {
+            let orderid = $(this).attr("id")
+            console.log(orderid)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "Delete",
+                        url: "https://localhost:7027/OrderDetails/Delete/" + orderid,
+                        async: false
+                    }).done(function (data) {
+                        history.go(0)
+
+                    }).fail(function (err) {
+                        alert(err.statusText);
+                    })
+
+
+
+                }
+            })
+
+        })
+
 
     </script>
 }
@@ -190,19 +197,19 @@
         switch (state)
         {
             case 0:
-                StateName = @$"<span style=""color: red ;"">未出貨</span>";
+                StateName = @$"<span style=""color:#7B7B7B ;"">未出貨</span>";
                 break;
             case 1:
-                StateName = @$"<span style=""color: green ;"">已出貨</span>";
+                StateName = @$"<span style=""color: #006000 ;"">已出貨</span>";
                 break;
             case 2:
-                StateName = @$"<span style=""color: #ccc ;"">運送中</span>";
+                StateName = @$"<span style=""color: #00A600 ;"">運送中</span>";
                 break;
             case 3:
-                StateName = "已簽收";
+                StateName = @$"<span style=""color: #02DF82 ;"">已簽收</span>";
                 break;
             case 4:
-                StateName = "已完成";
+                StateName = @$"<span style=""color: #00AEAE	 ;"">已完成</span>";
                 break;
             
 

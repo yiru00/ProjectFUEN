@@ -13,6 +13,8 @@ var ProjectFUENconnectionString = builder.Configuration.GetConnectionString("Pro
 builder.Services.AddDbContext<ProjectFUENContext>(options =>
     options.UseSqlServer(ProjectFUENconnectionString));
 
+//builder.Services.AddDbContext<ProjectFUENContext>(options =>
+//	options.UseSqlServer(builder.Configuration.GetConnectionString("ProjectFUEN") ?? throw new InvalidOperationException("Connection string 'ProjectFUEN' not found.")));
 
 var app = builder.Build();
 

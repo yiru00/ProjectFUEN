@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,7 @@ using X.PagedList;
 
 namespace ProjectFUEN.Controllers
 {
+    [Authorize]
 
     /// <summary>
     /// OrderDetail 是 orderitem, 是要查詢與顯示出貨狀態的
@@ -32,7 +34,7 @@ namespace ProjectFUEN.Controllers
         public async Task<IActionResult> Index(int? state, int? page = 1 )
         {
             var projectFUENContext = _context.OrderDetails.Include(o => o.Member);
-            const int pageSize = 1;
+            const int pageSize = 3;
 
             ViewBag.OrderDetail = GetPagedProcess(page, pageSize);
             ViewBag.State = GetState(state);
@@ -75,7 +77,7 @@ namespace ProjectFUEN.Controllers
 
         //private string stateToString(int state)
         //{
-
+        
         //}
 
         //無限回傳 要new新物件 err500 非同步不會做跳500
@@ -100,7 +102,7 @@ namespace ProjectFUEN.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> Search(int state1,int? state,string account, int? page = 1)
         {  
-            const int pageSize = 2;
+            const int pageSize = 5;
             ViewBag.State = GetState(state);
 
             var data = _context.OrderDetails.Include(o => o.Member).Select(x => new OrderDetailsDTO
@@ -136,7 +138,7 @@ namespace ProjectFUEN.Controllers
 
             res.Add(new SelectListItem { Value = string.Empty, Text = "請選擇...", Selected = State == null });
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 res.Add(new SelectListItem { Value = i.ToString(), Text = GetStateName(i), Selected = State == i });
             }
@@ -172,7 +174,7 @@ namespace ProjectFUEN.Controllers
         //    }
         //    return View(await member.ToListAsync());
         //}
-
+       
         ////阿郭search
         //public ActionResult search(string accountname)
         //{
@@ -185,7 +187,7 @@ namespace ProjectFUEN.Controllers
 
         //    return View(data);
         //}
-
+  
 
 
         //怪怪的
@@ -244,7 +246,7 @@ namespace ProjectFUEN.Controllers
         //    {
         //        return NotFound();
         //    }
-
+        
         //    return View(orderDetail);
         //}
 
@@ -332,35 +334,19 @@ namespace ProjectFUEN.Controllers
             {
                 return NotFound();
             }
-
-            var orderDetail = await _context.OrderDetails
-                .Include(o => o.Member)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (orderDetail == null)
-            {
-                return NotFound();
-            }
-
-            return View(orderDetail);
-        }
-
-        // POST: OrderDetails/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        
+        [HttpDelete]     
+        public void Delete(int id)
         {
-            if (_context.OrderDetails == null)
-            {
-                return Problem("Entity set 'ProjectFUENContext.OrderDetails'  is null.");
-            }
-            var orderDetail = await _context.OrderDetails.FindAsync(id);
+            if (_context.OrderDetails == null) return;
+
+            var orderDetail =  _context.OrderDetails.Find(id);
             if (orderDetail != null)
             {
                 _context.OrderDetails.Remove(orderDetail);
             }
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context.SaveChanges();
         }
 
         private bool OrderDetailExists(int id)

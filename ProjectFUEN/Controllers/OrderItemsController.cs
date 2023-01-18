@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ using ProjectFUEN.Models.EFModels;
 
 namespace ProjectFUEN.Controllers
 {
+   [Authorize]
+
     public class OrderItemsController : Controller
     {
         private readonly ProjectFUENContext _context;
@@ -27,40 +30,26 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: OrderItems/Details/5  //加入state
-        public async Task<IActionResult> Details(int? id)
+        public async Task<ActionResult<IEnumerable<OrderItem>>> Details(int? id)
         {
             if (id == null || _context.OrderItems == null)
             {
                 return NotFound();
             }
 
-            var orderItem = await _context.OrderItems
+            var orderItem =   _context.OrderItems
              
                 .Include(o => o.Order)
                 .Include(o => o.Product)
-
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+                .Where(m => m.OrderId == id)
+                .AsEnumerable();
+                ;
             if (orderItem == null)
             {
                 return NotFound();
             }
 
-            //var orderItem = (
-            //    from a in _context.OrderItems
-            //    from b in _context.OrderDetails
-            //    where a.OrderId == id
-            //    select new OrderItemsDTO
-            //    {
-            //        OrderId = a.OrderId,
-            //        ProductId = a.ProductId,
-            //        ProductName = a.ProductName,
-            //        ProductPrice = a.ProductPrice,
-            //        ProductNumber = a.ProductNumber,
-            //        Order = a.Order,
-            //        Product = a.Product,
-            //        State = b.State,
-            //    }).FirstOrDefaultAsync();
-
+         
             return View(orderItem);
         }
 

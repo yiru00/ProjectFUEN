@@ -24,15 +24,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.12" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.3" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\EFModels\" />
-    <Folder Include="Models\EFModels\" />
-    <Folder Include="Models\Infrastructures\Repositories\" />
-    <Folder Include="Models\Services\" />
-    <Folder Include="wwwroot\UploadedFiles\" />
     <Folder Include="Models\Services\" />
     <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="Models\Infrastructures\Repositories\" />

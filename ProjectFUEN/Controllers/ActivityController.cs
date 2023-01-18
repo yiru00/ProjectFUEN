@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,8 @@ using ProjectFUEN.Models.ViewModels;
 
 namespace ProjectFUEN.Controllers
 {
-    public class ActivityController : Controller
+	[Authorize]
+	public class ActivityController : Controller
     {
         FileManager fileManager;
         private readonly ProjectFUENContext _context;

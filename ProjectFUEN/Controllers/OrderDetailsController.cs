@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,7 @@ using X.PagedList;
 
 namespace ProjectFUEN.Controllers
 {
+    [Authorize]
 
     /// <summary>
     /// OrderDetail 是 orderitem, 是要查詢與顯示出貨狀態的

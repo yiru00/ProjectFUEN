@@ -32,7 +32,7 @@ namespace ProjectFUEN.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ActivityCategories.Select(x => x.ToVM()).ToListAsync());
+            return View(await _context.ActivityCategories.OrderBy(x=>x.DisplayOrder).Select(x => x.ToVM()).ToListAsync());
         }
         
         

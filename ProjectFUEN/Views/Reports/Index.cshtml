@@ -385,7 +385,7 @@
             $("thead").append(thead);
 
             for (let item of data) {
-                let targetData = item.photo
+                let targetData = `<img style = "height:50px;width:50px;object-fit:cover" src = "Images/${item.photo}" alt = "XXX"/>`
                 let id = item.photoId
                 if (isComment === "1") {
                     targetData = item.comment.substring(0, 10) + "...";

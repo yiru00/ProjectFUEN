@@ -2,7 +2,7 @@
 
 namespace fileUpload.Models
 {
-    public class FileManager
+    public class FilePhoto
     {
         /// <summary>
         /// 上傳是否成功,erroMessage,fileName

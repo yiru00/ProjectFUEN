@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using fileUpload.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,14 +19,16 @@ using X.PagedList;
 
 namespace ProjectFUEN.Controllers
 {
+    [Authorize]   
+    
     public class EventController : Controller
     {
-        FileManager fileManager;
+        FilePhoto fileManager;
         private readonly ProjectFUENContext _context;
 
         public EventController(ProjectFUENContext context)
         {
-            fileManager = new FileManager();
+            fileManager = new FilePhoto();
             _context = context;
         }
 
@@ -60,7 +63,7 @@ namespace ProjectFUEN.Controllers
         public async Task<IActionResult> Index(int? page = 1)
         {
             //每頁幾筆
-            const int pageSize = 6;
+            const int pageSize = 3;
             //處理頁數
             ViewBag.Event = GetPagedProcess(page, pageSize);//填入頁面資料
             //填入頁面資料

@@ -16,7 +16,7 @@ using X.PagedList;
 
 namespace ProjectFUEN.Controllers
 {
-    [Authorize]
+    
 
     /// <summary>
     /// OrderDetail 是 orderitem, 是要查詢與顯示出貨狀態的
@@ -148,23 +148,7 @@ namespace ProjectFUEN.Controllers
             return View(SelectedorderItems);
         }
 
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null || _context.OrderDetails == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var orderDetail = await _context.OrderDetails
-        //        .Include(o => o.Member)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (orderDetail == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(orderDetail);
-        //}
+        
 
 
         // GET: OrderDetails/Create

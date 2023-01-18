@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using fileUpload.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,6 +20,7 @@ using X.PagedList;
 
 namespace ProjectFUEN.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         FileManager2 fileManager;

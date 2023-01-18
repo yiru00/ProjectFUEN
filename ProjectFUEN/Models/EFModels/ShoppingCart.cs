@@ -5,9 +5,13 @@ using System.Collections.Generic;
 
 namespace ProjectFUEN.Models.EFModels
 {
-    public partial class IndiscriminateReport
+    public partial class ShoppingCart
     {
         public int MemberId { get; set; }
-        public int? NumOfTimes { get; set; }
+        public int ProductId { get; set; }
+        public int Number { get; set; }
+
+        public virtual Member Member { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

@@ -15,6 +15,46 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
+         "Name": "[dbo].[Activities]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ActivityCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ActivityCollections]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ActivityMembers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Administrator]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AlbumItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Albums]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Answers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Brands]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Categories]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[CommentReports]",
          "ObjectType": 0
       },
@@ -23,11 +63,51 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Coupons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EventItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Events]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Favorites]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FollowInfos]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[IndiscriminateReports]",
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Instructors]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Members]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OthersCollections]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OwnCollections]",
          "ObjectType": 0
       },
       {
@@ -37,9 +117,41 @@
       {
          "Name": "[dbo].[Photos]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductPhotos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Products]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Questions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShoppingCarts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TagItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Tags]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UsedCoupons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Views]",
+         "ObjectType": 0
       }
    ],
-   "UiHint": "DESKTOP-AQMMUU4.Practice",
+   "UiHint": "DESKTOP-PAKSETB.ProjectFUEN",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,

@@ -5,9 +5,12 @@ using System.Collections.Generic;
 
 namespace ProjectFUEN.Models.EFModels
 {
-    public partial class IndiscriminateReport
+    public partial class ProductPhoto
     {
-        public int MemberId { get; set; }
-        public int? NumOfTimes { get; set; }
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public string Source { get; set; }
+
+        public virtual Product Product { get; set; }
     }
 }

@@ -9,8 +9,13 @@ namespace ProjectFUEN.Models.EFModels
     {
         public Photo()
         {
+            AlbumItems = new HashSet<AlbumItem>();
             Comments = new HashSet<Comment>();
+            OthersCollections = new HashSet<OthersCollection>();
+            OwnCollections = new HashSet<OwnCollection>();
             PhotoReports = new HashSet<PhotoReport>();
+            Views = new HashSet<View>();
+            Tags = new HashSet<Tag>();
         }
 
         public int Id { get; set; }
@@ -29,7 +34,13 @@ namespace ProjectFUEN.Models.EFModels
         public DateTime UploadTime { get; set; }
 
         public virtual Member AuthorNavigation { get; set; }
+        public virtual ICollection<AlbumItem> AlbumItems { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<OthersCollection> OthersCollections { get; set; }
+        public virtual ICollection<OwnCollection> OwnCollections { get; set; }
         public virtual ICollection<PhotoReport> PhotoReports { get; set; }
+        public virtual ICollection<View> Views { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

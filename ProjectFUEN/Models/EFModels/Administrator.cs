@@ -5,9 +5,10 @@ using System.Collections.Generic;
 
 namespace ProjectFUEN.Models.EFModels
 {
-    public partial class IndiscriminateReport
+    public partial class Administrator
     {
-        public int MemberId { get; set; }
-        public int? NumOfTimes { get; set; }
+        public string Account { get; set; }
+        public string Password { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

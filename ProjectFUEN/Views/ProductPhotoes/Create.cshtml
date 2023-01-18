@@ -1,0 +1,78 @@
+﻿@model ProjectFUEN.Models.VM.ProductPhotoVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>
+    <b>商品圖片-新增</b>
+</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data"
+              asp-controller="ProductPhotoes" asp-action="Create">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+                 <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+			</div>
+		
+            <div class="form-group">
+                <label asp-for="Sources" class="control-label"></label>
+                <input type="file" class="form-control" multiple="multiple" asp-for="Sources" id="myimg" accept="image/*" />
+                <span asp-validation-for="Sources" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+              <p class="text-danger">@ViewBag.photo</p>
+                <img id="preview1" style="max-height:200px;" />
+                <img id="preview2" style="max-height:200px;" />
+                <img id="preview3" style="max-height:200px;" />
+                <img id="preview4" style="max-height:200px;" />
+                <img id="preview5" style="max-height:200px;" />
+            </div>
+			@*<div class="form-group">
+			<label asp-for="ResumePhoto" class="control-label"></label>
+			<input asp-for="ResumePhoto" class="form-control" />
+			<span asp-validation-for="ResumePhoto" class="text-danger"></span>
+			</div>*@
+@*        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+            </div>*@
+         @*   <div class="form-group">
+                <label asp-for="Source" class="control-label"></label>
+                <input asp-for="Source" class="form-control" />
+                <span asp-validation-for="Source" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <input type="submit" value="新增" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+   <script>
+        $('#myimg').on('change', function (e) {
+            const file = this.files;
+            console.log (file);
+
+            for(let i = 0; i < file.length;i++){
+                let index = i + 1;
+                const objectURL = URL.createObjectURL(file[i]);    // 使用 createObjectURL 產生圖片url
+                $(`#preview${index}`).attr('src', objectURL);
+            }
+        });
+
+    </script>
+}

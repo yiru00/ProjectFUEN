@@ -1,0 +1,115 @@
+﻿@model ProjectFUEN.Models.ViewModels.EventVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>編輯</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data"
+              asp-controller="Event" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="EventName" class="control-label"></label>
+                <input asp-for="EventName" class="form-control" />
+                <span asp-validation-for="EventName" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group ">
+                <div class=" ">
+
+                    <input type="file" name="file" id="myimg" accept="image/*" class="form-control " />
+                </div>
+                <p class="text-danger">@ViewBag.photoError</p>
+                <br />
+                <img id="preview" style="max-height:164px;" src="/UploadedFiles/@Model.Photo" />
+
+            </div>
+
+            @*隱藏Photo欄位(還是要拿來繫結)*@
+            <div class="form-group visually-hidden">
+                <label asp-for="Photo" class="control-label"></label>
+                <input asp-for="Photo" class="form-control" />
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            <br />
+            @*<div class="form-group">
+            <label asp-for="Photo" class="control-label"></label>
+            <input asp-for="Photo" class="form-control" />
+            <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-secondary">返回活動總覽</a>
+                <input type="submit" value="保存" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+        $('#myimg').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#preview').attr('src', objectURL);
+        });
+
+                //// 全部勾選checkbox, global的checkbox也會勾選
+                //// 點擊Global的checkbox, local全部都勾選
+                //$("#thead").on("click", "input[type='checkbox']", function () {
+                //    let localLength = $("#tbody input[type='checkbox']").length;
+
+                //    if ($("#thead input[type='checkbox']").prop("checked")) {
+                //        for (let i = 0; i < localLength; i++) {
+                //            let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                //            item.prop("checked", true);
+                //        }
+                //    } else {
+                //        for (let i = 0; i < localLength; i++) {
+                //            let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                //            item.prop("checked", false);
+                //        }
+                //    }
+                //});
+                //// 當local的checkbox全部被勾選, global的checkbox被勾選
+                //// 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
+                //$("#tbody").on("click", "input[type='checkbox']", function () {
+                //    let localLength = $("#tbody input[type='checkbox']").length;
+                //    let count = 0;
+                //    for (let i = 0; i < localLength; i++) {
+                //        let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                //        if (item.prop("checked")) count++;
+                //    }
+
+                //    if (count === localLength) $("#thead input[type='checkbox']").prop("checked", true);
+                //    else $("#thead input[type='checkbox']").prop("checked", false);
+                //});
+    </script>
+}

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,15 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ProjectFUEN-417c8fce-eded-4234-b925-97ebb68c98c2</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Models\Services\" />
     <None Remove="Models\DTOs\" />
     <None Remove="Models\ViewModels\" />
     <None Remove="Models\Infrastructures\" />
-    <None Remove="Models\Infrastructures\ExtensionMethods\" />
-    <None Remove="Models\Infrastructures\Repositories\" />
     <None Remove="Models\EFModels\" />
+    <None Update="Views\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,12 +44,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\DTOs\" />
     <Folder Include="Models\Services\" />
     <Folder Include="Models\DTOs\" />
+    <Folder Include="Models\Infrastructures\ExtensionMethods\" />
     <Folder Include="Models\Infrastructures\Repositories\" />
     <Folder Include="Models\EFModels\" />
     <Folder Include="Models\EFModels\" />
@@ -69,5 +70,9 @@
     <None Include="wwwroot\UploadedFiles\e9c57f1081cf4dd3b20dd613c7c6.jpg" />
     <None Include="wwwroot\UploadedFiles\ed5bb7a7b657457c9c99bc0f2969f8d1.png" />
     <None Include="wwwroot\UploadedFiles\ef220278cd224fbf8ca435843380.pdf" />
+    <Folder Include="Views\Templates\" />
+    <Folder Include="wwwroot\ProductImgFiles\" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

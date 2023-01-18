@@ -12,7 +12,7 @@ builder.Services.AddControllersWithViews();
 //連線字串注入
 var ProjectFUENconnectionString = builder.Configuration.GetConnectionString("ProjectFUEN") ?? throw new InvalidOperationException("Connection string 'Northwind' not found.");
 builder.Services.AddDbContext<ProjectFUENContext>(options =>
-	options.UseSqlServer(ProjectFUENconnectionString));
+    options.UseSqlServer(ProjectFUENconnectionString));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => options.LoginPath = "/Login/Index");

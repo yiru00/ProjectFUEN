@@ -1,0 +1,74 @@
+﻿@model ProjectFUEN.Models.ViewModels.CreateCouponVM   
+
+@{
+    ViewData["Title"]= "Create";
+
+}
+
+<h1><i class="fa-regular fa-square-plus fs-2"></i> Create Coupon</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Code" class="col-form-label"></label>
+                <input asp-for="Code" class="form-control" value="@ViewData["Guid"]" readonly />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="col-form-label"></label>
+                <input asp-for="Name" class="form-control"  />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount" class="col-form-label"></label>
+                <div class="input-group">
+                    <div class="col-3">
+                    <select class="form-select me-3 w-10 discountT" asp-for="discountType">
+                        <option selected>請選擇</option>
+                        <option value="1">折扣</option>
+                        <option value="2">折價</option>
+                    </select>
+                    </div>
+                    <input asp-for="Discount" class="form-control" />
+                    <span id="Type" class="input-group-text"></span>
+                </div>
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LeastCost" class="col-form-label"></label>
+                <input asp-for="LeastCost" class="form-control" min="0"  />
+                <span asp-validation-for="LeastCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Count" class="col-form-label"></label>
+                <input asp-for="Count" class="form-control" min="1"  />
+                <span asp-validation-for="Count" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="text-decoration-none"><i class="fa-solid fa-right-to-bracket fs-4"></i><span class="text-decoration-none fs-4 ms-1 fw-bold">Back</span></a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $("#Type").hide();
+        $(".discountT").on("change",function(){
+            $("#Type").show();
+            if ($(".discountT").val() === "1") $("#Type").text("折");
+            else if($(".discountT").val() === "2") $("#Type").text("元");
+            else $("#Type").hide();
+        })
+        
+        
+    </script>
+}

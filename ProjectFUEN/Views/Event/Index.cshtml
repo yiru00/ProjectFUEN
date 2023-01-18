@@ -1,0 +1,126 @@
+﻿@using X.PagedList
+@model IEnumerable<ProjectFUEN.Models.EFModels.Event>
+
+@{
+    ViewData["Title"] = "Index";
+    var pagedList = (IPagedList)ViewBag.Event;
+}
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent
+@using X.PagedList.Web.Common
+
+<h1>商城活動管理</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-warning">新增商城活動</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th >
+                活動名稱
+            </th>
+            <th>
+                照片
+            </th>
+            <th>
+                開始日期
+            </th>
+            <th>
+                結束日期
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Photo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                    <img id="preview" style="max-height:236px ;" src="/UploadedFiles/@item.Photo" />
+             </td>
+             <td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">編輯</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-light">詳細資料</a>
+                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                <a class="Delete btn btn-danger" id=@item.Id eventName=@item.EventName style="cursor:pointer">刪除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="5">
+                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+@Html.PagedListPager(pagedList, page =>
+    Url.Action("Index", new { page = page }),
+    new PagedListRenderOptions(){
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" },
+        LinkToFirstPageFormat = "<< 第一頁",
+        LinkToPreviousPageFormat = "< 前一頁",
+        LinkToNextPageFormat = "後一頁 >",
+        LinkToLastPageFormat = "最末頁 >>"
+})
+
+@section Scripts {
+    <script>
+        $(".Delete").on("click",function(){
+            let eventName = $(this).attr("eventName");
+            let eventId = $(this).attr("id");
+
+                Swal.fire({
+                title: '確定要刪除嗎?',
+                text: "活動名稱 : "+eventName,
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '是的',
+                cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                    Swal.fire(
+                        '已刪除',
+                        '已刪除活動名稱',
+                        'success'
+                    ).then((result) => {
+                            history.go(0);
+                    })
+                                $.ajax({
+                            type: "Delete",
+                            url: "https://localhost:7027/Event/Delete",
+                            data: { id: eventId }
+                        }).done(function (data) {
+
+                        }).fail(function (err) {
+                            alert(err.statusText)
+                        })
+
+                    }
+                })
+
+                    
+        })
+    </script>
+}

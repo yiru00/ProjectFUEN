@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,6 +20,7 @@ using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace ProjectFUEN.Controllers
 {
+    [Authorize]
     public class CouponsController : Controller
     {
         private readonly ProjectFUENContext _context;

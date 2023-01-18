@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace ProjectFUEN.Models.EFModels
 {
-    public partial class OrderItem
+    public partial class OrderItemVM
     {
+        public int Id { get; set; }
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         [Display(Name = "產品名稱")]

@@ -49,6 +49,21 @@ namespace ProjectFUEN.Controllers
                 return NotFound();
             }
 
+            //var orderItem = (
+            //    from a in _context.OrderItems
+            //    from b in _context.OrderDetails
+            //    where a.OrderId == id
+            //    select new OrderItemsDTO
+            //    {
+            //        OrderId = a.OrderId,
+            //        ProductId = a.ProductId,
+            //        ProductName = a.ProductName,
+            //        ProductPrice = a.ProductPrice,
+            //        ProductNumber = a.ProductNumber,
+            //        Order = a.Order,
+            //        Product = a.Product,
+            //        State = b.State,
+            //    }).FirstOrDefaultAsync();
          
             return View(orderItem);
         }

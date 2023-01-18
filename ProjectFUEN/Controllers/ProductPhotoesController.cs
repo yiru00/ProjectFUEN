@@ -12,9 +12,11 @@ using ProjectFUEN.Models.Services.interfaces;
 using ProjectFUEN.Models.Services;
 using ProjectFUEN.Models.VM;
 using NuGet.Packaging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectFUEN.Controllers
 {
+    [Authorize]
     public class ProductPhotoesController : Controller
     {
         FileManager2 fileManager;

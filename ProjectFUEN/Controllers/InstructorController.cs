@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using ProjectFUEN.Models;
 using ProjectFUEN.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectFUEN.Controllers
 {
+	[Authorize]
 	public class InstructorController : Controller
 	{
 		FileManager fileManager;

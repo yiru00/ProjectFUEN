@@ -31,7 +31,7 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: OrderDetails
-        public async Task<IActionResult> Index(int? state, int? page = 1 )
+        public async Task<IActionResult> Index(int? state, int? page = 1)
         {
             var projectFUENContext = _context.OrderDetails.Include(o => o.Member);
             const int pageSize = 3;
@@ -61,7 +61,7 @@ namespace ProjectFUEN.Controllers
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
- 
+
             IPagedList<OrderDetailsDTO> pagelist = listUnpaged.ToPagedList(page ?? 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
@@ -75,33 +75,12 @@ namespace ProjectFUEN.Controllers
             return _context.OrderDetails;
         }
 
-        //private string stateToString(int state)
-        //{
         
-        //}
-
-        //無限回傳 要new新物件 err500 非同步不會做跳500
-        //[HttpGet]
-        //public async Task<IEnumerable<object>> Searcht(string account)
-        //{
-        //    //var emaccount = _context.OrderDetails.Include(o => o.Member).Where(x => x.Member.EmailAccount.Contains(account));
-
-        //    var emaccount = await _context.OrderDetails.Include(o => o.Member).Select(x => new
-        //    {
-        //        id = x.Id,
-        //        adress = x.Address,
-        //        state = x.State,
-        //        Member = x.Member,
-        //    }).ToListAsync();//.Where(x => x.Member.EmailAccount.Contains(account));
-
-
-        //    return emaccount;
-        //}
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> Search(int state1,int? state,string account, int? page = 1)
-        {  
+        public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> Search(int state1, int? state, string account, int? page = 1)
+        {
             const int pageSize = 5;
             ViewBag.State = GetState(state);
 
@@ -116,13 +95,13 @@ namespace ProjectFUEN.Controllers
             });
 
             if (state.HasValue) data = data.Where(x => x.State == state.Value);
-           
 
-            if (string.IsNullOrEmpty(account)==false)
+
+            if (string.IsNullOrEmpty(account) == false)
             {
                 data = data.Where(s => s.EmailAccount.Contains(account));
             }
-     
+
             ViewBag.OrderDetailDto = GetPagedProcess(page, pageSize, data);
 
 
@@ -146,70 +125,7 @@ namespace ProjectFUEN.Controllers
             return res.AsEnumerable();
         }
 
-        //public IEnumerable<SelectListItem> GetState(int? State)
-        //{
-        //    var items = _context.OrderDetails
-        //    .AsEnumerable()
-        //    .Select(c => new SelectListItem
-        //    {
-        //        Value = c.State.ToString(),
-        //        Text = GetStateName(c.State),
-        //        Selected = (State.HasValue && c.State == State.Value)
-        //    }).Prepend(new SelectListItem { Value = string.Empty, Text = "請選擇..." });
-
-        //    return items;
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> Search(string account)
-        //{
-        //    var member = from m in _context.Members select m;
-        //    if (account == null || _context.Members == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    if (!String.IsNullOrEmpty(account))
-        //    {
-        //        member = member.Where(s => s.EmailAccount!.Contains(account));
-        //    }
-        //    return View(await member.ToListAsync());
-        //}
-       
-        ////阿郭search
-        //public ActionResult search(string accountname)
-        //{
-
-        //    ViewBag.AccountName = accountname;
-        //    var data = _context.OrderDetails.Include(x => x.Member);
-
-
-        //    if (string.IsNullOrEmpty(accountname) == false) data = data.Where(p =>p.Member ));
-
-        //    return View(data);
-        //}
-  
-
-
-        //怪怪的
-        //public ActionResult SelectState(int? stateNum)
-        //{
-        //    ViewBag.state = GetOrderState(stateNum);
-        //    var data = _context.OrderDetails.Include(x => x.State);
-
-        //    if (stateNum.HasValue) data = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<OrderDetail, int>)data.Where(p => p.State == stateNum.Value);
-
-
-        //    return View(data);
-        //}
-
-
-        //private IEnumerable<SelectListItem>
-        //    GetOrderState(int? stateNum)
-        //{
-        //    var state = _context.OrderDetails.Select(c => new SelectListItem { Value = c.State.ToString(), Selected = (stateNum.HasValue && c.State == stateNum.Value) }).ToList().Prepend(new SelectListItem { Value = string.Empty, Text = "  " });
-
-        //    return state;
-        //}
+        
 
 
         //GET: OrderDetails/Details/5
@@ -246,7 +162,7 @@ namespace ProjectFUEN.Controllers
         //    {
         //        return NotFound();
         //    }
-        
+
         //    return View(orderDetail);
         //}
 
@@ -292,7 +208,7 @@ namespace ProjectFUEN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,[Bind("Id,MemberId,OrderDate,Address,State")] OrderDetail orderDetail)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,OrderDate,Address,State")] OrderDetail orderDetail)
         {
             string msg = "";
             if (id != orderDetail.Id)
@@ -328,54 +244,50 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: OrderDetails/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.OrderDetails == null)
-            {
-                return NotFound();
-            }
-        
-        [HttpDelete]     
-        public void Delete(int id)
-        {
-            if (_context.OrderDetails == null) return;
+       
 
-            var orderDetail =  _context.OrderDetails.Find(id);
-            if (orderDetail != null)
+            [HttpDelete]
+            public void Delete(int id)
             {
-                _context.OrderDetails.Remove(orderDetail);
+                if (_context.OrderDetails == null) return;
+
+                var orderDetail = _context.OrderDetails.Find(id);
+                if (orderDetail != null)
+                {
+                    _context.OrderDetails.Remove(orderDetail);
+                }
+
+                _context.SaveChanges();
             }
-            
-            _context.SaveChanges();
-        }
 
-        private bool OrderDetailExists(int id)
-        {
-          return _context.OrderDetails.Any(e => e.Id == id);
-        }
-
-        private string GetStateName(int state)
-        {
-            string StateName = "";
-            switch (state)
+            private bool OrderDetailExists(int id)
             {
-                case 0:
-                    StateName = "未出貨";
-                    break;
-                case 1:
-                    StateName = "已出貨";
-                    break;
-                case 2:
-                    StateName = "運送中";
-                    break;
-                case 3:
-                    StateName = "已簽收";
-                    break;
-                case 4:
-                    StateName = "已完成";
-                    break;               
+                return _context.OrderDetails.Any(e => e.Id == id);
             }
-            return StateName;
+
+            private string GetStateName(int state)
+            {
+                string StateName = "";
+                switch (state)
+                {
+                    case 0:
+                        StateName = "未出貨";
+                        break;
+                    case 1:
+                        StateName = "已出貨";
+                        break;
+                    case 2:
+                        StateName = "運送中";
+                        break;
+                    case 3:
+                        StateName = "已簽收";
+                        break;
+                    case 4:
+                        StateName = "已完成";
+                        break;
+                }
+                return StateName;
+            }
         }
     }
-}
+

@@ -61,7 +61,7 @@ namespace ProjectFUEN.Controllers
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
-
+ 
             IPagedList<OrderDetailsDTO> pagelist = listUnpaged.ToPagedList(page ?? 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
@@ -80,7 +80,7 @@ namespace ProjectFUEN.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> Search(int state1, int? state, string account, int? page = 1)
-        {
+        {  
             const int pageSize = 5;
             ViewBag.State = GetState(state);
 
@@ -95,13 +95,13 @@ namespace ProjectFUEN.Controllers
             });
 
             if (state.HasValue) data = data.Where(x => x.State == state.Value);
-
+           
 
             if (string.IsNullOrEmpty(account) == false)
             {
                 data = data.Where(s => s.EmailAccount.Contains(account));
             }
-
+     
             ViewBag.OrderDetailDto = GetPagedProcess(page, pageSize, data);
 
 
@@ -125,7 +125,11 @@ namespace ProjectFUEN.Controllers
             return res.AsEnumerable();
         }
 
-        
+       
+
+
+
+  
 
 
         //GET: OrderDetails/Details/5
@@ -228,50 +232,50 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: OrderDetails/Delete/5
-       
+        
 
-            [HttpDelete]
-            public void Delete(int id)
-            {
-                if (_context.OrderDetails == null) return;
+        [HttpDelete]     
+        public void Delete(int id)
+        {
+            if (_context.OrderDetails == null) return;
 
                 var orderDetail = _context.OrderDetails.Find(id);
-                if (orderDetail != null)
-                {
-                    _context.OrderDetails.Remove(orderDetail);
-                }
-
-                _context.SaveChanges();
-            }
-
-            private bool OrderDetailExists(int id)
+            if (orderDetail != null)
             {
-                return _context.OrderDetails.Any(e => e.Id == id);
+                _context.OrderDetails.Remove(orderDetail);
             }
+            
+            _context.SaveChanges();
+        }
 
-            private string GetStateName(int state)
+        private bool OrderDetailExists(int id)
+        {
+          return _context.OrderDetails.Any(e => e.Id == id);
+        }
+
+        private string GetStateName(int state)
+        {
+            string StateName = "";
+            switch (state)
             {
-                string StateName = "";
-                switch (state)
-                {
-                    case 0:
-                        StateName = "未出貨";
-                        break;
-                    case 1:
-                        StateName = "已出貨";
-                        break;
-                    case 2:
-                        StateName = "運送中";
-                        break;
-                    case 3:
-                        StateName = "已簽收";
-                        break;
-                    case 4:
-                        StateName = "已完成";
-                        break;
-                }
-                return StateName;
+                case 0:
+                    StateName = "未出貨";
+                    break;
+                case 1:
+                    StateName = "已出貨";
+                    break;
+                case 2:
+                    StateName = "運送中";
+                    break;
+                case 3:
+                    StateName = "已簽收";
+                    break;
+                case 4:
+                    StateName = "已完成";
+                    break;               
             }
+            return StateName;
         }
     }
+}
 

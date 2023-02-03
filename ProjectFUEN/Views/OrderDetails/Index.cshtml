@@ -20,19 +20,19 @@
 
 
 <div class="col-10 mb-5 mt-5 ">
-
+	
 	<div class="caption align-items-xl-center ">
-
+		
 		<div class="row list-group-horizontal ">
 
-
+			
 			@using (Html.BeginForm("Search", "OrderDetails", FormMethod.Get))
 			{
-
+			
 				<div class=" input-group col-12 align-items-center d justify-content-center">
-
+                    
 					<div class="input-group align-content-center d-flex col-4 ">
-						<h2 class="ms-3">訂單管理</h2>
+                        <h2 class="ms-3">訂單管理</h2>
 						<div class="col-2  ms-3 ">@Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.SelectList, new { @class = "order-state form-control" })</div>
 						<input type="text" name="account" class="col-6 ms-3 " value="" id="Searchtext" placeholder="請輸入.." />
 						<button type="submit" class="btn btn-dark SearchClick" value="" id="SearchClick">
@@ -138,15 +138,21 @@
 
 
 @section Scripts
-	{
+{
 	
 	<script>
+
+
+
+		
+
 
 		$('.fc1').fancybox({
 			iframe: {
 				css: {
 					width: '600px',
 					height: '500px',
+
 				}
 			},
 			afterClose: function () {
@@ -155,9 +161,13 @@
 			}
 		});
 
+		
+
 		$(".order-state").on("change", function () {
 			$("#SearchClick").trigger("click");
 		})
+
+
 		$(".deleteOrder").on("click", function () {
 			let orderid = $(this).attr("id")
 			console.log(orderid)
@@ -171,19 +181,27 @@
 				confirmButtonText: 'Yes, delete it!'
 			}).then((result) => {
 				if (result.isConfirmed) {
+
 					$.ajax({
 						type: "Delete",
 						url: "https://localhost:7027/OrderDetails/Delete/" + orderid,
 						async: false
 					}).done(function (data) {
 						history.go(0)
+
 					}).fail(function (err) {
 						alert(err.statusText);
 					})
-
+								
 				}
 			})
+
 		})
+
+
+
+
+
 	</script>
 }
 
@@ -216,5 +234,7 @@
 
 
 }
+
+
 
 

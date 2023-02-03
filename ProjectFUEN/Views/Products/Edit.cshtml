@@ -1,0 +1,94 @@
+﻿@model ProjectFUEN.Models.VM.ProductEditVm
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>
+    <b>商品管理-修改</b>
+</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandId" class="control-label"></label>
+                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
+                <span asp-validation-for="BrandId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ManufactorDate" class="control-label"></label>
+                <input asp-for="ManufactorDate" class="form-control" />
+                <span asp-validation-for="ManufactorDate" class="text-danger"></span>
+            </div>
+       
+            <div class="form-group">
+                <label asp-for="Inventory" class="control-label"></label>
+                <input asp-for="Inventory" class="form-control" />
+                <span asp-validation-for="Inventory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductSpec" class="control-label"></label>
+                <input asp-for="ProductSpec" class="form-control" />
+                <span asp-validation-for="ProductSpec" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="保存" class="btn btn-primary" />
+            </div>
+           @* <div class="form-group">
+                <div class="col-md-10">
+
+                    <input type="file" multiple="multiple" asp-for="Sources" id="myimg" accept="image/*" />
+                </div>
+                <p class="text-danger">@ViewBag.photoError</p>
+
+                <div id="preview">
+                    @for (int i = 0; i < Model.FileNames.Count(); i++)
+                    {
+                        <img style="max-height:200px;" src="~/ProductImgFiles/@Model.FileNames.ToArray()[i]" />
+                    }
+                </div>
+
+                
+
+
+            </div>*@
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+      @*  <script>
+        $('#myimg').on('change', function (e) {
+            $("#preview").empty();
+            for(let file of this.files){
+                // 使用 createObjectURL 產生圖片url
+                const objectURL = URL.createObjectURL(file);
+                $("#preview").append(`<img src="${objectURL}" alt="XXX"/>`)
+            }
+        });
+
+    </script>*@
+}

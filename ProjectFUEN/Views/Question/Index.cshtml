@@ -1,0 +1,249 @@
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.QaVM>
+
+@{
+	ViewData["Title"] = "問與答";
+}
+
+<div class=" p-2">
+	<h1 class="no-print">問與答</h1>
+</div>
+<hr>
+<div class="p-2">
+	<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.ActivityName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.EmailAccount)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.QuestionContent)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.QuestionDateCreated)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.State)
+			</th>
+
+			<th>答覆</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.ActivityName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EmailAccount)
+				</td>
+				<td class="qcontent">
+					@Html.DisplayFor(modelItem => item.QuestionContent)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.QuestionDateCreated)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.State)
+				</td>
+
+				<td>
+					<a data-state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion " data-bs-toggle="modal" @*data-bs-target="#CreateModal"*@></a>
+@*	<a data-state="@item.State" question="@item.QuestionId" class="btn btn-primary getQuestion " data-bs-toggle="modal" data-bs-target="#EditModal">修改</a>*@
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+</div>
+
+
+
+
+@*新增答案*@
+<div class="modal fade" id="CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">回覆問題</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="mb-3">
+						<p>回覆給：<span class="emailAccount"></span></p>
+						<p class="questionContent"></p>
+					</div>
+					<div class="mb-3">
+						<label for="message-text" class="col-form-label">回答:</label>
+						<textarea class="form-control answerContent" id="message-text" maxlength="300" rows="4"></textarea>
+						<p class="msgErr text-danger"></p>
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-primary postAnswer">送出</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+@*編輯答案*@
+
+<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog ">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">回覆問題</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="mb-3">
+						<p>回覆給：<span class="emailAccount"></span></p>
+						<p class="questionContent"></p>
+					</div>
+					<div class="mb-3">
+						<label for="message-text" class="col-form-label">回答:</label>
+						<textarea class="form-control editContent" id="message-text" maxlength="300" rows="4"></textarea>
+						<p class="msgErr text-danger"></p>
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-primary putAnswer">修改</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+		let qid;
+		let aid;
+		
+		let allBtn = $(".getQuestion")
+		
+		for (let i = 0; i < allBtn.length; i++)
+        {
+			if (allBtn[i].getAttribute("data-state") == "False") {
+
+				allBtn[i].setAttribute("data-bs-target", "#CreateModal");
+				allBtn[i].innerText="新增"
+			}
+			else{
+				allBtn[i].setAttribute("data-bs-target", "#EditModal");
+				allBtn[i].innerText = "修改"
+			}
+        }
+		
+		$(".getQuestion").on("click", function () {
+
+			qid = $(this).attr("question"); //取得點到問題id
+			//alert(qid)
+			$(".msgErr").text(null)
+			//$(".answerContent").val(null)
+
+			$.ajax({
+				type: "GET",
+				url: "https://localhost:7027/Question/GetQ?qid=" + qid,
+				data: "json"
+			})
+				.done(function (data) {
+					//alert(JSON.stringify(data))
+					aid=data["answerId"]
+					$(".emailAccount").text(data["emailAccount"])
+					$(".questionContent").text("Ｑ：" + data["questionContent"])
+					if (data["state"] == false) { $(".answerContent").val(data["answerContent"]) }
+					else if (data["state"] == true) { $(".editContent").val(data["answerContent"]) }
+
+				})
+				.fail(function (err) {
+					history.go(0);
+				})
+		})
+
+		//新增
+		$(".postAnswer").on("click", function () {
+			let answerContent = $(".answerContent").val()
+			//console.log(answerContent)
+
+			$(".msgErr").text(null)
+			if(answerContent.trim()==""||answerContent==""){
+				$(".msgErr").text("記得輸入內容")
+			}
+			else{
+			$.ajax({
+				type: "POST",
+				data: {
+					QuestionId:qid,
+					AnswerContent: answerContent
+				},
+
+				url: "https://localhost:7027/Question/Create",
+				
+			})
+				.done(function (data) {
+					history.go(0);
+				})
+				.fail(function (err) {
+					alert("失敗");
+				})
+			}
+
+		})
+
+		//編輯
+		$(".putAnswer").on("click", function () {
+			let editContent = $(".editContent").val()
+			console.log(editContent)
+
+			$(".msgErr").text(null)
+			if (editContent.trim() == "" || editContent == "") {
+				$(".msgErr").text("記得輸入內容")
+			}
+			else{
+				
+			$.ajax({
+				url: "https://localhost:7027/Question/Edit",
+				type: "PUT",
+				data: {
+					AnswerId: aid,
+					AnswerContent: editContent
+				},
+
+			})
+				.done(function (data) {
+					history.go(0);
+				})
+				.fail(function (err) {
+					alert("請在試一次");
+					history.go(0);
+				})
+			}
+		})
+
+
+		//表格預覽
+		let qcontent = $(".qcontent");
+		//console.log(qcontent);
+		for (let i = 0; i < qcontent.length; i++) {
+			let str = qcontent[i].innerText;
+			//console.log(str.length);
+			if (str.length >= 15) {
+				let newStr = qcontent[i].innerText.slice(0, 15) + "  ...";
+				qcontent[i].innerText = newStr;
+			}
+		}
+	</script>
+
+}

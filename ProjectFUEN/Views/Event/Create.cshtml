@@ -1,0 +1,202 @@
+﻿@using ProjectFUEN.Models.EFModels
+@using ProjectFUEN.Models.ViewModels;
+@model ProjectFUEN.Models.ViewModels.EventCreateVM
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<br>
+<h1> 商城活動新增</h1>
+<hr />
+
+
+<form method="post" enctype="multipart/form-data"
+asp-controller="Event" asp-action="Create">
+        <div>
+        <div class="mb-3" style="margin-right:200px">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-md-4">
+                <label asp-for="EventName" class="control-label"></label>
+                <input asp-for="EventName" class="form-control" />
+                <span asp-validation-for="EventName" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group col-md-4">
+                    <label asp-for="File" class="control-label"></label>
+                    <br />
+					<input type="file" asp-for="File" id="myimg" accept="image/*" class="form-control " />
+                    <br />
+                    <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <p class="text-danger">@ViewBag.photo</p>
+                <img id="preview" style="max-height:140px;" />
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input id='date1' asp-for="StartDate" class="form-control" />
+                @*<label asp-for="StartDate" class="control-label">選擇日期：</label>
+                <div class="input-group date" id='date1'>
+                    <input asp-for ="StartDate" type="text" class="form-control" />
+                    <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </span>*@
+                @*</div>*@
+
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group col-md-4">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+        </div>
+    <br />
+    <h2>商品</h2>
+    <br/>
+        <div class="form-group overflow-scroll col-md-9" style="height:500px">
+            @*<div>
+                <label for="productText" class="form-label">商品名稱 </label>
+                <input type="text" name="SearchString" id="productText" class="form-control" style="width:495px" />
+            </div>*@
+            <br />
+           
+            <table class="table "  >
+                <thead id="thead">
+                <tr class="row-cols-3 ">
+                        <td class="col-1"><input type="checkbox"></td>
+                        <td>商品名稱</td>
+                        <td>價格</td>
+                        <td>商品庫存</td>
+                        <td>上架時間</td>
+
+                    </tr>
+                </thead>
+                <tbody id="tbody" class="">
+                    @foreach (var item in ViewBag.Products)
+                    {
+                    <tr class="row-cols-3  ">
+                        <td class="col-1"><input type="checkbox" name="checkBoxes" value="@item.Id"></td>
+                            <td>@item.Name</td>
+                            <td>@item.Price</td>
+                            <td>@item.Inventory</td>
+                            <td>@item.ReleaseDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    <br />
+        <div class="form-group">
+            <a asp-action="Index" class="btn btn-secondary">返回活動總覽</a>
+
+            <input type="submit" value="新增" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        const checkbox = [];
+
+        $('#myimg').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#preview').attr('src', objectURL);
+        });
+
+        // 全部勾選checkbox, global的checkbox也會勾選
+        // 點擊Global的checkbox, local全部都勾選
+        $("#thead").on("click", "input[type='checkbox']", function () {
+            let localLength = $("#tbody input[type='checkbox']").length;
+
+            if ($("#thead input[type='checkbox']").prop("checked")) {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                    item.prop("checked", true);
+                }
+            } else {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                    item.prop("checked", false);
+                }
+            }
+        });
+        // 當local的checkbox全部被勾選, global的checkbox被勾選
+        // 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
+        $("#tbody").on("click", "input[type='checkbox']", function () {
+            let localLength = $("#tbody input[type='checkbox']").length;
+            let count = 0;
+            for (let i = 0; i < localLength; i++) {
+                let item = $(`tbody input[type='checkbox']:eq(${i})`);
+
+                if (item.prop("checked")) count++;
+            }
+
+            if (count === localLength) $("#thead input[type='checkbox']").prop("checked", true);
+            else $("#thead input[type='checkbox']").prop("checked", false);
+        });
+
+        
+        $("#productText").on("keyup", function () {
+            // Get CheckBox value
+            let localLength = $("tbody input[type='checkbox']").length;
+            let item = $("tbody input[type='checkbox']");
+            const checkboxId = [];
+            for (let i = 0; i < localLength; i++) {
+                let item = $("tbody input[type='checkbox']").eq(i);
+                if (item.prop("checked")) {
+                    checkboxId.push(item.val());
+                }
+            }
+
+            let text = $("#productText").val();
+
+            // Search
+            $.ajax({
+                type: "GET",
+                url: `https://localhost:7027/Event/Search?productName=${text}&strcheckBoxes=${checkboxId}`,
+            }).done(function(data) {
+                showTable(data);
+
+                for (let i = 0; i < localLength; i++) {
+                    let item = $("tbody input[type='checkbox']").eq(i);
+                    for (let j = 0; j < data[0].checkboxes.length; j++) {
+
+                        if (data[0].checkboxes[j] == item.val()) item.prop("checked", true);
+                    }
+                }
+            }).fail(function (err) {
+                alert(err.statusText)
+            })
+        }) 
+
+        function showTable(data) {
+
+            $("#tbody").empty();
+            for(let item of data) {
+                const element = $(`<tr class="row-cols-3">
+                                        <td class="col-1"><input type="checkbox" name="checkBoxes" value="${item.id}"></td>
+                                        <td> ${item.name} </td>
+                                        <td> ${item.brandName} </td>
+                                        <td> ${item.categoryName} </td>
+                                        <td> ${item.price}</td>
+                                   </tr>`)
+                $("#tbody").append(element)
+            }
+        }
+
+        
+	
+    </script>
+}
+

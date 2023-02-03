@@ -1,0 +1,129 @@
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.BlackListVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1><i class="fa-solid fa-user-lock"></i> BlackLists</h1>
+<div class="d-flex mt-2 mb-4">
+    <div class="input-group">
+        <div class="form-floating">
+            <input type="text" id="searchText" class="form-control" placeholder="Account">
+            <label for="searchText">Account</label>
+        </div>
+        <button id="search" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+</div>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-light">
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAccount)
+                <i class="fa-regular fa-envelope opacity-50"></i>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealName)
+                <i class="fa-solid fa-id-card opacity-50"></i>
+            </th>
+            <th>
+                Remove
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAccount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealName)
+            </td>
+            <td>
+                    <button id="@item.Id" class="btn btn-outline-secondary delete"><i class="fa-solid fa-user-minus"></i></button>
+            </td> 
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        // Search button
+        $("#search").on("click", function () {
+            let searchText = $("#searchText").val();
+
+            $.ajax({
+                type: "GET",
+                url: `https://localhost:7027/BlackLists/GetBackListMembers?account=${searchText}`
+            }).done(function (data) {
+                showTable(data);
+            }).fail(function (err) {
+                console.log(err.statusText)
+            })
+        })
+
+        // Delete Black List Member
+        $("#tbody").on("click", ".delete", function () {
+            const tr = $(this).parent().parent()
+            let id = $(this).prop("id");
+            const tds = $(this).parent().parent().find("td");
+            const text = `${tds.eq(0).text().trim()}`
+
+            Swal.fire({
+                title: "Are you sure?",
+                html: text,
+                icon: 'info',
+                iconHtml: '<i class="fa-solid fa-user-minus fs-1"></i>',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Removed!',
+                        `${tds.eq(0).text().trim()} has removed`,
+                        'success'
+                    ).then((result) => {
+                        // Delete DB 黑名單
+                        $.ajax({
+                            type: "PUT",
+                            url: `https://localhost:7027/BlackLists/Delete?id=${id}`
+                        }).done(function (data) {
+
+                        }).fail(function (err) {
+                            console.log(err.statusText)
+                        })
+
+                        // Delte 此筆資料
+                        tr.remove();
+                    })
+                }
+            })
+        })
+
+        // Show
+        function showTable(data) {
+            $("#tbody").empty();
+
+            for (let item of data) {
+                let tbody = $(`<tr id="${item.id}">
+                                <td>
+                                    ${item.emailAccount}
+                                </td>
+                                <td>
+                                    ${item.realName}
+                                </td>
+                                <td>
+                                    <button id="${item.id}" class="btn-primary delete">Delete</button>
+                                </td>
+                            </tr>`)
+
+                $("#tbody").append(tbody);
+            }
+        }
+    </script>
+}

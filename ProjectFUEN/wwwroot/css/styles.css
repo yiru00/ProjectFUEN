@@ -11699,3 +11699,20 @@ body {
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
 }
+
+/*自定義分頁樣式*/
+.page-custom1 .pagination ul li{
+    
+    
+}
+
+.FunBtn :hover {
+    opacity: 0.7;
+    transition: 0.2s;
+    font-size:17p
+}
+
+.SearchClick :hover {
+    opacity: 0.5;
+    transition: 0.2s;
+}

@@ -1,0 +1,45 @@
+﻿@model ProjectFUEN.Models.ViewModels.ActivityCategoryVM
+
+@{
+	ViewData["Title"] = "新增拍攝類型";
+}
+
+<div class="d-flex align-items-center p-2">
+	<h1>新增拍攝類型</h1>
+	<button class="btn btn-primary ms-5">
+		<a class="text-center text-white text-decoration-none" asp-action="Index">列表</a>
+	</button>
+
+</div>
+<hr />
+<div class="row p-2">
+	<div class="col">
+		<form asp-action="Create">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="d-flex row gx-4">
+				<div class="col-lg-4 col-12">
+					<div class="form-group my-2">
+						<label asp-for="DisplayOrder" class="control-label"></label>
+						<input asp-for="DisplayOrder" class="form-control" />
+						<span asp-validation-for="DisplayOrder" class="text-danger"></span>
+					</div>
+					<div class="form-group my-2">
+						<label asp-for="CategoryName" class="control-label"></label>
+						<input asp-for="CategoryName" class="form-control" />
+						<span asp-validation-for="CategoryName" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+			<input type="submit" value="新增" class="btn btn-primary" />
+
+		</form>
+	</div>
+</div>
+
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

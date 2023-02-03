@@ -1,0 +1,141 @@
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.MemberIndexVM>
+
+@{
+    ViewData["Title"] = "Members";
+}
+
+<h1><i class="fa-solid fa-user"></i> Members</h1>
+
+<div class="d-flex mt-2">
+    <div class="form-floating me-3">
+        <select id="selectCity" class="form-select" style="width:100px">
+            <option>請選擇</option>
+            <option>台北市</option>
+            <option>新北市</option>
+            <option>桃園市</option>
+            <option>台中市</option>
+            <option>台南市</option>
+            <option>高雄市</option>
+            <option>新竹縣</option>
+            <option>苗栗縣</option>
+            <option>彰化市</option>
+            <option>南投縣</option>
+            <option>雲林縣</option>
+            <option>嘉義縣</option>
+            <option>屏東縣</option>
+            <option>宜蘭縣</option>
+            <option>花蓮縣</option>
+            <option>台東縣</option>
+            <option>澎湖縣</option>
+            <option>金門縣</option>
+            <option>連江縣</option>
+            <option>基隆市</option>
+            <option>新竹市</option>
+            <option>嘉義市</option>
+        </select>
+        <label for="selectCity">City</label>
+    </div>
+    <div class="input-group">
+        <div class="form-floating">
+            <input type="text" id="searchText" class="form-control" placeholder="Account">
+            <label for="searchText">Account</label>
+        </div>
+        <button id="search" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+</div>
+
+<table class="table table-hover mt-4">
+    <thead>
+        <tr class="table-light">
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAccount)
+                <i class="fa-regular fa-envelope opacity-50"></i>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealName)
+                <i class="fa-solid fa-id-card opacity-50"></i>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BirthOfDate)
+                <i class="fa-solid fa-cake-candles opacity-50"></i>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mobile)
+                <i class="fa-solid fa-mobile-screen-button opacity-50"></i>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+                <i class="fa-solid fa-tree-city opacity-50"></i>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAccount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthOfDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mobile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        // Search button
+        $("#search").on("click", function () {
+            let searchText = $("#searchText").val();
+            let selectValue = $("#selectCity").val();
+
+            $.ajax({
+                type: "GET",
+                url: `https://localhost:7027/Members/GetMembers?account=${searchText}&selectCity=${selectValue}`
+            }).done(function (data) {
+                showTable(data);
+            }).fail(function (err) {
+                console.log(err.statusText)
+            })
+        })
+
+        // Show
+        function showTable(data) {
+            $("#tbody").empty();
+
+            for (let item of data) {
+                let tbody = $(`<tr id="${item.id}">
+                                <td>
+                                    ${item.emailAccount}
+                                </td>
+                                <td>
+                                    ${item.realName}
+                                </td>
+                                <td>
+                                    ${item.mobile}
+                                </td>
+                                <td>
+                                    ${item.birthOfDate}
+                                </td>
+                                <td>
+                                    ${item.city}
+                                </td>
+                                <td>
+                                </td>
+                            </tr>`)
+
+                $("#tbody").append(tbody);
+            }
+        }
+    </script>
+}

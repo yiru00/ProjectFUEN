@@ -1,0 +1,270 @@
+﻿@using ProjectFUEN.Models.ViewModels;
+@model IEnumerable<ProjectFUEN.Models.ViewModels.CouponVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="d-flex">
+    <h1><i class="fa-solid fa-ticket"></i> Coupons</h1>
+    <a asp-action="Create" class="ms-2 fs-2  text-decoration-none"><i class="fa-regular fa-square-plus fs-3"></i></a>
+</div>
+
+<div class="form-floating w-25">
+    <input type="text" id="customSearch" class="form-control" placeholder="Code/Name">
+    <label for="customSearch"><i class="fa-solid fa-magnifying-glass"></i><span class="opacity-50 ms-2">Code/Name</span></label>
+</div>
+
+<div id="toolbar">
+  <button id="checkdeletebtn" class="btn btn-outline-danger" disabled><i class="fa-solid fa-check"></i>  Delete</button>
+</div>
+
+
+
+<table id="table"
+       class="table table-hover"
+       data-toggle="table"
+       data-toolbar="#toolbar"
+       data-pagination="true"
+       data-show-columns="true"
+       data-show-columns-toggle-all="true"
+       data-search="true"
+       data-search-selector="#customSearch"
+       data-search-highlight="true">
+    <thead>
+        <tr class="text-center table-primary">
+            <th data-field="state" data-checkbox="true" >
+            </th>
+            <th data-field="id" class="d-none" data-searchable="false" data-switchable="false">
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th data-field="code" data-sortable="true">
+                <i class="fa-regular fa-credit-card opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th data-field="Name"  data-sortable="true">
+                <i class="fa-solid fa-ticket opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th data-sortable="true" data-searchable="false">
+                <i class="fa-solid fa-tags opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th data-sortable="true" data-searchable="false">
+                <i class="fa-solid fa-piggy-bank opacity-50"></i>
+                @Html.DisplayNameFor(model => model.LeastCost)
+            </th>
+            <th data-sortable="true" data-searchable="false">
+                <i class="fa-solid fa-box-archive opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents1" data-switchable="false">
+                
+                Send
+            </th>
+            <th data-searchable="false" data-switchable="false">Edit</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="text-center" style="vertical-align: middle">
+            <td></td>
+            <td class="d-none">
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeastCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square fs-5"></i></a>
+                @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
+                @*<a class="deleteCoupon" id="@item.Id" couponName="@item.Name" style="cursor:pointer"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script>
+        let $table = $('#table');
+        let $checkdeletebtn = $('#checkdeletebtn');
+
+        //$(".sendCoupon").on("click", function () {
+        //    alert("123")
+        //    let couponCode = $(this).attr("id");
+        //    let couponName = $(this).attr("couponName");
+        //    console.log(couponCode)
+        //    console.log(couponName)
+
+        //    Swal.fire({
+        //        title: 'Send ' + couponName,
+        //        text: "Code: "+couponCode,
+        //        icon: 'question',
+        //        iconHtml: '<i class="fa-solid fa-envelope-open-text" style="font-size:50px"></i>',
+        //        showCancelButton: true,
+        //        confirmButtonColor: '#3085d6',
+        //        cancelButtonColor: '#d33',
+        //        confirmButtonText: 'Yes, send it!'
+        //    }).then((result) => {
+        //        if (result.isConfirmed) {
+        //            Swal.fire(
+        //                'Send!',
+        //                'Coupon has been sent',
+        //                'success'
+        //            )
+        //            //    $.ajax({
+        //            //    type: "POST",
+        //            //    url: "https://localhost:7027/Coupons/MailToHtml",
+        //            //    data: { couponCode: couponCode }
+        //            //}).done(function (data) {
+        //            //    //alert(data);
+        //            //}).fail(function (err) {
+        //            //    alert(err.statusText);
+        //            //})
+
+        //            $(this).attr('disabled', true).css({"background-color":"gray","border-color":"gray"});
+        //        }
+                    
+        //    })
+        //})
+
+        //$(".deleteCoupon").on("click", function () {
+        //    let couponId = $(this).attr("id");
+        //    let couponName = $(this).attr("couponName");
+        //    Swal.fire({
+        //        title: 'Delete ' + couponName,
+        //        text: 'Click "Yes"',
+        //        icon: 'error',
+        //        iconHtml: '<i class="fa-regular fa-trash-can" style="font-size:50px"></i>',
+        //        showCancelButton: true,
+        //        confirmButtonColor: '#3085d6',
+        //        cancelButtonColor: '#d33',
+        //        confirmButtonText: 'Yes, delete it!'
+        //    }).then((result) => {
+        //        if (result.isConfirmed) {
+        //            Swal.fire(
+        //                'Deleted!',
+        //                'Coupon has been deleted',
+        //                'success'
+        //            ).then((result) =>{
+        //                history.go(0);
+        //            })
+
+        //            $.ajax({
+        //                type: "Delete",
+        //                url: "https://localhost:7027/Coupons/DeleteCoupon",
+        //                data: { id: couponId },
+        //                async: false
+        //            }).done(function (data) {
+
+        //            }).fail(function (err) {
+        //                alert(err.statusText);
+        //            })
+                                        
+        //        }
+
+        //    })
+        //})
+
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $checkdeletebtn.prop('disabled', !$table.bootstrapTable('getSelections').length)
+                
+            })
+
+        $checkdeletebtn.click(function () {
+            let ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+            })
+
+            $table.bootstrapTable('remove', {
+            field: 'id',
+            values: ids
+            })
+
+            ids.forEach(function(value){
+                $.ajax({
+                    type: "delete",
+                    url: "https://localhost:7027/coupons/deletecoupon",
+                    data: { id: value },
+                    async: false
+                }).done(function (data) {
+                    
+                }).fail(function (err) {
+                    alert(err.statustext);
+                })
+            })
+
+        })
+
+
+        function operateFormatter(value, row, index) {
+            return [
+              '<a class="sendCoupon fs-5" href="javascript:void(0)" title="SendCoupon">',
+              '<i class="fa-regular fa-envelope sendIcon"></i>',
+              '</a>  '
+            ].join('')
+          }
+
+        window.operateEvents1 = {
+              'click .sendCoupon': function (e, value, row, index)
+              {
+                //console.log('You click sendCoupon action, row: ' + JSON.stringify(row["Name"]))
+
+                        Swal.fire({
+                            title: 'Send ' + JSON.stringify(row["Name"]),
+                            text: "Code: " + JSON.stringify(row["code"]),
+                            icon: 'question',
+                            iconHtml: '<i class="fa-solid fa-envelope-open-text" style="font-size:50px"></i>',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, send it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                    'Send!',
+                                    'Coupon has been sent',
+                                    'success'
+                                )
+                                    $.ajax({
+                                    type: "POST",
+                                    url: "https://localhost:7027/Coupons/MailToHtml",
+                                    data: { couponCode: JSON.stringify(row["code"]) }
+                                }).done(function (data) {
+                                    
+                                }).fail(function (err) {
+                                    alert(err.statusText);
+                                })
+
+                            }
+
+                        })
+              }
+    
+          }
+
+
+    </script>
+}

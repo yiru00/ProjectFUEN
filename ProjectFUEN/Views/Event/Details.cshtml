@@ -1,0 +1,90 @@
+﻿@using ProjectFUEN.Models.EFModels;
+@model ProjectFUEN.Models.EFModels.Event
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>詳細資料</h1>
+<br>
+<br>
+<br>
+<br>
+<div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            活動名稱        
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EventName)
+        </dd>
+        <dt class = "col-sm-2">
+            活動照片        
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Photo)
+        </dd>
+        <dt class = "col-sm-2">
+            開始日期
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class = "col-sm-2">
+            結束日期
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        
+
+    </dl>
+
+</div>
+
+@*<table class="table">
+    <thead id="thead">
+        <tr class="row-cols-3">
+            <td class="col-1"><input type="checkbox"></td>
+            <td>商品名稱</td>
+            <td>品牌</td>
+            <td>類別</td>
+            <td>價格</td>
+        </tr>
+    </thead>*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>商品名稱</td>
+            <td>價格</td>
+            <td>商品庫存</td>
+            <td>上架時間</td>
+        </tr>
+    </thead>
+    <tbody id="tbody" >
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Inventory</td>
+                <td>@item.ReleaseDate</td>
+            </tr>
+
+
+           @* <tr class="row-cols-3">
+                <td class="col-1"><input type="checkbox" name="checkBoxes" value="@item.Id"></td>
+                <td>@item.Name</td>
+                <td>@item.Brand.Name</td>
+                <td>@item.Category.Name</td>
+                <td>@item.Price</td>
+            </tr>*@
+        }
+    </tbody>
+</table>
+
+<br />
+<div class="form-group">
+    <a asp-action="Index" class="btn btn-secondary">返回活動總覽</a>
+</div>

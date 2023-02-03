@@ -22,6 +22,7 @@ namespace ProjectFUEN.Models.EFModels
         public virtual DbSet<ActivityCategory> ActivityCategories { get; set; }
         public virtual DbSet<ActivityCollection> ActivityCollections { get; set; }
         public virtual DbSet<ActivityMember> ActivityMembers { get; set; }
+        public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumItem> AlbumItems { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
@@ -136,6 +137,26 @@ namespace ProjectFUEN.Models.EFModels
                     .WithMany(p => p.ActivityMembers)
                     .HasForeignKey(d => d.MemberId)
                     .HasConstraintName("FK__ActivityM__Membe__3E52440B");
+            });
+
+            modelBuilder.Entity<Administrator>(entity =>
+            {
+                entity.HasKey(e => e.Account)
+                    .HasName("PK__Administ__B0C3AC47A87D7F96");
+
+                entity.ToTable("Administrator");
+
+                entity.Property(e => e.Account)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Album>(entity =>

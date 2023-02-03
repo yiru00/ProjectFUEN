@@ -1,0 +1,417 @@
+﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.PhotoReportIndexVM>
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="mt-4 ms-4">
+
+    <div class="mb-4 d-flex">
+        <h1><i class="fa-solid fa-bullhorn"></i>  Reports</h1>
+        <div class="form-floating me-3 ms-4" >
+            <select class="form-select"  id="select">
+            <option value="0" >Photo</option>
+            <option value="1">Comment</option>
+            </select>
+            <label for="select" class="input-text" style="font-size:15px">choose</label>
+		</div>
+
+        <div class="form-floating">
+            <input type="text" id="searchText" placeholder="Account" class="form-control" />
+            <label for="searchText"><i class="fa-solid fa-magnifying-glass"></i><span class="text-muted ms-2">Account</span></label>
+		</div>
+
+    </div>
+
+    
+     <button id="del" class="btn btn-outline-danger me-auto mt-4"><i class="fa-solid fa-check"></i>  Delete</button>
+
+</div>
+
+
+<table class="table table-hover ms-4">
+    <thead>
+        <tr>
+            <th>
+                <input type="checkbox" class="form-check-input" id="globalCheckbox"/>
+            </th>
+            <th>
+                <i class="fa-solid fa-user"></i> @Html.DisplayNameFor(model => model.Reporter)
+            </th>
+            <th>
+                <i class="fa-regular fa-image"></i> @Html.DisplayNameFor(model => model.Photo)
+            </th>
+            <th>
+                <i class="fa-regular fa-calendar"></i> @Html.DisplayNameFor(model => model.ReportTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr id="local">
+            <td>
+                <input type="checkbox" class="form-check-input" id="@item.Id" reporter="@item.ReporterId"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reporter)
+            </td>
+            <td>
+                <img style="height:50px;width:50px;object-fit:cover" src= "Images/@item.Photo" alt="XXX">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportTime)
+            </td>
+            <td>
+                <button class="btn btn-primary" id="@item.PhotoId" member="@item.MemberId"><i class="fa-regular fa-trash-can"></i></button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        // 放所有checkbox的Id
+        let checkboxId = [];
+
+        // 點擊Global的checkbox, local全部都勾選
+        $("thead").on("click", "#globalCheckbox", function () {
+            let localLength = $("#local input[type='checkbox']").length;
+
+            checkboxId = [];
+
+            if ($("#globalCheckbox").prop("checked")) {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $("#local input[type='checkbox']").eq(i);
+                    checkboxId.push(item.prop("id"));
+                    item.prop("checked", true);
+                }
+            } else {
+                for (let i = 0; i < localLength; i++) {
+                    let item = $("#local input[type='checkbox']").eq(i);
+                    checkboxId.pop(item.prop("id"))
+                    item.prop("checked", false);
+                }
+            }
+        });
+
+        // 當local的checkbox全部被勾選, global的checkbox被勾選
+        // 當local的checkbox尚未全部被勾選, global的checkbox不可被勾選
+        $("tbody").on("click", "#local input[type='checkbox']", function () {
+            if ($(this).prop("checked")) checkboxId.push($(this).prop("id"));
+            else checkboxId.splice(checkboxId.indexOf($(this).prop("id")), 1)
+
+            let localLength = $("#local input[type='checkbox']").length;
+            let count = 0;
+
+            for (let i = 0; i < localLength; i++) {
+                let item = $("#local input[type='checkbox']").eq(i);
+
+                if (item.prop("checked")) count++;
+            }
+            if (count === localLength) $("#globalCheckbox").prop("checked", true);
+            else $("#globalCheckbox").prop("checked", false);
+        });
+
+        // 下拉選單, 選擇哪一個執行API
+        $("select").on("change", function () {
+
+            // if成立執行show Photo之Table
+            if ($(this).val() === "0") {
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7027/Reports/GetAllPhotoReports"
+                }).done(function (data) {
+                    showTable(data);
+                }).fail(function (err) {
+                    console.log(err.statusText)
+                })
+            }
+            else {
+                // Show Comment table
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7027/Reports/GetAllCommentReports"
+                }).done(function (data) {
+                    showTable(data);
+                }).fail(function (err) {
+                    console.log(err.statusText)
+                })
+            }
+        });
+
+        // Search button
+        $("#searchText").on("keyup", function () {
+            let isComment = $("select").val();
+            let searchText = $("#searchText").val();
+
+            if (isComment === "0") {
+                if (searchText !== "") {
+                    $.ajax({
+                        type: "GET",
+                        url: `https://localhost:7027/Reports/GetPhotoReport?account=${searchText}`,
+                        async: false
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:7027/Reports/GetAllPhotoReports",
+                        async: false
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+            }
+            else {
+                if (searchText !== "") {
+                    $.ajax({
+                        type: "GET",
+                        url: `https://localhost:7027/Reports/GetCommentReport?account=${searchText}`,
+                        async: false
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        url: "https://localhost:7027/Reports/GetAllCommentReports",
+                        async: false
+                    }).done(function (data) {
+                        showTable(data);
+                    }).fail(function (err) {
+                        console.log(err.statusText)
+                    })
+                }
+            }
+
+
+            // Search後, 將checkbox填入
+            let count = 0;
+            let localLength = $("#local input[type='checkbox']").length;
+
+            for (let i = 0; i < localLength; i++) {
+                
+                for(let itemId of checkboxId) {
+                    let item = $("#local input[type='checkbox']").eq(i);
+                    
+                    if (itemId == item.prop("id")) {
+                        count++;
+                        item.prop("checked", true);
+                        break;
+                    }
+                }
+
+                if (count === localLength) $("#globalCheckbox").prop("checked", true);
+                else $("#globalCheckbox").prop("checked", false);
+            }
+        })
+
+        // Delete Comment, Photo
+        $("tbody").on("click", "button", function () {
+            let isComment = $("select").val();
+            let memberId = $(this).attr("member");
+            let targetId = $(this).prop("id");
+            const trs = $(`tbody [id=${targetId}]`)
+            const tds = $(this).parent().parent().find("td");
+            let text = $(tds.eq(2).children().css("width", "300px").css("height", "200px"))
+
+            // Comment
+            if (isComment === "1") {
+                $.ajax({
+                    type: "GET",
+                    url: `https://localhost:7027/Reports/GetOneCommentReport?id=${targetId}`,
+                    async: false
+                }).done(function (data) {
+                    text = data.comment;
+
+                }).fail(function (err) {
+                    console.log(err.statusText)
+                })
+            }
+
+            Swal.fire({
+                title: "Are you sure?",
+                html: text,
+                icon: 'error',
+                iconHtml:`<i class="fa-regular fa-trash-can"></i>`,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Removed!',
+                        `${text} has removed`,
+                        'success'
+                    ).then((result) => {
+                        // Delete DB Photo
+                        if (isComment === "0") {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeletePhoto?memberId=${memberId}&photoId=${targetId}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+                        // Delete DB Comment
+                        else {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeleteComment?memberId=${memberId}&commentId=${targetId}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+
+                        // Remove Trs
+                        for (let i = 0; i < trs.length; i++) {
+                            trs.eq(i).parent().parent().remove();
+                        }
+                    })
+                }
+            })
+
+            $(tds.eq(2).children().css("width", "50px").css("height", "50px"))
+        });
+
+        // Delete Multi-Report
+        $("#del").on("click", function() {
+            const reports = [];
+            const reporters = [];
+            const trs = [];
+            let isComment = $("select").val();
+
+            let localLength = $("#local input[type='checkbox']").length;
+            for (let i = 0; i < localLength; i++) {
+                let item = $("#local input[type='checkbox']").eq(i);
+
+                if(item.prop("checked")) {
+                    trs.push(item.parent().parent())
+                    reports.push(item.prop("id"))
+                    reporters.push(item.attr("reporter"))
+                }
+            }
+
+            let text = `Total Report: ${trs.length}`
+
+            // 彈跳視窗
+            Swal.fire({
+                title: "Are you sure?",
+                html: text,
+                icon: 'error',
+                iconHtml: `<i class="fa-regular fa-trash-can"></i>`,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Removed!',
+                        'success'
+                    ).then((result) => {
+                        // Delete DB report
+                        if (isComment === "0") {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeletePhotoReport?strreports=${reports}&strreporters=${reporters}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+                        else {
+                            $.ajax({
+                                type: "DELETE",
+                                url: `https://localhost:7027/Reports/DeleteCommentReport?strreports=${reports}&strreporters=${reporters}`
+                            }).done(function (data) {
+
+                            }).fail(function (err) {
+                                console.log(err.statusText)
+                            })
+                        }
+
+                        // Remove tr
+                        for (let tr of trs) {
+                            tr.remove();
+                        }
+                    })
+                }
+            })
+        })
+
+        // 顯示Table
+        function showTable(data) {
+            let isComment = $("select").val();
+            let targetHead = "Photo";
+            if (isComment === "1") targetHead = "Comment";
+
+            $("thead").empty();
+            $("tbody").empty();
+
+            let thead = $(`<tr>
+                            <th>
+                                <input type="checkbox"  class="form-check-input" id="globalCheckbox"/>
+                            </th>
+                            <th>
+                                        <i class="fa-solid fa-user"></i> Reporter
+                            </th>
+                            <th>
+                                <i class="fa-regular fa-image"></i> ${targetHead}
+                            </th>
+                            <th>
+                                <i class="fa-regular fa-calendar"></i> ReportTime
+                            </th>
+                            <th>
+                            </th>
+                        </tr>`);
+            $("thead").append(thead);
+
+            for (let item of data) {
+                let targetData = `<img style = "height:50px;width:50px;object-fit:cover" src = "Images/${item.photo}" alt = "XXX"/>`
+                let id = item.photoId
+                if (isComment === "1") {
+                    targetData = item.comment.substring(0, 10) + "...";
+                    id = item.commentId
+                }
+
+                let tbody = $(`<tr id="local">
+                                <td>
+                                    <input type="checkbox" class="form-check-input" id="${item.id}" reporter="${item.reporterId}"/>
+                                </td>
+                                <td>
+                                    ${item.reporter}
+                                </td>
+                                <td>
+                                    ${targetData}
+                                </td>
+                                <td>
+                                    ${item.reportTime}
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary" id="${id}" member="${item.memberId}"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>`)
+
+                $("tbody").append(tbody);
+            }
+        }
+    </script>
+}

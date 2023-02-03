@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //連線字串注入
-var ProjectFUENconnectionString = builder.Configuration.GetConnectionString("ProjectFUEN") ?? throw new InvalidOperationException("Connection string 'Northwind' not found.");
+var ProjectFUENconnectionString = builder.Configuration.GetConnectionString("azure") ?? throw new InvalidOperationException("Connection string 'Northwind' not found.");
 builder.Services.AddDbContext<ProjectFUENContext>(options =>
     options.UseSqlServer(ProjectFUENconnectionString));
 

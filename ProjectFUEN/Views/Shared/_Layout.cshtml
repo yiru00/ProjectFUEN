@@ -29,13 +29,13 @@
         @{
             if(!User.Identity.IsAuthenticated)
             {
-                <a class="nav-link text-white ms-auto" asp-controller="Login" asp-action="Index">Login</a>
+                <a class="nav-link text-white ms-auto" asp-controller="Login" asp-action="Index">登入</a>
             }
             else
             {
 				<div class="ms-auto d-flex aligin-items-center">
-                    <div class=" d-flex justify-content-center align-items-center text-white">@User.Identity.Name</div>
-                    <a class="nav-link text-white" asp-controller="Login" asp-action="SignOut">LogOut</a>
+                    <div class=" d-flex justify-content-center align-items-center text-white">您好 !   @User.Identity.Name  </div>
+                    <a class="nav-link text-white" asp-controller="Login" asp-action="SignOut">登出</a>
                 </div>
             }
         }
@@ -86,7 +86,7 @@
                                         </nav>
                                     </div>
 
-                                    <a href="@Url.Action("Index", "OrderDetails")" class="nav-link">訂單管理</a>
+                                    <a href="@Url.Action("Search", "OrderDetails")" class="nav-link">訂單管理</a>
 
                                     <a href="@Url.Action("Index", "Event")" class="nav-link">行銷活動</a>
 

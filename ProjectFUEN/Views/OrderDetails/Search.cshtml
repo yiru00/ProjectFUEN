@@ -5,131 +5,117 @@
 @using X.PagedList.Web.Common
 
 @{
-    ViewData["Title"] = "Index";
-   
+    ViewData["Title"] = "訂單管理";
+
     var pagedList = (IPagedList)ViewBag.OrderDetailDto;
     var state = ViewBag.state as IEnumerable<SelectListItem>;
 }
 
 
-
-<div class="col-10 mb-5 mt-5 ">
-	
-	<div class="caption align-items-xl-center ">
-		
-		<div class="row list-group-horizontal ">
-
-			
-			@using (Html.BeginForm("Search", "OrderDetails", FormMethod.Get))
-			{
-			
-				<div class=" input-group col-12 align-items-center d justify-content-center">
-                    
-					<div class="input-group align-content-center d-flex col-4 ">
-                        <h2 class="ms-3">訂單管理</h2>
-						<div class="col-2  ms-3 ">@Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.SelectList, new { @class = "order-state form-control" })</div>
-						<input type="text" name="account" class="col-6 ms-3 " value="" id="Searchtext" placeholder="請輸入.." />
-						<button type="submit" class="btn btn-dark SearchClick" value="" id="SearchClick">
-							<i class="fa-solid fa-magnifying-glass "></i>
-						</button>
-					</div>
-
-				</div>
-			}
-
-
-
-
-
-		</div>
-
-	</div>
+<div class="d-flex no-print align-items-center p-2">
+    <h1>訂單管理</h1>
 </div>
 
+<div class="p-2">
 
+    <div class="d-flex">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Member.RealName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member.EmailAccount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+        @using (Html.BeginForm("Search", "OrderDetails", FormMethod.Get))
         {
-            <tr>
-
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.RealName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.EmailAccount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.Raw(GetStateName(item.State))
-                </td>
-
-                <td>
-
-                    <a class="FunBtn text-dark fc1" asp-action="Edit" asp-route-id="@item.Id" data-fancybox data-type="iframe">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </a> |
-                    @* <a asp-action="Edit" asp-route-id="@item.Id">編輯</a> |*@
-                    <a class="FunBtn text-dark" asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> |
-                    <a class="deleteOrder FunBtn text-dark" id="@item.Id" style="cursor:pointer"><i class="fa-solid fa-trash"></i></a>
-                </td>
-            </tr>
+            <div class="input-group">@Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.SelectList, new { @class = "order-state form-control" })</div>
+            <div class="input-group">
+                <input type="text" name="account" class="form-control" value="" id="Searchtext" placeholder="請輸入.." />
+                <button type="submit" class="btn btn-dark SearchClick" value="" id="SearchClick">
+                    <i class="fa-solid fa-magnifying-glass "></i>
+                </button>
+            </div>
         }
-    </tbody>    
-</table>
-
-<div class="text-muted mx-auto ">
-    <div class="align-items-center mx-auto w-50">
-        @Html.PagedListPager((IPagedList)pagedList, page =>
-        Url.Action("Index", new { page = page }),
-
-        new PagedListRenderOptions {
-
-        LiElementClasses = new string[] { "page-item" },
-        PageClasses = new string[] { "page-link" },
-
-        LinkToFirstPageFormat="<<第一頁",
-        LinkToPreviousPageFormat="<",
-        LinkToNextPageFormat=">",
-        LinkToLastPageFormat="最末頁>>"
-        })
     </div>
 
 
 
-    第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
-    每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member.RealName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member.EmailAccount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
 
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member.RealName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member.EmailAccount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.Raw(GetStateName(item.State))
+                    </td>
+
+                    <td>
+
+                        <a class="FunBtn text-dark fc1" asp-action="Edit" asp-route-id="@item.Id" data-fancybox data-type="iframe">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a> |
+                        @* <a asp-action="Edit" asp-route-id="@item.Id">編輯</a> |*@
+                        <a class="FunBtn text-dark" asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> |
+                        <a class="deleteOrder FunBtn text-dark" id="@item.Id" style="cursor:pointer"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-muted mx-auto ">
+        <div class="align-items-center mx-auto w-50">
+            @Html.PagedListPager((IPagedList)pagedList, page =>
+            Url.Action("Index", new { page = page }),
+
+            new PagedListRenderOptions {
+
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" },
+
+            LinkToFirstPageFormat="<<第一頁",
+            LinkToPreviousPageFormat="<",
+            LinkToNextPageFormat=">",
+            LinkToLastPageFormat="最末頁>>"
+            })
+        </div>
+
+
+
+        第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+        每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+
+    </div>
 </div>
-
 
 @section Scripts
     {
@@ -190,7 +176,7 @@
 
     </script>
 }
-    @functions {
+@functions {
     public string GetStateName(int state)
     {
         string StateName = "";
@@ -211,7 +197,7 @@
             case 4:
                 StateName = @$"<span style=""color: #00AEAE	 ;"">已完成</span>";
                 break;
-            
+
 
         }
         return StateName;

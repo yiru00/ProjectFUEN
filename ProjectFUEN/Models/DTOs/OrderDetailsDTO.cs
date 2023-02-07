@@ -19,6 +19,7 @@ namespace ProjectFUEN.Models.DTOs
         [Display(Name = "訂單狀態")]
         public int State { get; set; }
 
+        [Display(Name = "會員帳號")]
         public string EmailAccount { get; set; }
 
         public virtual Member Member { get; set; }

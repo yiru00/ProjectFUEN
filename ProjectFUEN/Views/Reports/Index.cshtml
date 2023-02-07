@@ -1,30 +1,30 @@
 ﻿@model IEnumerable<ProjectFUEN.Models.ViewModels.PhotoReportIndexVM>
 
 @{
-    ViewData["Title"] = "Reports";
+    ViewData["Title"] = "社群檢舉";
 }
 
 <div class="mt-4 ms-4">
 
     <div class="mb-4 d-flex">
-        <h1><i class="fa-solid fa-bullhorn"></i>  Reports</h1>
+        <h1>社群檢舉</h1>
         <div class="form-floating me-3 ms-4" >
             <select class="form-select"  id="select">
             <option value="0" >Photo</option>
             <option value="1">Comment</option>
             </select>
-            <label for="select" class="input-text" style="font-size:15px">choose</label>
+            <label for="select" class="input-text" style="font-size:15px">請選擇</label>
 		</div>
 
         <div class="form-floating">
-            <input type="text" id="searchText" placeholder="Account" class="form-control" />
+            <input type="text" id="searchText" placeholder="檢舉者" class="form-control" />
             <label for="searchText"><i class="fa-solid fa-magnifying-glass"></i><span class="text-muted ms-2">Account</span></label>
 		</div>
 
     </div>
 
     
-     <button id="del" class="btn btn-outline-danger me-auto mt-4"><i class="fa-solid fa-check"></i>  Delete</button>
+     <button id="del" class="btn btn-outline-danger me-auto mt-4"><i class="fa-regular fa-trash-can"></i>  Delete</button>
 
 </div>
 
@@ -241,7 +241,7 @@
             }
 
             Swal.fire({
-                title: "Are you sure?",
+                title: "確定刪除?",
                 html: text,
                 icon: 'error',
                 iconHtml:`<i class="fa-regular fa-trash-can"></i>`,

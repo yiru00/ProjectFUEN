@@ -79,7 +79,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="discountInput">
                 @Html.DisplayFor(modelItem => item.Discount)
             </td>
             <td>
@@ -265,6 +265,12 @@
     
           }
 
+        let discountInput = $(".discountInput");
+
+        for(let i=0;i<discountInput.length;i++ ){
+
+           discountInput[i].innerText = Number(discountInput[i].innerText);
+        }  
 
     </script>
 }

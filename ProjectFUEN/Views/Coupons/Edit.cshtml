@@ -30,7 +30,7 @@
                                 <option value="2">折價</option>
                         </select>
                         </div>
-                        <input asp-for="Discount" class="form-control" />
+                        <input asp-for="Discount" class="form-control discountInput" />
                     <span id="Type" class="input-group-text"></span>
                     </div>
                 <span asp-validation-for="Discount" class="text-danger"></span>
@@ -67,6 +67,14 @@
             else if($(".discountT").val() === "2") $("#Type").text("元");
             else $("#Type").hide();
         })
+
+        let discountInput = $(".discountInput");
+        discountInput.val(Number(discountInput.val()));
+
+        //if (discountInput.val() >= 1) {
+        //    let resultD = Math.floor(discountInput.val());
+        //    discountInput.val(resultD);
+        //}
         
     </script>
 }

@@ -161,23 +161,6 @@ namespace ProjectFUEN.Controllers
 			
 		}
 
-		// GET: Instructor/Delete/5
-		//public async Task<IActionResult> Delete(int? id)
-		//{
-		//	if (id == null || _context.Instructors == null)
-		//	{
-		//		return NotFound();
-		//	}
-
-		//	var instructor = await _context.Instructors
-		//		.FirstOrDefaultAsync(m => m.Id == id);
-		//	if (instructor == null)
-		//	{
-		//		return NotFound();
-		//	}
-
-		//	return View(instructor);
-		//}
 
 		// POST: Instructor/Delete/5
 		[HttpDelete]

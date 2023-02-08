@@ -188,26 +188,6 @@ namespace ProjectFUEN.Controllers
             return View(activity);
         }
 
-        // GET: Activity/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.Activities == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var activity = await _context.Activities
-        //        .Include(a => a.Category)
-        //        .Include(a => a.Instructor)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (activity == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(activity);
-        //}
-
         // POST: Activity/Delete/5
         [HttpDelete]
         

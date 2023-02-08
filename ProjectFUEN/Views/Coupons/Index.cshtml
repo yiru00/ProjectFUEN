@@ -24,86 +24,87 @@
 
 
 
-    <table id="table"
-           class="table table-hover"
-           data-toggle="table"
-           data-toolbar="#toolbar"
-           data-pagination="true"
-           data-show-columns="true"
-           data-show-columns-toggle-all="true"
-           data-search="true"
-           data-search-selector="#customSearch"
-           data-search-highlight="true">
-        <thead>
-            <tr class="text-center table-primary">
-                <th data-field="state" data-checkbox="true">
-                </th>
-                <th data-field="id" class="d-none" data-searchable="false" data-switchable="false">
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th data-field="code" data-sortable="true">
-                    @*<i class="fa-regular fa-credit-card opacity-50"></i> *@
-                    @Html.DisplayNameFor(model => model.Code)
-                </th>
-                <th data-field="Name" data-sortable="true">
-                    @*<i class="fa-solid fa-ticket opacity-50"></i>*@
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th data-sortable="true" data-searchable="false">
-                    @*<i class="fa-solid fa-tags opacity-50"></i>*@
-                    @Html.DisplayNameFor(model => model.Discount)
-                </th>
-                <th data-sortable="true" data-searchable="false">
-                    @*<i class="fa-solid fa-piggy-bank opacity-50"></i>*@
-                    @Html.DisplayNameFor(model => model.LeastCost)
-                </th>
-                <th data-sortable="true" data-searchable="false">
-                    @*<i class="fa-solid fa-box-archive opacity-50"></i>*@
-                    @Html.DisplayNameFor(model => model.Count)
-                </th>
-                <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents1" data-switchable="false">
-                    發送
-                </th>
-                <th data-searchable="false" data-switchable="false">編輯</th>
+<table id="table"
+       class="table table-hover"
+       data-toggle="table"
+       data-toolbar="#toolbar"
+       data-pagination="true"
+       data-show-columns="true"
+       data-show-columns-toggle-all="true"
+       data-search="true"
+       data-search-selector="#customSearch"
+       data-search-highlight="true">
+    <thead>
+        <tr class="text-center table-primary">
+            <th data-field="state" data-checkbox="true" >
+            </th>
+            <th data-field="id" class="d-none" data-searchable="false" data-switchable="false">
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th data-field="code" data-sortable="true">
+                <i class="fa-regular fa-credit-card opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th data-field="Name"  data-sortable="true">
+                <i class="fa-solid fa-ticket opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th data-sortable="true" data-searchable="false">
+                <i class="fa-solid fa-tags opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th data-sortable="true" data-searchable="false">
+                <i class="fa-solid fa-piggy-bank opacity-50"></i>
+                @Html.DisplayNameFor(model => model.LeastCost)
+            </th>
+            <th data-sortable="true" data-searchable="false">
+                <i class="fa-solid fa-box-archive opacity-50"></i>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents1" data-switchable="false">
+                
+                Send
+            </th>
+            <th data-searchable="false" data-switchable="false">Edit</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="text-center" style="vertical-align: middle">
+            <td></td>
+            <td class="d-none">
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td class="discountInput">
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeastCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square fs-5"></i></a>
+                @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
+                @*<a class="deleteCoupon" id="@item.Id" couponName="@item.Name" style="cursor:pointer"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="text-center" style="vertical-align: middle">
-                    <td></td>
-                    <td class="d-none">
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Code)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Discount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LeastCost)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Count)
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
-                        @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
-                        @*<a class="deleteCoupon" id="@item.Id" couponName="@item.Name" style="cursor:pointer"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-    </div>
 
 
     @section Scripts{
@@ -188,5 +189,12 @@
                     })
                 }
 
-            }</script>
-    }
+        let discountInput = $(".discountInput");
+
+        for(let i=0;i<discountInput.length;i++ ){
+
+           discountInput[i].innerText = Number(discountInput[i].innerText);
+        }  
+
+    </script>
+}

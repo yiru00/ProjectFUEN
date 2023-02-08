@@ -13,7 +13,7 @@
 	</style>
 
 }
-<div class="d-flex p-2 align-items-center">
+<div class="d-flex p-2 align-items-center no-print">
 	<h1>活動詳情</h1>
 	<div class="ms-5">
 		<a type="submit" asp-action="Edit" asp-route-id="@Model?.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a> |
@@ -25,8 +25,8 @@
 </div>
 
 <hr />
-<div class="row p-2 d-flex">
-	<dl class="col-lg-6 col-12">
+<div class="row p-2 d-flex no-print">
+    <dl class="col-lg-6 col-12 no-print">
 
 		<div class="row my-2">
 			<dt class="col-sm-2">
@@ -73,7 +73,7 @@
 		</div>
 	</dl>
 
-	<dl class="col-lg-6 col-12 ">
+    <dl class="col-lg-6 col-12 no-print">
 		<div class="row my-2">
 			<dt class="col-sm-2">
 				@Html.DisplayNameFor(model => model.Address)

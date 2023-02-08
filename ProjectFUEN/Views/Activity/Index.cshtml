@@ -238,7 +238,7 @@
 		  function operateFormatter(value, row, index) {
     return [
 				'<a type="button" class= "btn btn-primary getMembers border-0 bg-body p-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">',
-				'<i class="fa-regular fa-address-book text-black fs-5" ></i>'
+				'<i class="fa-regular fa-address-book text-black fs-5" ></i>',
 				,'</a>']
 				.join('')
   }
@@ -259,6 +259,7 @@
 						console.log(data[0]["activityName"])
 						let activityAddress = data[0]["activityAddress"]
 						let activityTime = data[0]["activityTime"]
+                        let activityName = data[0]["activityName"]
 						$(".modal-title").html(`<p class="m-0">活動：${activityName}</p>
 												<p class=" m-0">時間：${activityTime}</p>
 												<p class=" m-0">地點：${activityAddress}</p>`)

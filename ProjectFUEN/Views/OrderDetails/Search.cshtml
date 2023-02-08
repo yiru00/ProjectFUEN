@@ -84,7 +84,7 @@
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a> |
                         @* <a asp-action="Edit" asp-route-id="@item.Id">編輯</a> |*@
-                        <a class="FunBtn text-dark" asp-controller="OrderItems" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> |
+                        <a class="FunBtn text-dark" asp-controller="OrderDetails" asp-action="OrderitemDetails" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> |
                         <a class="deleteOrder FunBtn text-dark" id="@item.Id" style="cursor:pointer"><i class="fa-solid fa-trash"></i></a>
                     </td>
                 </tr>

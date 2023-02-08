@@ -9,41 +9,41 @@
 <div>
     <h4>OrderItem  <a asp-controller="OrderDetails" asp-action="Search"><i class="FunBtn fa-solid fa-circle-arrow-left text-dark"></i></a></h4>
     <hr />
-        
 
-        <table class="table col-10">
-            <thead>
-                <tr>
-                    
-                    <th>
+
+    <table class="table col-10">
+        <thead>
+            <tr>
+
+                <th>
                     @Html.DisplayNameFor(model => model.ProductName)
-                    </th>
-                    <th>
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.ProductPrice)
                 </th>
-                    <th>
+                <th>
                     @Html.DisplayNameFor(model => model.ProductNumber)
                 </th>
-                    <th>
+                <th>
                     @Html.DisplayNameFor(model => model.Order.Address)
                 </th>
 
-                    <th>
+                <th>
                     @Html.DisplayNameFor(model => model.Product.ProductSpec)
 
-                    </th>
+                </th>
 
                 <th>
                     @Html.DisplayNameFor(model => model.Order.State)
 
                 </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
-                    
+
                     <td>
                         @Html.DisplayFor(model => item.ProductName)
                     </td>
@@ -66,16 +66,12 @@
                         @GetStateName(item.Order.State)
                     </td>
                 </tr>
-                }
-            </tbody>
+            }
+        </tbody>
 
 
 
-        </table>
-
-
-
-
+    </table>
 
 
 
@@ -83,12 +79,14 @@
 
 
 
-    
+
+
+
+
+
 
 </div>
 <div>
-   
-   
 </div>
 
 @functions {

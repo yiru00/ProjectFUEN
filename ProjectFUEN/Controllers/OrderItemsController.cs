@@ -30,43 +30,7 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: OrderItems/Details/5  //加入state
-        public async Task<ActionResult<IEnumerable<OrderItem>>> Details(int? id)
-        {
-            if (id == null || _context.OrderItems == null)
-            {
-                return NotFound();
-            }
-
-            var orderItem =   _context.OrderItems
-             
-                .Include(o => o.Order)
-                .Include(o => o.Product)
-                .Where(m => m.OrderId == id)
-                .AsEnumerable();
-                ;
-            if (orderItem == null)
-            {
-                return NotFound();
-            }
-
-            //var orderItem = (
-            //    from a in _context.OrderItems
-            //    from b in _context.OrderDetails
-            //    where a.OrderId == id
-            //    select new OrderItemsDTO
-            //    {
-            //        OrderId = a.OrderId,
-            //        ProductId = a.ProductId,
-            //        ProductName = a.ProductName,
-            //        ProductPrice = a.ProductPrice,
-            //        ProductNumber = a.ProductNumber,
-            //        Order = a.Order,
-            //        Product = a.Product,
-            //        State = b.State,
-            //    }).FirstOrDefaultAsync();
-         
-            return View(orderItem);
-        }
+        
 
         // GET: OrderItems/Create
         public IActionResult Create()

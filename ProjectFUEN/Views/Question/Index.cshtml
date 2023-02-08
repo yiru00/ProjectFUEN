@@ -47,8 +47,8 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.QuestionDateCreated)
 				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.State)
+				<td class="state">
+					@item.State
 				</td>
 
 				<td>
@@ -131,8 +131,14 @@
 		let qid;
 		let aid;
 		
+        //狀態顯示中文
+        let state=$(".state");
+        for(let i=0; i<state.length; i++){
+            (state[i].innerText == "True") ? state[i].innerText = "已回復" : state[i].innerText = "未回復"
+        }
+
+        //根據回復狀態顯示哪種功能
 		let allBtn = $(".getQuestion")
-		
 		for (let i = 0; i < allBtn.length; i++)
         {
 			if (allBtn[i].getAttribute("data-state") == "False") {
@@ -188,7 +194,6 @@
 					QuestionId:qid,
 					AnswerContent: answerContent
 				},
-
 				url: "https://localhost:7027/Question/Create",
 				
 			})
@@ -226,7 +231,7 @@
 					history.go(0);
 				})
 				.fail(function (err) {
-					alert("請在試一次");
+					alert("請再試一次");
 					history.go(0);
 				})
 			}

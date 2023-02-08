@@ -24,177 +24,160 @@
 
 
 
-<table id="table"
-       class="table table-hover"
-       data-toggle="table"
-       data-toolbar="#toolbar"
-       data-pagination="true"
-       data-show-columns="true"
-       data-show-columns-toggle-all="true"
-       data-search="true"
-       data-search-selector="#customSearch"
-       data-search-highlight="true">
-    <thead>
-        <tr class="text-center table-primary">
-            <th data-field="state" data-checkbox="true" >
-            </th>
-            <th data-field="id" class="d-none" data-searchable="false" data-switchable="false">
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th data-field="code" data-sortable="true">
-                <i class="fa-regular fa-credit-card opacity-50"></i>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th data-field="Name"  data-sortable="true">
-                <i class="fa-solid fa-ticket opacity-50"></i>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th data-sortable="true" data-searchable="false">
-                <i class="fa-solid fa-tags opacity-50"></i>
-                @Html.DisplayNameFor(model => model.Discount)
-            </th>
-            <th data-sortable="true" data-searchable="false">
-                <i class="fa-solid fa-piggy-bank opacity-50"></i>
-                @Html.DisplayNameFor(model => model.LeastCost)
-            </th>
-            <th data-sortable="true" data-searchable="false">
-                <i class="fa-solid fa-box-archive opacity-50"></i>
-                @Html.DisplayNameFor(model => model.Count)
-            </th>
-            <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents1" data-switchable="false">
-                
-                Send
-            </th>
-            <th data-searchable="false" data-switchable="false">Edit</th>
-            
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr class="text-center" style="vertical-align: middle">
-            <td></td>
-            <td class="d-none">
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td class="discountInput">
-                @Html.DisplayFor(modelItem => item.Discount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LeastCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Count)
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square fs-5"></i></a>
-                @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
-                @*<a class="deleteCoupon" id="@item.Id" couponName="@item.Name" style="cursor:pointer"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
-            </td>
-            
-        </tr>
-}
-    </tbody>
-</table>
+    <table id="table"
+           class="table table-hover"
+           data-toggle="table"
+           data-toolbar="#toolbar"
+           data-pagination="true"
+           data-show-columns="true"
+           data-show-columns-toggle-all="true"
+           data-search="true"
+           data-search-selector="#customSearch"
+           data-search-highlight="true">
+        <thead>
+            <tr class="text-center table-primary">
+                <th data-field="state" data-checkbox="true">
+                </th>
+                <th data-field="id" class="d-none" data-searchable="false" data-switchable="false">
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th data-field="code" data-sortable="true">
+                    @*<i class="fa-regular fa-credit-card opacity-50"></i> *@
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th data-field="Name" data-sortable="true">
+                    @*<i class="fa-solid fa-ticket opacity-50"></i>*@
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th data-sortable="true" data-searchable="false">
+                    @*<i class="fa-solid fa-tags opacity-50"></i>*@
+                    @Html.DisplayNameFor(model => model.Discount)
+                </th>
+                <th data-sortable="true" data-searchable="false">
+                    @*<i class="fa-solid fa-piggy-bank opacity-50"></i>*@
+                    @Html.DisplayNameFor(model => model.LeastCost)
+                </th>
+                <th data-sortable="true" data-searchable="false">
+                    @*<i class="fa-solid fa-box-archive opacity-50"></i>*@
+                    @Html.DisplayNameFor(model => model.Count)
+                </th>
+                <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents1" data-switchable="false">
+                    發送
+                </th>
+                <th data-searchable="false" data-switchable="false">編輯</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center" style="vertical-align: middle">
+                    <td></td>
+                    <td class="d-none">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td class="discountInput">
+                        @Html.DisplayFor(modelItem => item.Discount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LeastCost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Count)
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-regular fa-pen-to-square text-black fs-5"></i></a>
+                        @*<a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
+                        @*<a class="deleteCoupon" id="@item.Id" couponName="@item.Name" style="cursor:pointer"><i class="fa-regular fa-trash-can fs-5"></i></a>*@
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 
-
-    @section Scripts{
-        <script>let $table = $('#table');
-            let $checkdeletebtn = $('#checkdeletebtn');
-
-
-            $table.on('check.bs.table uncheck.bs.table ' +
-                'check-all.bs.table uncheck-all.bs.table',
-                function () {
-                    $checkdeletebtn.prop('disabled', !$table.bootstrapTable('getSelections').length)
-
-                })
-
-            $checkdeletebtn.click(function () {
-                let ids = $.map($table.bootstrapTable('getSelections'), function (row) {
-                    return row.id
-                })
-
-                $table.bootstrapTable('remove', {
-                    field: 'id',
-                    values: ids
-                })
-
-                ids.forEach(function (value) {
-                    $.ajax({
-                        type: "delete",
-                        url: "https://localhost:7027/coupons/deletecoupon",
-                        data: { id: value },
-                        async: false
-                    }).done(function (data) {
-
-                    }).fail(function (err) {
-                        alert(err.statustext);
-                    })
-                })
-
+@section Scripts{
+    <script>
+        let $table = $('#table');
+        let $checkdeletebtn = $('#checkdeletebtn');
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $checkdeletebtn.prop('disabled', !$table.bootstrapTable('getSelections').length)
             })
-
-
-            function operateFormatter(value, row, index) {
-                return [
-                    '<a class="sendCoupon fs-5" href="javascript:void(0)" title="SendCoupon">',
-                    '<i class="fa-regular fa-envelope sendIcon text-black fs-5"></i>',
-                    '</a>  '
-                ].join('')
+        $checkdeletebtn.click(function () {
+            let ids = $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.id
+            })
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            })
+            ids.forEach(function (value) {
+                $.ajax({
+                    type: "delete",
+                    url: "https://localhost:7027/coupons/deletecoupon",
+                    data: { id: value },
+                    async: false
+                }).done(function (data) {
+                }).fail(function (err) {
+                    alert(err.statustext);
+                })
+            })
+        })
+        function operateFormatter(value, row, index) {
+            return [
+                '<a class="sendCoupon fs-5" href="javascript:void(0)" title="SendCoupon">',
+                '<i class="fa-regular fa-envelope sendIcon text-black fs-5"></i>',
+                '</a>  '
+            ].join('')
+        }
+        window.operateEvents1 = {
+            'click .sendCoupon': function (e, value, row, index) {
+                //console.log('You click sendCoupon action, row: ' + JSON.stringify(row["Name"]))
+                Swal.fire({
+                    title: '發送 ' + JSON.stringify(row["Name"]),
+                    text: "優惠碼: " + JSON.stringify(row["code"]),
+                    icon: 'question',
+                    iconHtml: '<i class="fa-solid fa-envelope-open-text" style="font-size:50px"></i>',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '確定',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            '成功!',
+                            '優惠券已發送！',
+                            'success'
+                        )
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:7027/Coupons/MailToHtml",
+                            data: { couponCode: JSON.stringify(row["code"]) }
+                        }).done(function (data) {
+                        }).fail(function (err) {
+                            alert(err.statusText);
+                        })
+                    }
+                })
             }
 
-            window.operateEvents1 = {
-                'click .sendCoupon': function (e, value, row, index) {
-                    //console.log('You click sendCoupon action, row: ' + JSON.stringify(row["Name"]))
-
-                    Swal.fire({
-                        title: '發送 ' + JSON.stringify(row["Name"]),
-                        text: "優惠碼: " + JSON.stringify(row["code"]),
-                        icon: 'question',
-                        iconHtml: '<i class="fa-solid fa-envelope-open-text" style="font-size:50px"></i>',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: '確定',
-                        cancelButtonText: '取消'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire(
-                                '成功!',
-                                '優惠券已發送！',
-                               'success'
-                            )
-                            $.ajax({
-                                type: "POST",
-                                url: "https://localhost:7027/Coupons/MailToHtml",
-                                data: { couponCode: JSON.stringify(row["code"]) }
-                            }).done(function (data) {
-
-                            }).fail(function (err) {
-                                alert(err.statusText);
-                            })
-
-                        }
-
-                    })
-                }
-
-        let discountInput = $(".discountInput");
-
+        }
+         let discountInput = $(".discountInput");
         for(let i=0;i<discountInput.length;i++ ){
-
            discountInput[i].innerText = Number(discountInput[i].innerText);
         }  
-
-    </script>
-}
+                        </script>
+    }

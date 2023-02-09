@@ -23,7 +23,8 @@ namespace ProjectFUEN.Models.ViewModels
 		public bool? State { get; set; }
 		public int AnswerId { get; set; }
 		public string AnswerContent { get; set; }
-		public DateTime AnswerDateCreated { get; set; }
+        [Display(Name = "答覆日期")]
+        public DateTime AnswerDateCreated { get; set; }
 	}
 	
 }

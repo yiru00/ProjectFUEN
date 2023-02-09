@@ -24,6 +24,9 @@
 			<th>
 				@Html.DisplayNameFor(model => model.QuestionDateCreated)
 			</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AnswerDateCreated)
+                </th>
 			<th>
 				@Html.DisplayNameFor(model => model.State)
 			</th>
@@ -47,6 +50,9 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.QuestionDateCreated)
 				</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AnswerDateCreated)
+                    </td>
 				<td class="state">
 					@item.State
 				</td>
@@ -117,7 +123,7 @@
 						<p class="msgErr text-danger"></p>
 					</div>
 					<div class="form-group">
-						<button type="button" class="btn btn-primary putAnswer">修改</button>
+						<button type="button" class="btn btn-primary putAnswer">送出</button>
 					</div>
 				</form>
 			</div>
@@ -134,7 +140,7 @@
         //狀態顯示中文
         let state=$(".state");
         for(let i=0; i<state.length; i++){
-            (state[i].innerText == "True") ? state[i].innerText = "已回復" : state[i].innerText = "未回復"
+            (state[i].innerText == "True") ? state[i].innerText = "已答覆" : state[i].innerText = "未答覆"
         }
 
         //根據回復狀態顯示哪種功能

@@ -64,23 +64,8 @@ namespace ProjectFUEN.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(IFormFile file,[Bind("Id,InstructorName,Description,ResumePhoto")]InstructorVM instructor)
 		{
-			//上傳照片
-			//(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
-			//if (!uploadSuccess.Item1)
-			//{
-			//	ViewBag.photoError = uploadSuccess.Item2;
-			//	return View(instructor);
-			//}
-			//else
-			//{
-			//	instructor.ResumePhoto = uploadSuccess.Item3;
-
-			//}
-			if (file == null)
-			{
-				ViewBag.photoError = "記得上傳圖檔";
-			}
-            else if (ModelState.IsValid)
+			
+            if (ModelState.IsValid)
 			{
 				_context.Add(instructor.ToEntity());
 				await _context.SaveChangesAsync();
@@ -118,50 +103,6 @@ namespace ProjectFUEN.Controllers
 			{
 				return NotFound();
 			}
-
-            ////判斷是否有上傳圖檔，若檔案類型/未上傳 回傳錯誤訊息，上傳成功回傳新檔名，錯誤訊息=""
-            //(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
-
-
-            ////上傳檔案失敗(沒上傳東西/上傳圖檔以外的)
-            //if (!uploadSuccess.Item1)//上傳失敗 item1=false
-            //{
-
-            //	if (uploadSuccess.Item2 == "記得選取檔案") //未上傳任何檔案，用原有的
-            //	{
-            //		ModelState.Remove("file");
-            //		if (ModelState.IsValid)
-            //		{
-            //			_context.Update(instructor.ToEntity());
-            //			await _context.SaveChangesAsync();
-            //			return RedirectToAction(nameof(Index));
-
-            //		}
-            //	}
-            //	else if (uploadSuccess.Item2 == "檔案必須是圖片檔案")//上傳成圖檔以外的
-            //	{
-            //		ViewBag.photoError = uploadSuccess.Item2; //錯誤訊息
-            //		return View(instructor);
-            //	}
-            //	return View(instructor);
-            //}
-            //else //有上傳檔案=>判斷有沒有跳檔案錯誤的訊息，沒跳就將新的檔案(uploadSuccess.Item3)更新到instructor.ResumePhoto
-            //{
-            //	if (uploadSuccess.Item2 == "") //上傳圖檔，錯誤訊息=""
-            //	{
-            //		instructor.ResumePhoto = uploadSuccess.Item3; //傳入新檔名
-            //		_context.Update(instructor.ToEntity());
-            //		await _context.SaveChangesAsync();
-            //		return RedirectToAction(nameof(Index));
-            //	}
-            //	else //上傳圖檔以外的(ppt.pdf...)
-            //	{
-            //		ViewBag.photoError = uploadSuccess.Item2;
-            //		return View(instructor);
-            //	}
-
-
-            //}
 
             //沒上傳檔案=>用舊的網址（resumePhoto欄位有繫結）
             if (file==null) ModelState.Remove("file"); //不驗證圖片上傳欄位

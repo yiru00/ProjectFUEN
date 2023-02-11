@@ -37,6 +37,7 @@
                 <div class="col-12 col-lg-4">
                     <div class="form-group">
                         <label class="btn btn-outline-secondary" for="myimg">變更圖片</label>
+                        <button type="button" class="btn btn-light " id="origin">使用原圖</button>
                         <div class="input-group">
                             <input type="file" name="file" id="myimg" accept="image/*" class="form-control" style="display: none" />
                         </div>
@@ -53,7 +54,7 @@
 
 
                 @*隱藏ResumePhoto欄位(還是要拿來繫結)*@
-                <div class="form-group visually-hidden">
+                <div class="form-group ">
                     <label asp-for="ResumePhoto" class="control-label"></label>
                     <input asp-for="ResumePhoto" class="form-control imgurLink" />
                     <span asp-validation-for="ResumePhoto" class="text-danger"></span>
@@ -82,6 +83,7 @@
             const id = "1a8e6b2ff9a8c5f"; // 填入 App 的 Client ID
 			const token = "ed5c143a32be3f4fed6416da9794cdcd1c700494";// 填入 token
             $(".picChose").hide(); //沒選取要上傳的圖片時隱藏確認上傳的鈕
+            $("#origin").hide();
 
 
             //圖片預覽
@@ -102,9 +104,18 @@
                 $(".save").show();
             })
 
+            $("#origin").on("click", function (e) { //上傳到imgur後又想用原圖
+                $(".picChose").hide();
+                $("#origin").hide();
+                $('#preview').attr('src', picSrc);
+                $(".save").show();
+                $(".imgurLink").val(picSrc);
+            })
+
             $("#imgurUpload").on("click", function (e) {
                 $(".picChose").hide();
                 $(".save").show();
+                $("#origin").show();
 				console.log(file);
 				
 

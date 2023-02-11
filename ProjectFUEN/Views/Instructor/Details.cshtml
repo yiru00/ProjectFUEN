@@ -32,7 +32,7 @@
 				講師圖片
 			</dt>
 			<dd class="col-sm-10">
-				<img id="preview" style="width:400px;height:300px;object-fit:cover" src="/UploadedFiles/@Model.ResumePhoto" />
+				<img id="preview" style="width:400px;height:300px;object-fit:cover" src="@Model.ResumePhoto" />
 			</dd>
 		</div>
 		<div class="row my-2">
@@ -68,6 +68,7 @@
 					let deleteid = $(this).attr("id");
 
 					//HTTPDELETE
+
 					$.ajax({
 						type: "DELETE",
 						url: "https://localhost:7027/Instructor/Delete/" + deleteid

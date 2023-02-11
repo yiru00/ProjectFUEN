@@ -18,7 +18,7 @@
 		{
 			<div class="col-lg-2 col-md-4 col-12">
 				<div class="card" style="width:100%;">
-					<a asp-action="Details" asp-route-id="@item.Id"><img class="card-img-top" style="width:100%;height:200px;object-fit:cover" src="/UploadedFiles/@item.ResumePhoto" alt="Card image cap"></a>
+					<a asp-action="Details" asp-route-id="@item.Id"><img class="card-img-top" style="width:100%;height:200px;object-fit:cover" src="@item.ResumePhoto" alt="講師圖片" referrerpolicy="no-referrer"></a>
 					<div class="card-body">
 						<h4 class="card-title">@item.InstructorName</h4>
 						<p class="card-text">@item.Description</p>
@@ -42,6 +42,7 @@
 		for (let i = 0; i < cardText.length; i++) {
 			let str = cardText[i].innerText;
 			//console.log(str.length);
+
 			if (str.length >= 15) {
 				let newStr = cardText[i].innerText.slice(0, 12) + " ...";
 				cardText[i].innerText = newStr;

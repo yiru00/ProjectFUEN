@@ -40,7 +40,12 @@
                         </div>
                         <p class="text-danger">@ViewBag.photoError</p>
                         <img id="preview" style="width:400px;height:300px;object-fit:cover" class="border-0" />
-                        <span asp-validation-for="ResumePhoto" class="text-danger"></span>
+                        <div class="form-group visually-hidden">
+                            <label asp-for="ResumePhoto" class="control-label"></label>
+                            <input asp-for="ResumePhoto" class="form-control imgurLink" />
+                            @*<span asp-validation-for="ResumePhoto" class="text-danger"></span>*@
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -74,7 +79,8 @@
         });
         
         //表單submit後將圖片上傳至imgur
-
+        
+        
         $("#imgur").on("submit", function (e) {
             let myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer ed5c143a32be3f4fed6416da9794cdcd1c700494");
@@ -97,8 +103,13 @@
                     let res = JSON.parse(result);
                     let link = res["data"]["link"]
                     console.log(link);
-                })
-                .catch(error => console.log('error', error));
+                    $(".imgurLink").val(link);
+                    console.log($(".imgurLink").val());
+
+                }).catch((error) => {
+                    
+                    console.log('error', error)
+                });
 
 
         })

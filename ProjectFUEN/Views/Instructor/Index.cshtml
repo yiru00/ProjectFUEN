@@ -16,7 +16,7 @@
 	<div class="row d-flex flex-wrap p-2" >
 		@foreach (var item in Model)
 		{
-			<div class="col-lg-2 col-md-4 col-12">
+			<div class="col-lg-3 col-md-4 col-12">
 				<div class="card" style="width:100%;">
 					<a asp-action="Details" asp-route-id="@item.Id"><img class="card-img-top" style="width:100%;height:200px;object-fit:cover" src="@item.ResumePhoto" alt="講師圖片" referrerpolicy="no-referrer"></a>
 					<div class="card-body">
@@ -43,7 +43,7 @@
 			let str = cardText[i].innerText;
 			//console.log(str.length);
 
-			if (str.length >= 15) {
+			if (str.length >= 8) {
 				let newStr = cardText[i].innerText.slice(0, 12) + " ...";
 				cardText[i].innerText = newStr;
 			}

@@ -91,9 +91,12 @@
 				$('#preview').attr('src', objectURL);
                 $(".picChose").show();
                 $(".save").hide();
+                
             });
 
-            $("#cancle").on("click", function (e) {
+           
+
+            $("#cancle").on("click", function (e) { //顯示原圖
                 $(".picChose").hide();
                 $('#preview').attr('src', picSrc);
                 $(".save").show();

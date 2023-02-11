@@ -62,22 +62,25 @@ namespace ProjectFUEN.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,InstructorName,Description,ResumePhoto")]InstructorVM instructor)
+		public async Task<IActionResult> Create(IFormFile file,[Bind("Id,InstructorName,Description,ResumePhoto")]InstructorVM instructor)
 		{
-            //上傳照片
-            //(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
-            //if (!uploadSuccess.Item1)
-            //{
-            //	ViewBag.photoError = uploadSuccess.Item2;
-            //	return View(instructor);
-            //}
-            //else
-            //{
-            //	instructor.ResumePhoto = uploadSuccess.Item3;
+			//上傳照片
+			//(bool, string, string) uploadSuccess = fileManager.UploadFile(file);
+			//if (!uploadSuccess.Item1)
+			//{
+			//	ViewBag.photoError = uploadSuccess.Item2;
+			//	return View(instructor);
+			//}
+			//else
+			//{
+			//	instructor.ResumePhoto = uploadSuccess.Item3;
 
-            //}
-            
-            if (ModelState.IsValid)
+			//}
+			if (file == null)
+			{
+				ViewBag.photoError = "記得上傳圖檔";
+			}
+            else if (ModelState.IsValid)
 			{
 				_context.Add(instructor.ToEntity());
 				await _context.SaveChangesAsync();

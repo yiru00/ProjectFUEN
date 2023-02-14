@@ -101,7 +101,7 @@
             $(".save").show();
 
             let myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer ed5c143a32be3f4fed6416da9794cdcd1c700494");
+            myHeaders.append("Authorization", `Bearer ${token}`);
             let formdata = new FormData();
             formdata.append("image", file);
             console.log(formdata);

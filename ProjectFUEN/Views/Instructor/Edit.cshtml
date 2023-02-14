@@ -36,7 +36,7 @@
 
                 <div class="col-12 col-lg-4">
                     <div class="form-group">
-                        <label class="btn btn-outline-secondary" for="myimg">變更圖片</label>
+                        <label class="btn btn-outline-secondary" for="myimg">變更講師圖片</label>
                         <button type="button" class="btn btn-light " id="origin">使用原圖</button>
                         <div class="input-group">
                             <input type="file" name="file" id="myimg" accept="image/*" class="form-control" style="display: none" />
@@ -120,7 +120,7 @@
 				
 
                     let myHeaders = new Headers();
-                    myHeaders.append("Authorization", "Bearer ed5c143a32be3f4fed6416da9794cdcd1c700494");
+            myHeaders.append("Authorization", `Bearer ${token}`);
                     let formdata = new FormData();
                     formdata.append("image", file);
                     console.log(formdata);

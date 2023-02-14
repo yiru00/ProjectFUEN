@@ -14,13 +14,15 @@
 <hr />
 <div class="row p-2">
     <div class="col">
-        <form method="post" enctype="multipart/form-data" asp-controller="Activity" asp-action="Create">
+        <form id="imgur" method="post" enctype="multipart/form-data" asp-controller="Activity" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*隱藏欄位(還是要拿來繫結)*@
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="NumOfMember"/>
+            <input type="hidden" asp-for="NumOfMember" />
             <input type="hidden" asp-for="InstructorName" />
             <input type="hidden" asp-for="CategoryName" />
+            <input type="" asp-for="CoverImage" class=" imgurLink" />
+
             <div class="d-flex row gx-4">
                 <div class="col-4">
                     <div class="form-group my-2">
@@ -47,7 +49,7 @@
                         <input asp-for="Address" class="form-control" />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
-                    
+
                 </div>
 
                 <div class="col-4">
@@ -71,7 +73,7 @@
                         <input asp-for="MemberLimit" class="form-control" />
                         <span asp-validation-for="MemberLimit" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group my-2">
                         <label asp-for="Description" class="control-label"></label>
                         <textarea asp-for="Description" class="form-control" maxlength="300" rows="4"></textarea>
@@ -79,19 +81,22 @@
                     </div>
                 </div>
                 <div class="col-4">
-                    <div class="form-group my-2 d-flex flex-column">
-                        <label class="control-label" for="myimg">活動圖片</label>
+                    <div class="form-group my-2">
+                        <label class="btn btn-outline-secondary" for="myimg">選擇活動圖片</label>
                         <div class="input-group">
-                            <input type="file" name="file" id="myimg" accept="image/*" class="form-control" />
+                            <input type="file" name="file" id="myimg" accept="image/*" class="form-control" style="display: none" />
                         </div>
-                        <p class="text-danger">@ViewBag.photoError</p>
-                        <img id="preview" style="width:400px;height:300px;object-fit:cover" class="border-0"/>
+                        <p class="text-danger photoErro">@ViewBag.photoError</p>
+                        <img id="preview" style="width:400px;height:300px;object-fit:cover" class="border-0" />
+                        <div class="picChose">
+                            <button type="button" class="btn btn-light " id="imgurUpload">使用此圖片</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <input type="submit" value="新增" class="btn btn-primary" />
-            
+
+            <input type="submit" value="新增" class="btn btn-primary save" />
+
         </form>
     </div>
 </div>
@@ -102,21 +107,77 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        //圖片預覽用
+        let file;
+        let objectURL;
+        const id = "1a8e6b2ff9a8c5f"; // 填入 App 的 Client ID
+        const token = "ed5c143a32be3f4fed6416da9794cdcd1c700494";// 填入 token
+        $(".picChose").hide(); //沒選取要上傳的圖片時隱藏確認上傳的鈕
+
+        //圖片預覽
         $('#myimg').on('change', function (e) {
-            const file = this.files[0];
-            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            file = this.files[0];
+            objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
             $('#preview').attr('src', objectURL);
+            $(".picChose").show();
+            $(".save").hide();
+            $(".photoErro").text("");
         });
+
+        $("#imgur").on("submit", function (e) {
+            if (file == undefined) {
+                $(".photoErro").text("記得選取圖片");
+                return;
+            }
+        })
+
+        //表單submit後將圖片上傳至imgur
+
+
+        $("#imgurUpload").on("click", function (e) {
+            $(".picChose").hide();
+            $(".save").show();
+
+            let myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${token}`);
+            let formdata = new FormData();
+            formdata.append("image", file);
+            console.log(formdata);
+
+
+
+            let requestOptions = {
+                referrer: "",
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                //redirect: 'follow',
+                mimeType: "multipart/form-data",
+            };
+
+            fetch("https://api.imgur.com/3/image", requestOptions)
+                .then(response => response.text())
+                .then((result) => {
+                    //console.log(result);
+                    let res = JSON.parse(result);
+                    let link = res["data"]["link"]
+                    //console.log(link);
+
+                    $(".imgurLink").val(link);
+                    console.log($(".imgurLink").val());
+
+                }).catch((error) => {
+
+                    console.log('error', error)
+                });
+        })
 
         function convertToISO(timebit) {
             // remove GMT offset
             timebit.setHours(0, -timebit.getTimezoneOffset(), 0, 0);
-            
-            var isodate = timebit.toISOString().slice(0,16); //回傳格式:2020-07-01T00:00
+
+            var isodate = timebit.toISOString().slice(0, 16); //回傳格式:2020-07-01T00:00
             return isodate;
         }
-
         //活動日
         let gatheringDate = $('#gatheringTime');
         //設定最小日期(新增日往後7天)
@@ -126,30 +187,24 @@
         let minGatheringStr = convertToISO(minGatheringDate); //回傳字串 設定input屬性用
         gatheringDate.attr('min', minGatheringStr) //設定可以選的最小日期
         gatheringDate.attr('value', minGatheringStr) //預設是最小日期
-        
+
         //設定最大日期(新增日往後兩個月)
         let currentForGatheringMax = new Date();
         let maxGatheringDateStr = convertToISO(new Date(currentForGatheringMax.setMonth(currentForGatheringMax.getMonth() + 2)));
-        gatheringDate.attr('max',maxGatheringDateStr)
-
-
+        gatheringDate.attr('max', maxGatheringDateStr)
         //截止日
-        let deadLine=$('#deadLine');
+        let deadLine = $('#deadLine');
         //設定最小日期(新增日往後3天)
-        let currentForDeadLineMin=new Date();
+        let currentForDeadLineMin = new Date();
         let minDeadLineStr = convertToISO(new Date(currentForDeadLineMin.setDate(currentForDeadLineMin.getDate() + 3)));
-        deadLine.attr('min',minDeadLineStr)
-        deadLine.attr('value',minDeadLineStr)
-
+        deadLine.attr('min', minDeadLineStr)
+        deadLine.attr('value', minDeadLineStr)
         //設定最大日期(活動日往前3天)
-        $('#gatheringTime').on("change",function(){
+        $('#gatheringTime').on("change", function () {
             let gatheringInput = new Date($("#gatheringTime").val());
             let maxDeadLineStr = convertToISO(new Date(gatheringInput.setDate(gatheringInput.getDate() - 3)));
             console.log(maxDeadLineStr)
             deadLine.attr('max', maxDeadLineStr)
         })
-
-       
-        
     </script>
 }

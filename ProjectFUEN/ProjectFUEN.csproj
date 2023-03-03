@@ -72,7 +72,6 @@
     <None Include="wwwroot\UploadedFiles\ed5bb7a7b657457c9c99bc0f2969f8d1.png" />
     <None Include="wwwroot\UploadedFiles\ef220278cd224fbf8ca435843380.pdf" />
     <Folder Include="Views\Templates\" />
-    <Folder Include="wwwroot\ProductImgFiles\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

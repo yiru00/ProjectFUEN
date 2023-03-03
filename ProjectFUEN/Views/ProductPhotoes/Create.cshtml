@@ -11,12 +11,14 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data"
+          <form method="post" enctype="multipart/form-data"
               asp-controller="ProductPhotoes" asp-action="Create">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label asp-for="ProductId" class="control-label"></label>
 			<div class="form-group">
-                 <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+                 <label asp-for="ProductId" class="control-label">@ViewBag.productName</label>
+                @*<select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>*@
+                <input hidden asp-for="ProductId" class="form-control" value="@ViewBag.productid"/>
                 <span asp-validation-for="ProductId" class="text-danger"></span>
 			</div>
 		

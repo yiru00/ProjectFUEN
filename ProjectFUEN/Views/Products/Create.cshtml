@@ -37,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Inventory" class="control-label"></label>
-                <input asp-for="Inventory" class="form-control" />
+                <input id="manufactorDate" asp-for="Inventory" class="form-control" />
                 <span asp-validation-for="Inventory" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -45,13 +45,13 @@
                 <input asp-for="ProductSpec" class="form-control" />
                 <span asp-validation-for="ProductSpec" class="text-danger"></span>
             </div>
-           
+
             <div class="form-group">
                 <label asp-for="Sources" class="control-label"></label>
                 <input type="file" class="form-control" multiple="multiple" asp-for="Sources" id="myimg" accept="image/*" />
                 <span asp-validation-for="Sources" class="text-danger"></span>
             </div>
-           <div class="form-group">
+            <div class="form-group">
                 <p class="text-danger">@ViewBag.photo</p>
                 <img id="preview1" style="max-height:200px;" />
                 <img id="preview2" style="max-height:200px;" />
@@ -59,7 +59,7 @@
                 <img id="preview4" style="max-height:200px;" />
                 <img id="preview5" style="max-height:200px;" />
             </div>
-         
+
             <div class="form-group">
                 <input type="submit" value="新增" class="btn btn-primary" />
             </div>
@@ -72,19 +72,22 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script>
-        $('#myimg').on('change', function (e) {
-            const file = this.files;
-            console.log (file);
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+            <script>
+            $('#myimg').on('change', function (e) {
+                const file = this.files;
+                console.log(file);
 
-            for(let i = 0; i < file.length;i++){
-                let index = i + 1;
-                const objectURL = URL.createObjectURL(file[i]);    // 使用 createObjectURL 產生圖片url
-                $(`#preview${index}`).attr('src', objectURL);
-            }
-        });
-
+                for (let i = 0; i < file.length; i++) {
+                    let index = i + 1;
+                    const objectURL = URL.createObjectURL(file[i]);    // 使用 createObjectURL 產生圖片url
+                    $(`#preview${index}`).attr('src', objectURL);
+                }
+            });
         function convertToISO(daybit) {
             // remove GMT offset
             //daybit.setDays(0, -daybit.getDayzoneOffset());

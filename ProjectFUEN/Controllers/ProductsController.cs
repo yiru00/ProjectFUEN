@@ -39,7 +39,7 @@ namespace ProjectFUEN.Controllers
         public IActionResult Index(string search, int? page = 1)
         {
             //每頁幾筆
-            const int pageSize = 3;
+            const int pageSize = 10;
             //處理頁數
             ViewBag.ProductIndexVm = GetPagedProcess(page, pageSize);
 

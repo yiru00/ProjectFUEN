@@ -124,8 +124,8 @@ namespace ProjectFUEN.Controllers
                 product.ProductPhotos.AddRange(photos);
 
                 _context.SaveChanges();
-                return Redirect("Index/" + vm.ProductId);
-            
+                return RedirectToAction("Index", "ProductPhotoes", new { id = productPhoto.ProductId });
+
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
             return View(productPhoto);

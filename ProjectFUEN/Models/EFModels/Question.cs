@@ -39,7 +39,10 @@ namespace ProjectFUEN.Models.EFModels
                     ActivityId = source.ActivityId,
                     EmailAccount = source.Member.EmailAccount,
                     MemberId = source.Member.Id,
-                    State = source.State
+                    State = source.State,
+                    AnswerId = null,
+                    AnswerContent = null,
+                    AnswerDateCreated =null
                 };
             }
             else

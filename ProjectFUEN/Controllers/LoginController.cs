@@ -46,7 +46,7 @@ namespace ProjectFUEN.Controllers
                     {
                         IsPersistent = true,
                         AllowRefresh = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(10),
                     };
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), authProperties);

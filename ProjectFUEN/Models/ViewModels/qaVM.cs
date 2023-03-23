@@ -21,9 +21,10 @@ namespace ProjectFUEN.Models.ViewModels
 		public int MemberId { get; set; }
 		[Display(Name = "答覆狀態")]
 		public bool? State { get; set; }
-		public int AnswerId { get; set; }
-		public string AnswerContent { get; set; }
-		public DateTime AnswerDateCreated { get; set; }
+		public int? AnswerId { get; set; }
+		public string? AnswerContent { get; set; }
+        [Display(Name = "答覆日期")]
+        public DateTime? AnswerDateCreated { get; set; }
 	}
 	
 }

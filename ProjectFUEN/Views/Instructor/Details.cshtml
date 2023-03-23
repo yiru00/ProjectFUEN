@@ -32,7 +32,7 @@
 				講師圖片
 			</dt>
 			<dd class="col-sm-10">
-				<img id="preview" style="width:400px;height:300px;object-fit:cover" src="/UploadedFiles/@Model.ResumePhoto" />
+				<img id="preview" style="width:400px;height:300px;object-fit:cover" src="@Model.ResumePhoto" />
 			</dd>
 		</div>
 		<div class="row my-2">
@@ -52,27 +52,23 @@
 		$(".delete").on('click', function () {
 
 
-			const swalWithBootstrapButtons = Swal.mixin({
-				customClass: {
-					confirmButton: 'btn btn-success',
-					cancelButton: 'btn btn-danger'
-				},
-				buttonsStyling: false
-			})
-
-			swalWithBootstrapButtons.fire({
-				title: '確定刪除?',
-				text: "You won't be able to revert this!",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonText: '確定',
-				cancelButtonText: '取消',
-				reverseButtons: true
+            Swal.fire({
+                title: '確定刪除?',
+                icon: 'error',
+                iconHtml: `<i class="fa-regular fa-trash-can"></i>`,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '確定',
+                cancelButtonText: '取消',
+                reverseButtons: true
+				
 			}).then((result) => {
 				if (result.isConfirmed) {
 					let deleteid = $(this).attr("id");
 
 					//HTTPDELETE
+
 					$.ajax({
 						type: "DELETE",
 						url: "https://localhost:7027/Instructor/Delete/" + deleteid
@@ -82,12 +78,7 @@
 						})
 						.fail(function (err) { });
 
-				} else if (
-					/* Read more about handling dismissals below */
-					result.dismiss === Swal.DismissReason.cancel
-				) {
-					history.go(0);
-				}
+				} 
 			})
 		})
 	</script>

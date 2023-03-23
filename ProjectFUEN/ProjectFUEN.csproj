@@ -14,17 +14,12 @@
     <None Remove="Models\EFModels\" />
     <None Update="Views\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="wwwroot\UploadedFiles\033b0ac2d003477bae0776cb2465156f" />
-    <Content Include="wwwroot\UploadedFiles\15a687d9731e4a419e90811f57c6.png" />
-    <Content Include="wwwroot\UploadedFiles\4a1de6f1cb5e4cf9b685b10869cbbd20.png" />
-  </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Imgur.API" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.12" />
@@ -62,17 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\UploadedFiles\0d5ac7de5c6e43068a82df1b326724fe.jpg" />
-    <None Include="wwwroot\UploadedFiles\484d0d777302458b8c1e72948fd880ac.jpg" />
-    <None Include="wwwroot\UploadedFiles\5b3cdd9075fc4891944fbbfe8feb.jpg" />
-    <None Include="wwwroot\UploadedFiles\76be26f9903c437fac831e8ce8dd.jpg" />
-    <None Include="wwwroot\UploadedFiles\dd22f20e53f6452db577e5df76b5.png" />
-    <None Include="wwwroot\UploadedFiles\e00ba9e43b03480bb9544d141b46.png" />
-    <None Include="wwwroot\UploadedFiles\e9c57f1081cf4dd3b20dd613c7c6.jpg" />
-    <None Include="wwwroot\UploadedFiles\ed5bb7a7b657457c9c99bc0f2969f8d1.png" />
-    <None Include="wwwroot\UploadedFiles\ef220278cd224fbf8ca435843380.pdf" />
     <Folder Include="Views\Templates\" />
-    <Folder Include="wwwroot\ProductImgFiles\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

@@ -14,7 +14,7 @@ namespace ProjectFUEN.Models.ViewModels
         [Required(ErrorMessage ="必填")]
 		[MaxLength(50)]
 		public string ?InstructorName { get; set; }
-		public string ?ResumePhoto { get; set; }
+		public string ResumePhoto { get; set; }
 
         [Required(ErrorMessage ="必填")]
 		[MaxLength(300)]

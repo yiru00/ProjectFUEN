@@ -42,11 +42,6 @@ namespace ProjectFUEN.Controllers
         }
         public void MailToHtml(string couponCode)
         {
-            //[V]service做發信
-            //[V]I/Repository GetAllEmail 找全部會員的EmailAccount 直接用IEnumerable傳
-            //[ ]細節-> 改html模板
-            //[V]GET 改 POST
-
             couponService.SendCoupon(couponCode);
         }
 
@@ -65,11 +60,6 @@ namespace ProjectFUEN.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(int discountType, CreateCouponVM coupon)
         {
-            // [V]VM不能填Code 在create頁面就先顯示code的guid
-            // [V]寫Service Create(coupon.ToDto) 判斷Discount >=1要是整數 大於0.01 err.msg 欄位下顯示 & return View(coupon)
-            // [V]I/Repository void Create(couponDto) => 轉成ToEntity 資料庫.Coupons.Add(新增資料)、saveChangesAsync() 完成後 controller return Index
-
-            // await??? 要寫在asp-for
 
             ViewData["Guid"] = coupon.Code;
 
@@ -86,15 +76,6 @@ namespace ProjectFUEN.Controllers
         // GET: Coupons/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            // [V] Service bool CouponIsExist(id)
-            //      1.判斷ID是否存在 存取資料庫.FindAsync(id) ??? SingleOrDefault(c=>c.id==id) => 
-            //      3.id會是null 用網址列打 => 判斷後 404
-            //    回傳 true/false到controller false=> return 404 or 小視窗找不到
-            //    I/Repository Dto GetByCouponId 資料庫.FindAsync(id) ??
-            //    到controller轉成VM return
-
-            // Q[] Find 只能用List且比較快 
-
             (bool IsSuccess, CouponDto data) response = couponService.CouponIsExist(id);
 
             if (response.IsSuccess) return View(response.data.ToEditCouponVM());
@@ -108,17 +89,6 @@ namespace ProjectFUEN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int discountType, EditCouponVM coupon)
         {
-            //[V] VM不能編輯code (readOnly)
-            //[V] 把VM轉成dto
-            //[N] 要再驗證一次 id存在嗎 GET驗證過了 且 bind東西是一樣的吧?!
-            //[ ] I/Repository EditCoupon(dto) 轉成entity => db.Update(entity) Save
-
-            // 有可能不一樣嗎
-            //if (id != coupon.Id)
-            //{
-            //    return NotFound();
-            //}
-          
             (bool IsSuccess, string ErrorMsg) response = couponService.EditCoupon(coupon.EditVMToDto(), discountType);
 
             if (response.IsSuccess) return RedirectToAction(nameof(Index));
@@ -128,36 +98,9 @@ namespace ProjectFUEN.Controllers
             return View(coupon);
         }
 
-        // GET: Coupons/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            (bool IsSuccess, CouponDto data) response = couponService.CouponIsExist(id);
-
-            if (response.IsSuccess) return View(response.data.ToDeleteCouponVM());
-            else return NotFound();
-        }
-
-        // POST: Coupons/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            // db會是null??
-            // 判斷id是否存在 不存在根本就不會點到?!
-            // I/Repository Delete(id) db.FindAsync(id) 資料庫remove(id的那筆資料) save
-
-            repo.Delete(id);
-
-            return RedirectToAction(nameof(Index));
-        }
-
         [HttpDelete, ActionName("DeleteCoupon")]
         public void DeleteCoupon(int id)
         {
-            // db會是null??
-            // 判斷id是否存在 不存在根本就不會點到?!
-            // I/Repository Delete(id) db.FindAsync(id) 資料庫remove(id的那筆資料) save
-
             repo.Delete(id);
         }
     }

@@ -231,13 +231,51 @@ namespace ProjectFUEN.Controllers
             return Ok();
         }
 
-        // GET: OrderDetails/Delete/5
-        
-
-        [HttpDelete]     
-        public void Delete(int id)
+        public ActionResult<IEnumerable<OrderItem>> OrderitemDetails(int? id)
         {
-            if (_context.OrderDetails == null) return;
+            if (id == null || _context.OrderItems == null)
+            {
+                return NotFound();
+            }
+
+            var orderItem = _context.OrderItems
+
+                .Include(o => o.Order)
+                .Include(o => o.Product)
+                .Where(m => m.OrderId == id)
+                .AsEnumerable();
+            ;
+            if (orderItem == null)
+            {
+                return NotFound();
+            }
+
+            //var orderItem = (
+            //    from a in _context.OrderItems
+            //    from b in _context.OrderDetails
+            //    where a.OrderId == id
+            //    select new OrderItemsDTO
+            //    {
+            //        OrderId = a.OrderId,
+            //        ProductId = a.ProductId,
+            //        ProductName = a.ProductName,
+            //        ProductPrice = a.ProductPrice,
+            //        ProductNumber = a.ProductNumber,
+            //        Order = a.Order,
+            //        Product = a.Product,
+            //        State = b.State,
+            //    }).FirstOrDefaultAsync();
+
+            return View(orderItem);
+        }
+
+
+        // GET: OrderDetails/Delete/5
+
+        [HttpDelete]
+            public void Delete(int id)
+            {
+                if (_context.OrderDetails == null) return;
 
                 var orderDetail = _context.OrderDetails.Find(id);
             if (orderDetail != null)

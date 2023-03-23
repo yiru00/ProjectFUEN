@@ -7,14 +7,20 @@ namespace ProjectFUEN.Models.ViewModels
     public class CouponVM
     {
         public int Id { get; set; }
-
+        [Display(Name = "優惠碼")]
         public string Code { get; set; }
 
+        [Display(Name = "優惠券名稱")]
         public string Name { get; set; }
 
+
+        [Display(Name = "折扣")]
         public decimal Discount { get; set; }
 
+
         public int LeastCost { get; set; }
+
+        [Display(Name = "數量")]
 
         public int Count { get; set; }
     }

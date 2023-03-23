@@ -136,30 +136,6 @@ namespace ProjectFUEN.Controllers
             }
 
         }
-
-        //     // GET: ActivityCategory/Delete/5
-        //     public async Task<IActionResult> Delete(int? DisplayOrder)
-        //     {
-        //         if (DisplayOrder == null || _context.ActivityCategories == null)
-        //         {
-        //             ViewBag.url = "./Index";
-        //             ViewBag.message = "記得選取欲刪除的拍攝類別";
-        //             return View("../ErrorPage/page404");
-        //         }
-
-        //var activityCategory = await _context.ActivityCategories
-        //             .FirstOrDefaultAsync(m => m.DisplayOrder == DisplayOrder);
-        //         if (activityCategory == null)
-        //         {
-        //             ViewBag.url = "./Index";
-        //             ViewBag.message = "找不到欲刪除的拍攝類別";
-        //             return View("../ErrorPage/page404");
-        //         }
-
-        //         return View(activityCategory.ToDto().ToVM());
-        //     }
-
-        // Delete: ActivityCategory/Delete/5
         [HttpDelete]
         
         public bool Delete(int id)

@@ -5,53 +5,53 @@
 }
 
 <h1>
-    <b>商品管理-新增</b>
+    <b id="databtn">商品管理-新增</b>
 </h1>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form method="post" enctype="multipart/form-data" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId" id="CategoryId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="BrandId" class="control-label"></label>
-                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
+                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId" id="BrandId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" id="name"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control" id="price"/>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ManufactorDate" class="control-label"></label>
-                <input asp-for="ManufactorDate" class="form-control" />
+                <input id="manufactorDate" asp-for="ManufactorDate" class="form-control" />
                 <span asp-validation-for="ManufactorDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Inventory" class="control-label"></label>
-                <input asp-for="Inventory" class="form-control" />
+                <input id="Inventory" asp-for="Inventory" class="form-control" />
                 <span asp-validation-for="Inventory" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProductSpec" class="control-label"></label>
-                <input asp-for="ProductSpec" class="form-control" />
+                <textarea asp-for="ProductSpec" class="form-control" id="spec"></textarea>
                 <span asp-validation-for="ProductSpec" class="text-danger"></span>
             </div>
-           
+
             <div class="form-group">
                 <label asp-for="Sources" class="control-label"></label>
                 <input type="file" class="form-control" multiple="multiple" asp-for="Sources" id="myimg" accept="image/*" />
                 <span asp-validation-for="Sources" class="text-danger"></span>
             </div>
-           <div class="form-group">
+            <div class="form-group">
                 <p class="text-danger">@ViewBag.photo</p>
                 <img id="preview1" style="max-height:200px;" />
                 <img id="preview2" style="max-height:200px;" />
@@ -59,31 +59,73 @@
                 <img id="preview4" style="max-height:200px;" />
                 <img id="preview5" style="max-height:200px;" />
             </div>
-         
-            <div class="form-group">
+
+            <div class="form-group d-flex">
                 <input type="submit" value="新增" class="btn btn-primary" />
+               
             </div>
+           
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+
+    <a asp-action="Index">返回</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        $('#myimg').on('change', function (e) {
-            const file = this.files;
-            console.log (file);
 
-            for(let i = 0; i < file.length;i++){
-                let index = i + 1;
-                const objectURL = URL.createObjectURL(file[i]);    // 使用 createObjectURL 產生圖片url
-                $(`#preview${index}`).attr('src', objectURL);
-            }
+    <script>
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+           <script>
+            $('#myimg').on('change', function (e) {
+                const file = this.files;
+                console.log(file);
+
+                for (let i = 0; i < file.length; i++) {
+                    let index = i + 1;
+                    const objectURL = URL.createObjectURL(file[i]);    // 使用 createObjectURL 產生圖片url
+                    $(`#preview${index}`).attr('src', objectURL);
+                }
+            });
+        function convertToISO(daybit) {
+            // remove GMT offset
+            //daybit.setDays(0, -daybit.getDayzoneOffset());
+
+            var isodate = daybit.toISOString().slice(0, 10); //回傳格式:2020-07-01
+            return isodate;
+        }
+        //製造日
+        let manufactor = $('#manufactorDate');
+        //設定最大日期為今天
+        let currentForManufactorMax = new Date(); //取得目前時間
+        let nowDaysTS = currentForManufactorMax.setDate(currentForManufactorMax.getDate()); //回傳今天的時間戳記
+        let maxmanufactorDate = new Date(nowDaysTS); //時間戳記轉成日期型別
+        let maxmanufactorStr = convertToISO(maxmanufactorDate); //回傳字串 設定input屬性用
+        manufactor.attr('max', maxmanufactorStr) //設定可以選的最大日期
+        manufactor.attr('value', maxmanufactorStr) //預設是最大日期
+
+
+        //假資料按鈕
+        $('#databtn').on('click', function () {
+            $('#CategoryId').val("2"),
+            $('#BrandId').val("2"),
+            $('#name').val("Fujifilm/ 富士instax mini9皮卡丘相機"),
+            $('#spec').val("※以上資訊僅供參考， 如有誤植請依各官方網站或實際商品為準"),
+            $('#price').val("6800"),
+            $('#Inventory').val("11")
+            console.log("test");
         });
+
+
+        
+
+
+        
+        
 
     </script>
 }

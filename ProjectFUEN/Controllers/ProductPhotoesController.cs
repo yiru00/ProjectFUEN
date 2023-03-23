@@ -62,9 +62,13 @@ namespace ProjectFUEN.Controllers
         }
 
         // GET: ProductPhotoes1/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
+
+            //ViewData["ProductId"] = new SelectList(_context.Products.Where(x => x.Id == id), "Id", "Name");
+            var product = _context.Products.FirstOrDefault(x => x.Id == id);
+            ViewData["ProductName"] = product.Name;
+            ViewData["Productid"] = id;
             return View();
         }
 
@@ -120,8 +124,8 @@ namespace ProjectFUEN.Controllers
                 product.ProductPhotos.AddRange(photos);
 
                 _context.SaveChanges();
-                return Redirect("Index/" + vm.ProductId);
-            
+                return RedirectToAction("Index", "ProductPhotoes", new { id = productPhoto.ProductId });
+
             }
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", productPhoto.ProductId);
             return View(productPhoto);

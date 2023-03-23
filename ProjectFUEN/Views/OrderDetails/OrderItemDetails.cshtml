@@ -1,0 +1,120 @@
+﻿@model IEnumerable<ProjectFUEN.Models.EFModels.OrderItem>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>OrderItem  <a asp-controller="OrderDetails" asp-action="Search"><i class="FunBtn fa-solid fa-circle-arrow-left text-dark"></i></a></h4>
+    <hr />
+
+
+    <table class="table col-10">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order.Address)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.ProductSpec)
+
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Order.State)
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(model => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.ProductPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.ProductNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Order.Address)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => item.Product.ProductSpec)
+
+                    </td>
+
+                    <td>
+                        @GetStateName(item.Order.State)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+
+
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div>
+</div>
+
+@functions {
+    public string GetStateName(int state)
+    {
+        string StateName = "";
+        switch (state)
+        {
+            case 0:
+                StateName = "未出貨";
+                break;
+            case 1:
+                StateName = "已出貨";
+                break;
+            case 2:
+                StateName = "運送中";
+                break;
+            case 3:
+                StateName = "已簽收";
+                break;
+            case 4:
+                StateName = "已完成";
+                break;
+            default:
+                StateName = "訂單異常";
+                break;
+
+        }
+        return StateName;
+    }
+}
